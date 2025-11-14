@@ -11,9 +11,10 @@ import { MenuItemProps } from "@/components/menu/MenuItem";
 interface Props {
   active?: string;
   hideLinks?: string[];
+  hideAuth?: boolean;
   additional?: MenuItemProps[];
 }
-const { hideLinks, additional } = Astro.props;
+const { hideLinks, hideAuth, additional } = Astro.props;
 ---
 
 <!doctype html>
@@ -32,7 +33,7 @@ const { hideLinks, additional } = Astro.props;
   <body class="min-h-screen bg-slate-200 dark:bg-slate-800">
     <GridBackgrounded />
     <div class="z-1 relative">
-      <Header hideLinks={hideLinks} additional={additional}>
+      <Header hideLinks={hideLinks} hideAuth={hideAuth} additional={additional}>
         <slot name="header-navbar" />
       </Header>
       <section class="mt-6">

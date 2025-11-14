@@ -43,8 +43,8 @@ const InfoPanel: React.FC<InfoPanelProps> = ({
     const hasContent = children || (actions && actions.length > 0)
     const titleBottomMargin = hasContent ? 'mb-4' : undefined;
     const contentTopMargin = 'mt-4';
-    const titleColor = 'text-slate-600 dark:text-slate-300';
-    const textColor = 'text-gray-600 dark:text-gray-300';
+    const titleColor = 'text-slate-600 dark:text-slate-400';
+    const textColor = 'text-gray-600 dark:text-gray-500';
     const borderColor = 'border-slate-200 dark:border-slate-700/10';
     const blurredBorder = 'border-blur-xs';
 

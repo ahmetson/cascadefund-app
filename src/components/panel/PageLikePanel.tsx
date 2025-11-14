@@ -37,7 +37,7 @@ const PageLikePanel: React.FC<PageLikePanelProps> = ({
         if (titleCenter) {
             return (
                 <div className="mb-4 text-center">
-                    <h2 className={`font-georgia flex items-center justify-center gap-1 h-5 ${titleColor}`}>
+                    <h2 className={`font-georgia flex items-center justify-center gap-1 text-2xl ${titleColor}`}>
                         {icon && getIcon({ iconType: icon, width: 'w-5', height: 'h-5', className: 'mt-1 text-slate-600 dark:text-slate-400' })}
                         <span>{title}</span>
                     </h2>

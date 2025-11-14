@@ -7,10 +7,11 @@ import { MenuItemProps } from "../menu/MenuItem";
 interface Props {
   active?: string;
   hideLinks?: string[];
+  hideAuth?: boolean;
   additional?: MenuItemProps[];
 }
 
-const { active, hideLinks, additional } = Astro.props;
+const { active, hideLinks, hideAuth, additional } = Astro.props;
 ---
 
 <header
@@ -59,7 +60,7 @@ const { active, hideLinks, additional } = Astro.props;
       </WorkNavbar>
     </div>
     <div class="navbar-end flex h-6">
-      <AuthNavItem className="py-2! px-2!" client:load />
+      {!hideAuth && <AuthNavItem className="py-2! px-2!" client:load />}
     </div>
   </div>
 </header>

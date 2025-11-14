@@ -4,9 +4,10 @@ import V2Layout from "@/layouts/PanelViewLayout.astro";
 import PageLikePanel from "@/components/panel/PageLikePanel";
 import Link from "@/components/custom-ui/Link";
 import InfoPanel from "@/components/panel/InfoPanel";
+import { MenuName } from "@/components/navbar/WorkNavbar.astro";
 ---
 
-<V2Layout>
+<V2Layout hideLinks={Object.keys(MenuName)} hideAuth={true}>
   <PageLikePanel
     slot="center"
     title="Login"
@@ -45,11 +46,8 @@ import InfoPanel from "@/components/panel/InfoPanel";
     <p>Other authentication providers are on the roadmap.</p>
     <p>
       Obtain Voting Power, upvote the
-      <Link
-        uri="/data/issue"
-        className="text-blue-600 hover:text-blue-800 underline"
-        >"multi-auth" issue</Link
-      > and get rating.
+      <Link uri="/data/issue" className="underline">"multi-auth" issue</Link> and
+      get rating.
     </p>
   </InfoPanel>
 </V2Layout>
