@@ -9,12 +9,11 @@ import GridBackgrounded from "./GridBackgrounded";
 import { MenuItemProps } from "@/components/menu/MenuItem";
 
 interface Props {
-  subtitle?: string;
   active?: string;
   hideLinks?: string[];
   additional?: MenuItemProps[];
 }
-const { subtitle, hideLinks, additional } = Astro.props;
+const { hideLinks, additional } = Astro.props;
 ---
 
 <!doctype html>

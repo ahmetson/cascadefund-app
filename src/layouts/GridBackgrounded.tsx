@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 
 function GridSmallBackground() {
   return (
-    <div className="fixed h-screen w-screen z-0 bg-slate-900 dark:bg-slate-700">
+    <div className="fixed h-screen w-screen z-0 bg-teal-50 dark:bg-slate-700">
       <div
         className={cn(
           "absolute inset-0 bg-fixed",
