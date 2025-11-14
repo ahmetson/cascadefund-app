@@ -26,15 +26,3 @@ debug.log
 src/stories/
 *storybook.log
 storybook-static
-
-# Certificates
-*.pem
-*.key
-*.crt
-*.csr
-*.p12
-*.p8
-*.p7b
-*.p7c
-*.p7m
-*.p7s
