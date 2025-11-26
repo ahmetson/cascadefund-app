@@ -32,7 +32,7 @@ const PageLikePanel: React.FC<PageLikePanelProps> = ({
     ...interactiveProps
 }) => {
     const renderHeader = () => {
-        const titleColor = 'text-slate-700 dark:text-slate-400';
+        const titleColor = 'text-slate-700 dark:text-slate-300';
 
         if (titleCenter) {
             return (
@@ -59,7 +59,7 @@ const PageLikePanel: React.FC<PageLikePanelProps> = ({
     const renderContent = () => {
         return (
             <div
-                className="font-noto-sans space-y-3 text-sm text-slate-600 dark:text-slate-500 overflow-y-auto"
+                className="font-noto-sans space-y-3 text-sm text-slate-600 dark:text-slate-400 overflow-y-auto"
             >
                 {children}
             </div>
@@ -75,7 +75,7 @@ const PageLikePanel: React.FC<PageLikePanelProps> = ({
             {renderHeader()}
 
             {subtitle && (
-                <p className="text-sm text-gray-500 -mt-2 mb-4">
+                <p className="text-sm text-slate-500 dark:text-slate-400 -mt-2 mb-4">
                     {subtitle}
                 </p>
             )}
@@ -90,7 +90,7 @@ const PageLikePanel: React.FC<PageLikePanelProps> = ({
             {renderHeader()}
 
             {subtitle && (
-                <p className="text-sm text-gray-500 -mt-2 mb-4">
+                <p className="text-sm text-slate-500 dark:text-slate-400 -mt-2 mb-4">
                     {subtitle}
                 </p>
             )}

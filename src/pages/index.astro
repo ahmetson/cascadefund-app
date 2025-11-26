@@ -10,17 +10,17 @@ import { MenuName } from "@/components/navbar/WorkNavbar.astro";
 <V2Layout hideLinks={Object.keys(MenuName)} hideAuth={true}>
   <PageLikePanel
     slot="center"
-    title="Login"
+    title="Welcome to CascadeFund"
     titleCenter={true}
-    className="bg-cyan-50 border-cyan-100"
   >
-    <div class="text-center space-y-6 mt-14 h-25">
+    <div class="text-center space-y-2 mt-8">
+      <p class="text-sm">For Demo, sign in with pre-defined users.</p>
       <Link
         uri="/login/callback"
         className="inline-flex items-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition-colors"
-        >Sign in with GitHub</Link
+        >Sign in</Link
       >
-      <p class="text-sm text-gray-500 mt-4 -mb-4">
+      <!-- <p class="text-sm mt-4">
         By signing in, you agree to our{" "}
         <Link
           uri="/meta/policy"
@@ -29,10 +29,11 @@ import { MenuName } from "@/components/navbar/WorkNavbar.astro";
         >
           Privacy Policy
         </Link>
-      </p>
+      </p> -->
     </div>
   </PageLikePanel>
-  <InfoPanel
+
+  <!-- <InfoPanel
     slot="right"
     title="Don't want GitHub?"
     icon="info"
@@ -49,5 +50,5 @@ import { MenuName } from "@/components/navbar/WorkNavbar.astro";
       <Link uri="/data/issue" className="underline">"multi-auth" issue</Link> and
       get rating.
     </p>
-  </InfoPanel>
+  </InfoPanel> -->
 </V2Layout>

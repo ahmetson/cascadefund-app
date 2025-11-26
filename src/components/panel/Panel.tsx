@@ -33,7 +33,7 @@ const BasePanel: React.FC<BasePanelProps> = ({
     bg = 'bg-white dark:bg-slate-900',
     border = {
         size: 'border-1',
-        color: 'border-slate-300 dark:border-slate-700',
+        color: 'border-slate-200 dark:border-slate-500/10',
         className: ''
     },
     shadowSize = ShadowSize.shadowMd,
