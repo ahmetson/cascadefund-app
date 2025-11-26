@@ -6,6 +6,7 @@ import { MenuItemProps } from "../menu/MenuItem";
 import { motion } from "framer-motion";
 import { socialLinks } from "@/scripts/data";
 import SocialLink from "./SocialLink";
+import Badge from "../badge/Badge";
 
 interface Props {
   active?: string;
@@ -52,6 +53,10 @@ const { active, hideLinks, hideAuth, additional } = Astro.props;
         </WorkNavbar>
       </div>
       <Logo />
+      <Badge
+        variant="purple"
+        className="text-slate-500 dark:text-slate-400 text-sm">Demo</Badge
+      >
       <motion.div className="flex flex-row items-center space-x-2 ml-4 w-full">
         {
           Object.values(socialLinks).map((link) => (
