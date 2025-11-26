@@ -1,13 +1,11 @@
 ---
-import V2Layout from "@/layouts/PanelViewLayout.astro";
-
+import PanelViewLayout from "@/layouts/PanelViewLayout.astro";
 import PageLikePanel from "@/components/panel/PageLikePanel";
 import Link from "@/components/custom-ui/Link";
-import InfoPanel from "@/components/panel/InfoPanel";
 import { MenuName } from "@/components/navbar/WorkNavbar.astro";
 ---
 
-<V2Layout hideLinks={Object.keys(MenuName)} hideAuth={true}>
+<PanelViewLayout hideLinks={Object.keys(MenuName)} hideAuth={true}>
   <PageLikePanel
     slot="center"
     title="Welcome to CascadeFund"
@@ -51,4 +49,4 @@ import { MenuName } from "@/components/navbar/WorkNavbar.astro";
       get rating.
     </p>
   </InfoPanel> -->
-</V2Layout>
+</PanelViewLayout>

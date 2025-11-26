@@ -2,7 +2,7 @@
 import { ClientRouter } from "astro:transitions";
 import "@/styles/global.css";
 import "@/styles/motion.css";
-import Header from "@/components/utilitified_decorations/Header.astro";
+import Header from "@/components/utilitified_decorations/HeaderDemo.astro";
 import Footer from "@/components/utilitified_decorations/Footer.astro";
 import ThreeColumnGrid from "@/components/grid/ThreeColumnGrid.astro";
 import GridBackgrounded from "./GridBackgrounded";
@@ -39,7 +39,9 @@ const { hideLinks, hideAuth, additional } = Astro.props;
       <section class="mt-6">
         <slot name="hero" />
       </section>
-      <ThreeColumnGrid className="mx-auto py-8 space-x-4 px-4 mt-6">
+      <ThreeColumnGrid
+        className="mx-auto py-8 space-x-4 px-4 mt-6 min-h-[calc(100vh-4rem)]"
+      >
         <slot name="left" class="mr-4" slot="left" />
         <slot name="center" class="mx-4" slot="center" />
         <slot name="right" class="ml-4" slot="right" />
