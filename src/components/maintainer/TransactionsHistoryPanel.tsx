@@ -12,6 +12,7 @@ import { Popover } from '@base-ui-components/react/popover'
 import Button from '@/components/custom-ui/Button'
 import Badge from '@/components/badge/Badge'
 import BackButton from '@/components/custom-ui/BackButton'
+import { ReceiverInfoProps } from './ReceiverInfo'
 
 interface Transaction {
   id: number
@@ -34,6 +35,7 @@ interface Transaction {
     stars: number
   }
   cascadeLevel?: number
+  receivers?: ReceiverInfoProps[]
 }
 
 interface TransactionsHistoryPanelProps {
@@ -54,7 +56,71 @@ const sampleTransactions: Transaction[] = [
     },
     memo: 'Thank you for your amazing work on this project! Keep it up!',
     blockchainTx: '0x3f8e2094a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8',
-    receipt: 'example.pdf'
+    receipt: 'example.pdf',
+    receivers: [
+      {
+        nickname: 'Emma Davis',
+        icon: 'https://api.backdropbuild.com/storage/v1/object/public/avatars/9nFM8HasgS.jpeg',
+        isMaintainer: false,
+        amount: 450.00,
+        sunshines: 450,
+        stars: 1.25,
+        receivers: [
+          {
+            nickname: 'John Smith',
+            icon: 'https://api.backdropbuild.com/storage/v1/object/public/avatars/9nFM8HasgS.jpeg',
+            isMaintainer: true,
+            amount: 200.00,
+            sunshines: 200,
+            stars: 0.56,
+            receivers: [
+              {
+                nickname: 'Alice Brown',
+                icon: 'https://api.backdropbuild.com/storage/v1/object/public/avatars/9nFM8HasgS.jpeg',
+                isMaintainer: false,
+                amount: 100.00,
+                sunshines: 100,
+                stars: 0.28
+              }
+            ]
+          },
+          {
+            nickname: 'Robert Wilson',
+            icon: 'https://api.backdropbuild.com/storage/v1/object/public/avatars/9nFM8HasgS.jpeg',
+            isMaintainer: false,
+            amount: 150.00,
+            sunshines: 150,
+            stars: 0.42
+          }
+        ]
+      },
+      {
+        nickname: 'Lisa Anderson',
+        icon: 'https://api.backdropbuild.com/storage/v1/object/public/avatars/9nFM8HasgS.jpeg',
+        isMaintainer: true,
+        amount: 500.00,
+        sunshines: 500,
+        stars: 1.39,
+        receivers: [
+          {
+            nickname: 'David Lee',
+            icon: 'https://api.backdropbuild.com/storage/v1/object/public/avatars/9nFM8HasgS.jpeg',
+            isMaintainer: false,
+            amount: 300.00,
+            sunshines: 300,
+            stars: 0.83
+          }
+        ]
+      },
+      {
+        nickname: 'Chris Taylor',
+        icon: 'https://api.backdropbuild.com/storage/v1/object/public/avatars/9nFM8HasgS.jpeg',
+        isMaintainer: false,
+        amount: 300.00,
+        sunshines: 300,
+        stars: 0.83
+      }
+    ]
   },
   {
     id: 2,
@@ -68,7 +134,53 @@ const sampleTransactions: Transaction[] = [
     },
     memo: 'Great progress!',
     blockchainTx: '0x4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3',
-    receipt: 'example.pdf'
+    receipt: 'example.pdf',
+    receivers: [
+      {
+        nickname: 'Mark Thompson',
+        icon: 'https://api.backdropbuild.com/storage/v1/object/public/avatars/9nFM8HasgS.jpeg',
+        isMaintainer: true,
+        amount: 1500.00,
+        sunshines: 1500,
+        stars: 4.17,
+        receivers: [
+          {
+            nickname: 'Jennifer White',
+            icon: 'https://api.backdropbuild.com/storage/v1/object/public/avatars/9nFM8HasgS.jpeg',
+            isMaintainer: false,
+            amount: 750.00,
+            sunshines: 750,
+            stars: 2.08
+          },
+          {
+            nickname: 'Kevin Martinez',
+            icon: 'https://api.backdropbuild.com/storage/v1/object/public/avatars/9nFM8HasgS.jpeg',
+            isMaintainer: true,
+            amount: 500.00,
+            sunshines: 500,
+            stars: 1.39,
+            receivers: [
+              {
+                nickname: 'Sophia Garcia',
+                icon: 'https://api.backdropbuild.com/storage/v1/object/public/avatars/9nFM8HasgS.jpeg',
+                isMaintainer: false,
+                amount: 250.00,
+                sunshines: 250,
+                stars: 0.69
+              }
+            ]
+          }
+        ]
+      },
+      {
+        nickname: 'Amanda Johnson',
+        icon: 'https://api.backdropbuild.com/storage/v1/object/public/avatars/9nFM8HasgS.jpeg',
+        isMaintainer: false,
+        amount: 1000.00,
+        sunshines: 1000,
+        stars: 2.78
+      }
+    ]
   },
   {
     id: 3,
@@ -247,7 +359,9 @@ const TransactionsHistoryPanel: React.FC<TransactionsHistoryPanelProps> = ({
                         className="text-sm font-medium text-gray-800 dark:text-gray-400"
                       />
                     </Tooltip>
-                    {!showCascaded && <DonationReceiversPopup />}
+                    {!showCascaded && (
+                      <DonationReceiversPopup receivers={transaction.receivers} />
+                    )}
                   </div>
                 </td>
 
