@@ -61,75 +61,38 @@ const influencerMainItems = (activeMenuItem: MenuName, focusMenuItem?: MenuName)
   ]
 }
 
-const maintainerCollabItems = (activeMenuItem: MenuName, disableAnimation: boolean = false, focusMenuItem?: MenuName): React.ReactNode[] => {
+const maintainerCollabItems = (activeMenuItem: MenuName, focusMenuItem?: MenuName): React.ReactNode[] => {
   return [
     <MenuItem
-      icon="marketing"
-      label="Marketing"
-      uri="/maintainer/marketing"
-      active={activeMenuItem === 'marketing'}
-      focus={focusMenuItem === 'marketing'}
-    />,
-    <MenuItem
-      icon="guide"
+      icon="info"
       label="Guide"
       uri="/project/guide"
       active={activeMenuItem === 'guide'}
       focus={focusMenuItem === 'guide'}
     />,
     <MenuItem
-      icon="work"
-      label="Work"
-      badges={[
-        {
-          children: "3",
-          variant: "success",
-          active: activeMenuItem === 'work',
-          static: disableAnimation
-        }
-      ]}
-      uri="/maintainer/work"
-      active={activeMenuItem === 'work'}
-      focus={focusMenuItem === 'work'}
-    />,
-    <MenuItem
-      icon="cascading-work"
-      label="Cascading work"
-      badges={[
-        {
-          children: "2",
-          variant: "danger",
-          active: activeMenuItem === 'cwork',
-          static: disableAnimation
-        }
-      ]}
-      uri="/maintainer/cwork"
-      active={activeMenuItem === 'cwork'}
-      focus={focusMenuItem === 'cwork'}
-    />,
-    <MenuItem
-      icon="dependencies"
+      icon="connection"
       label="Dependencies"
       uri="/project/dependencies"
       active={activeMenuItem === 'dependencies'}
       focus={focusMenuItem === 'dependencies'}
     />,
     <MenuItem
-      icon="roadmap"
+      icon="navigation"
       label="Roadmap"
       uri="/project/roadmap"
       active={activeMenuItem === 'roadmap'}
       focus={focusMenuItem === 'roadmap'}
     />,
     <MenuItem
-      icon="work"
+      icon="issue"
       label="Issues"
       uri="/project/issues"
       active={activeMenuItem === 'issues'}
       focus={focusMenuItem === 'issues'}
     />,
     <MenuItem
-      icon="share"
+      icon="arrow-right"
       label="Share Button"
       uri="/project/share-btn"
       active={activeMenuItem === 'share-btn'}
@@ -156,12 +119,6 @@ const influencerCollabItems = (activeMenuItem: MenuName, focusMenuItem?: MenuNam
   ]
 }
 
-const isBadgedItemAnimated = (onlyCustomChildren: boolean, children: any, activeItem: MenuName): boolean => {
-  if (onlyCustomChildren || children) {
-    return false;
-  }
-  return activeItem === 'work' || activeItem === 'cwork';
-}
 
 const noChildren = <div className="text-center py-8 text-gray-500 dark:text-gray-400">
   <svg viewBox="0 0 24 24" className="w-12 h-12 mx-auto mb-4 text-gray-300 dark:text-gray-400" fill="currentColor">
@@ -173,7 +130,6 @@ const noChildren = <div className="text-center py-8 text-gray-500 dark:text-gray
 
 const Panel: React.FC<Props> = ({ activeMenuItem, focusMenuItem, title = 'Main Menu', onlyCustomChildren = false, children }) => {
   const titleC = <div className='text-sm font-medium   text-gray-500'>{title}</div>
-  const disableAnimation = isBadgedItemAnimated(onlyCustomChildren, children, activeMenuItem);
 
   return <PageLikePanel interactive={false} title={titleC} >
     <div className="p-1 z-10 w-full overflow-hidden justify-between">
@@ -183,7 +139,7 @@ const Panel: React.FC<Props> = ({ activeMenuItem, focusMenuItem, title = 'Main M
         (<>
           <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3 mt-3">Collaboration Menu</h3>
           <div className="p-1 w-full overflow-hidden justify-between">
-            {!isOnlyInfluencerMenu(activeMenuItem) ? maintainerCollabItems(activeMenuItem, disableAnimation, focusMenuItem) : influencerCollabItems(activeMenuItem, focusMenuItem)}
+            {!isOnlyInfluencerMenu(activeMenuItem) ? maintainerCollabItems(activeMenuItem, focusMenuItem) : influencerCollabItems(activeMenuItem, focusMenuItem)}
           </div>
         </>)}
     </div>
