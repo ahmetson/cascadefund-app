@@ -1,0 +1,17 @@
+---
+import Layout from "@/layouts/PanelViewLayout.astro";
+import { MenuName } from "@/components/navbar/WorkNavbar.astro";
+
+import BackButton from "@/components/custom-ui/BackButton";
+import TransactionsHistoryPanel from "@/components/maintainer/TransactionsHistoryPanel";
+
+// Check for 'cascaded' query parameter
+const cascaded = Astro.url.searchParams.get('cascaded');
+const defaultShowCascaded = cascaded === 'true';
+---
+
+<Layout hideLinks={Object.keys(MenuName)}>
+  <BackButton uri="/project/donations" slot="left" />
+  <TransactionsHistoryPanel defaultShowCascaded={defaultShowCascaded} slot="center" client:only="react" />
+</Layout>
+

@@ -78,6 +78,8 @@ export type IconType =
   | 'sunshine'
   | 'percentage'
   | 'unattached'
+  | 'arrow-to-br-corner'
+  | 'multiple-users'
 
 export type IconProps = {
   iconType: IconType
@@ -416,6 +418,16 @@ export const getIcon = (props: IconProps | IconType): React.ReactNode => {
     case 'unattached': return (
       <svg className={className} fill={fill} stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0" />
+      </svg>
+    )
+    case 'arrow-to-br-corner': return (
+      <svg className={className} fill={fill} stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+      </svg>
+    )
+    case 'multiple-users': return (
+      <svg className={className} fill={fill} stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
       </svg>
     )
     default:
