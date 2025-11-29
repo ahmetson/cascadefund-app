@@ -1,5 +1,4 @@
 import Strikethrough from '@/components/animate-ui/strikethrough'
-import { ShadowSize } from '@/types/eventTypes'
 import React from 'react'
 import SelectableItem, { SelectableItemProps } from '../list/SelectableItem'
 
@@ -19,7 +18,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ ref, onClick: onTaskClick, selected
   return (
     <div ref={ref}>
       <Strikethrough id={id!} checked={isCompleted}>
-        <SelectableItem selectedId={selectedTaskId} id={id!} onClick={onTaskClick} iconClassName={isCompleted ? 'bg-green-700 border-green-700' : 'border-green-300'}>
+        <SelectableItem selectedId={selectedTaskId} id={id!} onClick={onTaskClick} iconClassName={isCompleted ? 'bg-green-700 border-green-700' : 'border-green-300 dark:border-green-700'}>
           <div className={`text-sm ${isCompleted ? 'line-through text-gray-500 dark:text-gray-400' : 'text-gray-900 dark:text-gray-300'}`}>
             {title}
           </div>
