@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PageLikePanel from '@/components/panel/PageLikePanel'
 import Button from '../custom-ui/Button'
 import Tooltip from '../custom-ui/Tooltip'
@@ -11,26 +11,44 @@ import * as RadixSlider from '@radix-ui/react-slider'
 import { Checkbox, CheckboxIndicator } from '@/components/animate-ui/primitives/radix/checkbox'
 import ByAuthor from '../ByAuthor'
 import { ProfileLink } from '../profile/types'
+import LoadingSpinner from '../LoadingSpinner'
+
+export interface Issue {
+  title: string
+  id: string
+  uri: string
+  completed: boolean
+  maintainer: string
+  contributor: string
+  sunshines: number
+}
 
 export interface ProjectVersionProps {
   version: string
   date: number
   status: 'completed' | 'active' | 'planned'
-  features: string[]
+  issues: Issue[]
   completedIssues?: number
   totalIssues?: number
   authors: string[]
+  projectId: string
 }
 
 const ProjectVersionPanel: React.FC<ProjectVersionProps> = ({
   version,
   date,
-  status,
-  features,
-  completedIssues,
-  totalIssues,
-  authors
+  status: initialStatus,
+  issues,
+  completedIssues: initialCompletedIssues,
+  totalIssues: initialTotalIssues,
+  authors,
+  projectId
 }) => {
+  const [status, setStatus] = useState<'completed' | 'active' | 'planned'>(initialStatus)
+  const [completedIssues, setCompletedIssues] = useState<number>(initialCompletedIssues ?? 0)
+  const [totalIssues, setTotalIssues] = useState<number>(initialTotalIssues ?? 0)
+  const [loading, setLoading] = useState<boolean>(false)
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'completed': return 'bg-green-100/10 dark:bg-green-900/20 border-green-300 dark:border-green-500/30'
@@ -55,20 +73,65 @@ const ProjectVersionPanel: React.FC<ProjectVersionProps> = ({
     }
   }
 
+  const handleStatusUpdate = async () => {
+    if (loading || status === 'completed') return
+
+    setLoading(true)
+    try {
+      const response = await fetch('/api-json', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          method: 'updateProjectVersionStatus',
+          params: {
+            projectId,
+            currentStatus: status,
+            completedIssues,
+            totalIssues
+          },
+          id: 1
+        })
+      })
+
+      const data = await response.json()
+
+      if (data.error) {
+        console.error('Error updating status:', data.error)
+      } else if (data.result) {
+        setStatus(data.result.status)
+        setCompletedIssues(data.result.completedIssues)
+        setTotalIssues(data.result.totalIssues)
+      }
+    } catch (error) {
+      console.error('Error calling API:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <PageLikePanel
       interactive={false}
       title={version}
       rightHeader={
         status !== 'completed' &&
-        <Button variant='secondary' disabled={false}>
-          {getStatusText(status)}
+        <Button variant='secondary' disabled={loading} onClick={handleStatusUpdate}>
+          {loading ? (
+            <div className="flex items-center gap-2">
+              <LoadingSpinner />
+            </div>
+          ) : (
+            getStatusText(status)
+          )}
         </Button>
       }
       className={`w-full ${getStatusColor(status)} mb-4`}
     >
-      {completedIssues !== undefined && totalIssues !== undefined && (
-        <div className="">
+      {status !== 'completed' && completedIssues !== undefined && totalIssues !== undefined && (
+        <div className="w-full p-2">
           {/* Slider Labels */}
           <div className="flex items-center justify-between">
             <div
@@ -127,16 +190,16 @@ const ProjectVersionPanel: React.FC<ProjectVersionProps> = ({
           </h4>
         </Tooltip>
         <ul className="space-y-2">
-          {features.map((feature, index) => (
-            <li key={index} className="flex items-center space-x-2">
+          {issues.map((issue) => (
+            <li key={issue.id} className="flex items-center space-x-2">
               <Checkbox
-                checked={status === 'completed'}
+                checked={issue.completed || status === 'completed'}
                 disabled
                 className="w-4 h-4 rounded-sm border-2 border-slate-400 dark:border-slate-600 bg-white dark:bg-slate-600 data-[state=checked]:bg-slate-600 dark:data-[state=checked]:bg-slate-400 data-[state=checked]:border-slate-600 dark:data-[state=checked]:border-slate-400 flex items-center justify-center"
               >
                 <CheckboxIndicator className="w-3 h-3 text-white dark:text-slate-700" />
               </Checkbox>
-              <span className="text-sm text-slate-700 dark:text-slate-400">{feature}</span>
+              <span className="text-sm text-slate-700 dark:text-slate-400">{issue.title}</span>
             </li>
           ))}
         </ul>

@@ -2,16 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 import { RoadmapPanel } from './RoadmapPanel'
 import { ActionProps } from '@/types/eventTypes'
-
-interface VersionProps {
-    version: string
-    date: string
-    status: 'completed' | 'active' | 'planned'
-    features: string[]
-    completedIssues?: number
-    totalIssues?: number
-    authors: string[]
-}
+import { ProjectVersionProps, Issue } from '../project/ProjectVersionPanel'
 
 const meta: Meta<typeof RoadmapPanel> = {
     title: 'Components/Maintainer/Roadmap Panel',
@@ -40,42 +31,109 @@ const meta: Meta<typeof RoadmapPanel> = {
 export default meta
 type Story = StoryObj<typeof RoadmapPanel>
 
-const mockActiveVersion: VersionProps = {
+const mockActiveVersion: ProjectVersionProps = {
     version: "v2.5.0",
     authors: ["ahmetson"],
-    date: "Oct 12, 2023",
+    date: Math.floor(new Date("Oct 12, 2023").getTime() / 1000),
     status: "active",
-    features: [
-        "Dark mode implementation",
-        "Tablet responsive layout fixes",
-        "Google Calendar integration"
+    projectId: "project-1",
+    issues: [
+        {
+            title: "Dark mode implementation",
+            id: "issue-1",
+            uri: "/issues/1",
+            completed: true,
+            maintainer: "ahmetson",
+            contributor: "contributor1",
+            sunshines: 150
+        },
+        {
+            title: "Tablet responsive layout fixes",
+            id: "issue-2",
+            uri: "/issues/2",
+            completed: false,
+            maintainer: "ahmetson",
+            contributor: "contributor2",
+            sunshines: 200
+        },
+        {
+            title: "Google Calendar integration",
+            id: "issue-3",
+            uri: "/issues/3",
+            completed: false,
+            maintainer: "ahmetson",
+            contributor: "contributor3",
+            sunshines: 180
+        }
     ],
     completedIssues: 1,
     totalIssues: 3
 }
 
-const mockPlannedVersion: VersionProps = {
+const mockPlannedVersion: ProjectVersionProps = {
     version: "v2.6.0",
-    date: "Oct 12, 2023",
+    date: Math.floor(new Date("Oct 12, 2023").getTime() / 1000),
     authors: ["ahmetson"],
     status: "planned",
-    features: [
-        "Advanced filtering options",
-        "API rate limit improvements"
+    projectId: "project-1",
+    issues: [
+        {
+            title: "Advanced filtering options",
+            id: "issue-4",
+            uri: "/issues/4",
+            completed: false,
+            maintainer: "ahmetson",
+            contributor: "contributor4",
+            sunshines: 120
+        },
+        {
+            title: "API rate limit improvements",
+            id: "issue-5",
+            uri: "/issues/5",
+            completed: false,
+            maintainer: "ahmetson",
+            contributor: "contributor5",
+            sunshines: 100
+        }
     ],
     completedIssues: 0,
     totalIssues: 2
 }
 
-const mockCompletedVersion: VersionProps = {
+const mockCompletedVersion: ProjectVersionProps = {
     version: "v2.4.0",
     authors: ["ahmetson"],
-    date: "Oct 13, 2023",
+    date: Math.floor(new Date("Oct 13, 2023").getTime() / 1000),
     status: "completed",
-    features: [
-        "Discovered authentication system",
-        "New dashboard experience",
-        "Performance optimizations"
+    projectId: "project-1",
+    issues: [
+        {
+            title: "Discovered authentication system",
+            id: "issue-6",
+            uri: "/issues/6",
+            completed: true,
+            maintainer: "ahmetson",
+            contributor: "contributor6",
+            sunshines: 250
+        },
+        {
+            title: "New dashboard experience",
+            id: "issue-7",
+            uri: "/issues/7",
+            completed: true,
+            maintainer: "ahmetson",
+            contributor: "contributor7",
+            sunshines: 300
+        },
+        {
+            title: "Performance optimizations",
+            id: "issue-8",
+            uri: "/issues/8",
+            completed: true,
+            maintainer: "ahmetson",
+            contributor: "contributor8",
+            sunshines: 220
+        }
     ],
     completedIssues: 3,
     totalIssues: 3
@@ -157,11 +215,28 @@ export const MixedStatuses: Story = {
             {
                 version: "v2.3.0",
                 authors: ["developer1", "developer2"],
-                date: "Sep 28, 2023",
+                date: Math.floor(new Date("Sep 28, 2023").getTime() / 1000),
                 status: "completed",
-                features: [
-                    "Bug fixes",
-                    "Security improvements"
+                projectId: "project-1",
+                issues: [
+                    {
+                        title: "Bug fixes",
+                        id: "issue-9",
+                        uri: "/issues/9",
+                        completed: true,
+                        maintainer: "developer1",
+                        contributor: "contributor9",
+                        sunshines: 180
+                    },
+                    {
+                        title: "Security improvements",
+                        id: "issue-10",
+                        uri: "/issues/10",
+                        completed: true,
+                        maintainer: "developer2",
+                        contributor: "contributor10",
+                        sunshines: 200
+                    }
                 ],
                 completedIssues: 5,
                 totalIssues: 5
@@ -199,11 +274,28 @@ export const VersionWithoutProgress: Story = {
             {
                 version: "v2.7.0",
                 authors: ["ahmetson"],
-                date: "Nov 1, 2023",
+                date: Math.floor(new Date("Nov 1, 2023").getTime() / 1000),
                 status: "planned",
-                features: [
-                    "New feature exploration",
-                    "UI/UX improvements"
+                projectId: "project-1",
+                issues: [
+                    {
+                        title: "New feature exploration",
+                        id: "issue-11",
+                        uri: "/issues/11",
+                        completed: false,
+                        maintainer: "ahmetson",
+                        contributor: "contributor11",
+                        sunshines: 90
+                    },
+                    {
+                        title: "UI/UX improvements",
+                        id: "issue-12",
+                        uri: "/issues/12",
+                        completed: false,
+                        maintainer: "ahmetson",
+                        contributor: "contributor12",
+                        sunshines: 110
+                    }
                 ],
                 // No completedIssues or totalIssues
             }
