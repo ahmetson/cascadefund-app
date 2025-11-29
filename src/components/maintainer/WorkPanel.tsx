@@ -24,18 +24,18 @@ const C: React.FC = () => {
       </DndProvider>
     },
     {
-      label: <DndProvider backend={HTML5Backend}><DropTarget id="detailize-list" accept={["issue"]} onDrop={(e) => console.log(e)}>Detailize</DropTarget></DndProvider>,
+      label: <DndProvider backend={HTML5Backend}><DropTarget id="detailize-list" accept={["issue"]} onDrop={(e) => console.log(e)}>Interesting</DropTarget></DndProvider>,
       key: "detailize",
       content: <DndProvider backend={HTML5Backend}>
-        <IssueListPanel title={'Detailize Issues'} draggable={true} />
+        <IssueListPanel title={'Interesting Issues'} draggable={true} />
       </DndProvider>,
       className: ' p-0!',
     },
     {
-      label: <DndProvider backend={HTML5Backend}><DropTarget id="hard-list" accept={["issue"]} onDrop={(e) => console.log(e)}>Heavy</DropTarget></DndProvider>,
+      label: <DndProvider backend={HTML5Backend}><DropTarget id="hard-list" accept={["issue"]} onDrop={(e) => console.log(e)}>Not interesting</DropTarget></DndProvider>,
       key: "hard",
       content: <DndProvider backend={HTML5Backend}>
-        <IssueListPanel title={'Heavy Issues'} draggable={true} />
+        <IssueListPanel title={'Not Interesting Issues'} draggable={true} />
       </DndProvider>
     },
     {
