@@ -10,6 +10,7 @@ import ProjectStats from "@/components/project/ProjectStatsPanel";
 // import ProjectPeople from "@/components/project/ProjectPeoplePanel";
 // import HighlightedInteraction from "@/components/project/HighlightedInteractionPanel";
 import BackButton from "@/components/custom-ui/BackButton";
+import GalacticUI from "@/components/galactic/GalacticUI";
 
 const projectData: ProjectInfoProps = {
   uri: "/data/project",
@@ -66,6 +67,7 @@ const projectData: ProjectInfoProps = {
 ---
 
 <V2Layout active={MenuName.ProjectName} hideLinks={Object.keys(MenuName)}>
+  <GalacticUI slot="background" client:only="react" />
   <BackButton slot="left" uri="/data/projects" />
 
   <!-- <NotificationBanner
