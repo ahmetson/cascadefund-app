@@ -36,6 +36,16 @@ const GalaxyZoomWrapper: React.FC<GalaxyZoomWrapperProps> = ({
     return () => window.removeEventListener('resize', updateViewportSize);
   }, []);
 
+  // Set up smooth transition for content container on mount
+  useEffect(() => {
+    const contentContainer = document.querySelector('[data-galaxy-content]');
+    if (contentContainer) {
+      const contentEl = contentContainer as HTMLElement;
+      contentEl.style.transition = 'transform 0.4s ease-out';
+      contentEl.style.transformOrigin = 'center center';
+    }
+  }, []);
+
   // Calculate virtual screen size based on zoom (128px step increments)
   useEffect(() => {
     const zoomDelta = 100 - zoom;
@@ -85,11 +95,11 @@ const GalaxyZoomWrapper: React.FC<GalaxyZoomWrapperProps> = ({
       bgEl.style.height = `${canvasHeight}px`;
     }
 
-    // Apply transform to content container
+    // Apply transform to content container (transition is set on mount)
     const contentContainer = document.querySelector('[data-galaxy-content]');
     if (contentContainer) {
-      (contentContainer as HTMLElement).style.transform = `scale(${contentScale})`;
-      (contentContainer as HTMLElement).style.transformOrigin = 'center center';
+      const contentEl = contentContainer as HTMLElement;
+      contentEl.style.transform = `scale(${contentScale})`;
     }
 
   }, [virtualScreenSize]);
