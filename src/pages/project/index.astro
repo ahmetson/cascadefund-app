@@ -5,6 +5,7 @@ import { MenuName } from "@/components/navbar/WorkNavbar.astro";
 import { ProjectInfoProps } from "@/components/project/ProjectLink";
 import ProjectLandingHero from "@/components/project/ProjectLandingHero";
 import ProjectCTAPanel from "@/components/project/ProjectCTAPanel";
+import ProjectGoalPanel from "@/components/project/ProjectGoalPanel";
 // import ProjectPeople from "@/components/project/ProjectPeoplePanel";
 // import HighlightedInteraction from "@/components/project/HighlightedInteractionPanel";
 import BackButton from "@/components/custom-ui/BackButton";
@@ -91,6 +92,16 @@ const projectData: ProjectInfoProps = {
     client:only="react"
   />
   <ProjectCTAPanel slot="center" client:only="react" />
+
+  <ProjectGoalPanel
+    slot="right"
+    client:only="react"
+    stars={projectData.stars}
+    totalStars={projectData.rating.stars}
+    totalSunshines={projectData.rating.sunshines}
+    goalStars={100}
+    goalDonations={projectData.balance * 10}
+  />
 
   <!-- <HighlightedInteraction slot="right" /> -->
   <!-- <ProjectPeople slot="right" /> -->
