@@ -43,9 +43,8 @@ const {
     <link rel="icon" type="image/png" href="/cascadefund_logo.png" />
     <meta name="generator" content={Astro.generator} />
     <title>{"'" + projectName + "' star galaxy"}</title>
+    <ClientRouter />
   </head>
-  <ClientRouter />
-
   <body
     class="min-h-screen bg-slate-200 dark:bg-slate-800 border-1 border-red-500/10"
   >
@@ -104,6 +103,4 @@ const {
       maxGalaxyContent={maxGalaxyContent}
     />
   </body>
-
-
 </html>
