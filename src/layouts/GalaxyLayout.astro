@@ -9,6 +9,7 @@ import GridBackgrounded from "./GridBackgrounded";
 import { MenuItemProps } from "@/components/menu/MenuItem";
 import { GravityStarsBackground } from "@/components/animate-ui/components/backgrounds/gravity-stars";
 import { GradientBackground } from "@/components/animate-ui/components/backgrounds/gradient";
+import Galaxy from "@/components/Galaxy";
 
 import GalaxyLayoutBody from "./GalaxyLayoutBody";
 
@@ -62,9 +63,19 @@ const {
         className="fixed h-screen w-screen z-1 pointer-events-none"
         client:load
       />
+      <div class="fixed h-screen w-screen z-2">
+        <Galaxy
+          client:only="react"
+          mouseInteraction={true}
+          speed={0.25}
+          rotationSpeed={0.015}
+          twinkleIntensity={0.2}
+          repulsionStrength={1}
+        />
+      </div>
       <slot
         name="background"
-        class="fixed h-screen w-screen z-2 pointer-events-none"
+        class="fixed h-screen w-screen z-3 pointer-events-none"
       />
     </div>
 

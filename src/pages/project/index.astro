@@ -2,10 +2,9 @@
 import GalaxyLayout from "@/layouts/GalaxyLayout.astro";
 import { MenuName } from "@/components/navbar/WorkNavbar.astro";
 
-import ProjectInfo, {
-  ProjectInfoProps,
-} from "@/components/project/ProjectLink";
-import ProjectStats from "@/components/project/ProjectStatsPanel";
+import { ProjectInfoProps } from "@/components/project/ProjectLink";
+import ProjectLandingHero from "@/components/project/ProjectLandingHero";
+import ProjectCTAPanel from "@/components/project/ProjectCTAPanel";
 // import ProjectPeople from "@/components/project/ProjectPeoplePanel";
 // import HighlightedInteraction from "@/components/project/HighlightedInteractionPanel";
 import BackButton from "@/components/custom-ui/BackButton";
@@ -94,8 +93,12 @@ const projectData: ProjectInfoProps = {
     >
   </NotificationBanner> -->
 
-  <ProjectInfo slot="center" {...projectData} />
-  <ProjectStats slot="right" />
+  <ProjectLandingHero
+    slot="center"
+    projectData={projectData}
+    client:only="react"
+  />
+  <ProjectCTAPanel slot="center" client:only="react" />
 
   <!-- <HighlightedInteraction slot="right" /> -->
   <!-- <ProjectPeople slot="right" /> -->
