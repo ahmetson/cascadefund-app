@@ -203,7 +203,7 @@ const UserStar: React.FC<UserStarProps> = ({
         style={{ left: `${x}px`, top: `${y}px` }}
       >
         <Tooltip content={tooltipContent}>
-          <Link uri={profileUri} className="block">
+          <Link uri={profileUri} >
             <div className="flex flex-col items-center gap-1">
               {/* Star container with glows and avatar */}
               <div className={`star-glow-container-${starId}`}>
@@ -213,7 +213,7 @@ const UserStar: React.FC<UserStarProps> = ({
                 <div className={`star-glow-${starId} star-glow-3-${starId}`} />
 
                 {/* Avatar inside the star */}
-                <div className={`star-avatar-${starId} hover:opacity-80 transition-opacity p-3 border-2 border-red-500`}>
+                <div className={`star-avatar-${starId} hover:opacity-80 transition-opacity p-3 border-2 border-red-500 hover:bg-teal-300 bg-blue-200 dark:bg-blue-400! dark:hover:bg-teal-300! dark:hover:blur-sm`}>
                   <img
                     src={src || defaultSrc}
                     alt={alt || defaultAlt}
@@ -221,36 +221,35 @@ const UserStar: React.FC<UserStarProps> = ({
                   />
                 </div>
               </div>
-
-              {/* Stars and sunshines under the icon */}
-              <div className="flex items-center gap-2">
-                {stars !== undefined && (
-                  <div className="flex items-center gap-1">
-                    {getIcon({ iconType: 'star', className: 'w-3 h-3', fill: 'currentColor' })}
-                    <NumberFlow
-                      value={stars}
-                      locales="en-US"
-                      format={{ style: 'decimal', maximumFractionDigits: 2 }}
-                      className="text-[10px]"
-                    />
-                  </div>
-                )}
-                {sunshines !== undefined && (
-                  <div className="flex items-center gap-1">
-                    {getIcon({ iconType: 'sunshine', className: 'w-3 h-3' })}
-                    <NumberFlow
-                      value={sunshines}
-                      locales="en-US"
-                      format={{ style: 'decimal', maximumFractionDigits: 0 }}
-                      className="text-[10px]"
-                    />
-                  </div>
-                )}
-              </div>
             </div>
           </Link>
-        </Tooltip>
-      </div>
+          {/* Stars and sunshines under the icon */}
+          <div className="flex items-center gap-2">
+            {stars !== undefined && (
+              <div className="flex items-center gap-1">
+                {getIcon({ iconType: 'star', className: 'w-3 h-3', fill: 'currentColor' })}
+                <NumberFlow
+                  value={stars}
+                  locales="en-US"
+                  format={{ style: 'decimal', maximumFractionDigits: 2 }}
+                  className="text-[10px]"
+                />
+              </div>
+            )}
+            {sunshines !== undefined && (
+              <div className="flex items-center gap-1">
+                {getIcon({ iconType: 'sunshine', className: 'w-3 h-3' })}
+                <NumberFlow
+                  value={sunshines}
+                  locales="en-US"
+                  format={{ style: 'decimal', maximumFractionDigits: 0 }}
+                  className="text-[10px]"
+                />
+              </div>
+            )}
+          </div>
+        </Tooltip >
+      </div >
     </>
   )
 }
