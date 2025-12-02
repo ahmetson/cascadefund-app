@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ControlPanel from '@/components/panel/ControlPanel';
 import Button from '@/components/custom-ui/Button';
+import Tooltip from '@/components/custom-ui/Tooltip';
 
 interface GalaxyZoomControlsProps {
   initialZoom?: number;
@@ -39,6 +40,10 @@ const GalaxyZoomControls: React.FC<GalaxyZoomControlsProps> = ({
     setZoom(Number(e.target.value));
   };
 
+  const handleReset = () => {
+    setZoom(100);
+  };
+
   return (
     <div className="fixed bottom-16 left-8 z-50">
       <ControlPanel className="p-3">
@@ -60,8 +65,26 @@ const GalaxyZoomControls: React.FC<GalaxyZoomControlsProps> = ({
 
           {/* Zoom Display and Slider */}
           <div className="flex flex-col items-center gap-1 min-w-[120px]">
-            <div className="text-xs text-slate-400 dark:text-slate-500 font-mono">
-              {zoom}%
+            <div className="flex items-center gap-2">
+              <div className="text-xs text-slate-400 dark:text-slate-500 font-mono">
+                {zoom}%
+              </div>
+              {zoom !== 100 && (
+                <Tooltip content="Reset to 100%">
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={handleReset}
+                    outline={true}
+                    className="p-1 min-w-[24px] h-6 flex items-center justify-center"
+                    aria-label="Reset to 100%"
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                  </Button>
+                </Tooltip>
+              )}
             </div>
             <input
               type="range"
