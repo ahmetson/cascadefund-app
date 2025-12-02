@@ -17,12 +17,11 @@ interface ZoomChangeEventDetail {
 }
 
 const GalaxyWrapper: React.FC<GalaxyWrapperProps> = ({
-    minZoom = 25,
     mouseInteraction = true,
     speed = 0.25,
     rotationSpeed = 0.015,
     twinkleIntensity = 0.2,
-    repulsionStrength = 1,
+    repulsionStrength = 3,
 }) => {
     const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
     const [galaxySize, setGalaxySize] = useState({ width: 0, height: 0 });
@@ -90,6 +89,7 @@ const GalaxyWrapper: React.FC<GalaxyWrapperProps> = ({
                     speed={speed}
                     rotationSpeed={rotationSpeed}
                     twinkleIntensity={twinkleIntensity}
+                    autoCenterRepulsion={4}
                     repulsionStrength={repulsionStrength}
                 />
             </div>
