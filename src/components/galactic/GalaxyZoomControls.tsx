@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ControlPanel from '@/components/panel/ControlPanel';
 import Button from '@/components/custom-ui/Button';
 import Tooltip from '@/components/custom-ui/Tooltip';
+import NumberFlow from '@number-flow/react';
 
 interface GalaxyZoomControlsProps {
   initialZoom?: number;
@@ -45,7 +46,7 @@ const GalaxyZoomControls: React.FC<GalaxyZoomControlsProps> = ({
   };
 
   return (
-    <div className="fixed bottom-20 left-8 z-50">
+    <div className="fixed bottom-22 left-8 z-50">
       <ControlPanel className="p-3">
         <div className="flex items-center gap-2">
           {/* Zoom Out Button */}
@@ -67,7 +68,12 @@ const GalaxyZoomControls: React.FC<GalaxyZoomControlsProps> = ({
           <div className="flex flex-col items-center gap-1 min-w-[120px]">
             <div className="flex items-center gap-2">
               <div className="text-xs text-slate-400 dark:text-slate-500 font-mono">
-                {zoom}%
+                <NumberFlow
+                  value={zoom}
+                  locales="en-US"
+                  format={{ style: 'decimal', maximumFractionDigits: 0, useGrouping: false }}
+                />
+                %
               </div>
               {zoom !== 100 && (
                 <Tooltip content="Reset to 100%">
