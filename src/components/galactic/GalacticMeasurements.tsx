@@ -1,42 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 interface GalacticMeasurementsProps {
-  zoom: number;
+  virtualScreenSize: { width: number; height: number };
   className?: string;
 }
 
 const GalacticMeasurements: React.FC<GalacticMeasurementsProps> = ({
-  zoom,
+  virtualScreenSize,
   className = '',
 }) => {
-  const [measurements, setMeasurements] = useState({ width: 0, height: 0 });
+  const virtualWidth = virtualScreenSize.width;
+  const virtualHeight = virtualScreenSize.height;
 
-  useEffect(() => {
-    const updateMeasurements = () => {
-      setMeasurements({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    };
-
-    updateMeasurements();
-    window.addEventListener('resize', updateMeasurements);
-    return () => window.removeEventListener('resize', updateMeasurements);
-  }, []);
-
-  // Calculate scaled measurements based on zoom
-  const scaledWidth = Math.round((measurements.width * zoom) / 100);
-  const scaledHeight = Math.round((measurements.height * zoom) / 100);
-
-  // Generate measurement marks (every 100px scaled)
+  // Generate measurement marks (every 100px)
   const getMarks = (size: number, isVertical: boolean) => {
     const marks = [];
     const step = 100;
-    const scaledStep = Math.round((step * zoom) / 100);
-    const count = Math.floor(size / scaledStep);
+    const count = Math.floor(size / step);
 
     for (let i = 0; i <= count; i++) {
-      const position = i * scaledStep;
+      const position = i * step;
       marks.push(
         <div
           key={i}
@@ -53,7 +36,7 @@ const GalacticMeasurements: React.FC<GalacticMeasurementsProps> = ({
               }
           }
         >
-          {i * scaledStep}
+          {i * step}
         </div>
       );
     }
@@ -66,9 +49,9 @@ const GalacticMeasurements: React.FC<GalacticMeasurementsProps> = ({
       <div
         className={`fixed top-10 left-0 right-0 h-6 backdrop-blur-lg pointer-events-none z-40 ${className}`}
       >
-        {getMarks(measurements.width, false)}
+        {getMarks(virtualWidth, false)}
         <div className="absolute right-4 top-2 text-[10px] font-mono text-slate-400 dark:text-slate-500">
-          W: {scaledWidth}px
+          W: {virtualWidth}px
         </div>
       </div>
 
@@ -76,19 +59,19 @@ const GalacticMeasurements: React.FC<GalacticMeasurementsProps> = ({
       <div
         className={`fixed bottom-8 left-0 right-0 h-6 backdrop-blur-lg pointer-events-none z-40 ${className}`}
       >
-        {getMarks(measurements.width, false)}
+        {getMarks(virtualWidth, false)}
       </div>
 
       {/* Left measurements */}
       <div
         className={`fixed top-10 bottom-8 left-1 w-6 backdrop-blur-lg pointer-events-none z-40 ${className}`}
       >
-        {getMarks(measurements.height, true)}
+        {getMarks(virtualHeight, true)}
         <div
           className="absolute bottom-4 left-0 text-[10px] font-mono text-slate-400 dark:text-slate-500"
           style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
         >
-          H: {scaledHeight}px
+          H: {virtualHeight}px
         </div>
       </div>
 
@@ -96,7 +79,7 @@ const GalacticMeasurements: React.FC<GalacticMeasurementsProps> = ({
       <div
         className={`fixed top-10 bottom-8 right-0 w-6 backdrop-blur-lg pointer-events-none z-40 ${className}`}
       >
-        {getMarks(measurements.height, true)}
+        {getMarks(virtualHeight, true)}
       </div>
     </>
   );

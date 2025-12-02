@@ -9,7 +9,8 @@ import GridBackgrounded from "./GridBackgrounded";
 import { MenuItemProps } from "@/components/menu/MenuItem";
 import { GravityStarsBackground } from "@/components/animate-ui/components/backgrounds/gravity-stars";
 import { GradientBackground } from "@/components/animate-ui/components/backgrounds/gradient";
-import GalaxyZoomWrapper from "@/components/galactic/GalaxyZoomWrapper";
+
+import GalaxyLayoutBody from "./GalaxyLayoutBody";
 
 interface Props {
   active?: string;
@@ -20,6 +21,7 @@ interface Props {
   initialZoom?: number;
   minZoom?: number;
   maxZoom?: number;
+  maxGalaxyContent?: number;
 }
 const {
   hideLinks,
@@ -29,6 +31,7 @@ const {
   initialZoom,
   minZoom,
   maxZoom,
+  maxGalaxyContent,
 } = Astro.props;
 ---
 
@@ -39,7 +42,7 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="/cascadefund_logo.png" />
     <meta name="generator" content={Astro.generator} />
-    <title>'{projectName + " " + "in CascadeFund"}</title>
+    <title>{"'" + projectName + "' star galaxy"}</title>
   </head>
   <ClientRouter />
 
@@ -92,12 +95,13 @@ const {
     <div data-galaxy-fixed>
       <Footer />
     </div>
-    <GalaxyZoomWrapper
+    <GalaxyLayoutBody
       client:only="react"
       projectName={projectName}
       initialZoom={initialZoom}
       minZoom={minZoom}
       maxZoom={maxZoom}
+      maxGalaxyContent={maxGalaxyContent}
     />
   </body>
 
