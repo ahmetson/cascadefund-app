@@ -63,6 +63,7 @@ const PlaceCtaPanel: React.FC<PlaceCtaPanelProps> = ({ userData }) => {
             ...userData,
             x: dropResult.x,
             y: dropResult.y,
+            draggable: true,
         };
 
         // Dispatch event to create new user star

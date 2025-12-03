@@ -8,14 +8,6 @@ import { cn } from '@/lib/utils';
 const ProjectCTAPanel: React.FC = () => {
   const [isHovered, setIsHovered] = useState(false);
 
-  const handleViewAllPage = () => {
-    // Dispatch custom event to trigger zoom animation to 26
-    const event = new CustomEvent('galaxy-zoom-to', {
-      detail: { targetZoom: 26 }
-    });
-    window.dispatchEvent(event);
-  };
-
   const tooltipContent = (
     <div className="text-sm max-w-xs">
       <p>- Obtain sunshines, collaborate with maintainer on project issues. Turn sunshines to stars. Grow stars and turn it community owned project</p>

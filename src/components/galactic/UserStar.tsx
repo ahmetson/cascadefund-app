@@ -850,7 +850,7 @@ const UserStar: React.FC<UserStarProps> = ({
           <Tooltip content={tooltipContent}>
             {draggable ? (
               <div className="flex flex-col items-center gap-1">
-                {/* Star container with glows and avatar */}
+                dragge{/* Star container with glows and avatar */}
                 <div className={`star-glow-container-${starId} `}>
                   {/* Tags ellipse (transparent, outermost) */}
                   {!disableEllipses && validTags.length > 0 && (
@@ -902,7 +902,7 @@ const UserStar: React.FC<UserStarProps> = ({
                 </div>
               </div>
             ) : (
-              <Link uri={profileUri}>
+              <Link uri={profileUri}>linked
                 <div className="flex flex-col items-center gap-1">
                   {/* Star container with glows and avatar */}
                   <div className={`star-glow-container-${starId} `}>
