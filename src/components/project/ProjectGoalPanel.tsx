@@ -14,6 +14,7 @@ interface ProjectGoalPanelProps {
     goalStars?: number; // Stars needed for community control
     goalDonations?: number; // Donations needed (in parentheses)
     projectName?: string; // Project name
+    projectGoal?: number; // Total stars needed to turn project into galaxy
 }
 
 const ProjectGoalPanel: React.FC<ProjectGoalPanelProps> = ({
@@ -23,6 +24,7 @@ const ProjectGoalPanel: React.FC<ProjectGoalPanelProps> = ({
     goalStars = 100,
     goalDonations,
     projectName,
+    projectGoal,
 }) => {
     // Calculate energy percentage (same logic as ProjectLandingHero)
     const sunshinesToStar = 360;
@@ -37,8 +39,11 @@ const ProjectGoalPanel: React.FC<ProjectGoalPanelProps> = ({
     const sunshinesCount = totalSunshines || 0;
     const energyCount = Math.round(energyPercentage);
 
+    // Use projectGoal if provided, otherwise fall back to goalStars
+    const effectiveGoalStars = projectGoal ?? goalStars;
+
     // Calculate remaining stars needed
-    const remainingStars = Math.max(0, goalStars - (starsCount || 0));
+    const remainingStars = Math.max(0, effectiveGoalStars - (starsCount || 0));
 
     return (
         <InfoPanel
@@ -118,7 +123,7 @@ const ProjectGoalPanel: React.FC<ProjectGoalPanelProps> = ({
                 <GoalChart
                     totalStars={totalStars}
                     totalSunshines={totalSunshines}
-                    goalStars={goalStars}
+                    goalStars={effectiveGoalStars}
                     goalDonations={goalDonations}
                     energyCount={energyCount}
                     remainingStars={remainingStars}

@@ -9,6 +9,7 @@ import ProjectGoalPanel from "@/components/project/ProjectGoalPanel";
 // import ProjectPeople from "@/components/project/ProjectPeoplePanel";
 // import HighlightedInteraction from "@/components/project/HighlightedInteractionPanel";
 import BackButton from "@/components/custom-ui/BackButton";
+import AllStarsContest from "@/components/galactic/AllStarsContest";
 import { mockUserStars } from "@/data/mock-data";
 
 const projectData: ProjectInfoProps = {
@@ -52,6 +53,7 @@ const projectData: ProjectInfoProps = {
   followers: 0,
   createdTime: 0,
   actions: [],
+  projectGoal: 1000,
 };
 ---
 
@@ -60,7 +62,27 @@ const projectData: ProjectInfoProps = {
   hideLinks={Object.keys(MenuName)}
   projectName={projectData.title}
   stars={projectData.stars}
+  projectGoal={projectData.projectGoal}
 >
+  <AllStarsContest
+    slot="header-navbar"
+    client:only="react"
+    projectGoal={projectData.projectGoal}
+    currentStars={projectData.rating.stars}
+    projectName={projectData.title}
+    projectUri={projectData.uri}
+    contest={{
+      title: "Galaxy Formation Contest",
+      description:
+        "Projects that reach their star goal become galaxies and compete for prizes",
+      goal: projectData.projectGoal || 1000,
+      prize: "10,000 tokens + Featured placement",
+      endTime: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
+      position: 5,
+      contestFromDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 7 days ago
+      contestToDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
+    }}
+  />
   <BackButton slot="left" uri="/project/issues" />
 
   <!-- <NotificationBanner
@@ -104,6 +126,7 @@ const projectData: ProjectInfoProps = {
     totalStars={projectData.rating.stars}
     totalSunshines={projectData.rating.sunshines}
     goalStars={100}
+    projectGoal={projectData.projectGoal}
     goalDonations={projectData.balance * 10}
     projectName={projectData.title}
   />

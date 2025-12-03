@@ -47,6 +47,7 @@ export interface ProjectInfoProps {
   author: ProfileLink
   stars: UserStarData[]
   actions?: ActionProps[]  // Comes links to the work, and cascade work along with their badges
+  projectGoal?: number  // Total stars needed to turn project into galaxy
 }
 
 const ProjectCard: React.FC<ProjectInfoProps> = ({
@@ -95,7 +96,7 @@ const ProjectCard: React.FC<ProjectInfoProps> = ({
   }))
   return (
     <Link uri={uri || '#'}>
-      <BasePanel 
+      <BasePanel
         bg="bg-white/50 dark:bg-slate-900/50"
         className='mb-4 hover:bg-white dark:hover:bg-slate-900 hover:border-blue-500/20 transition-colors'
       >
