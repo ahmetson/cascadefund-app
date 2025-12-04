@@ -9,6 +9,7 @@ import UniverseResearchPanel from "@/components/galactic/UniverseResearchPanel";
 import GalaxyAutoZoom from "@/components/galactic/GalaxyAutoZoom";
 import BackButton from "@/components/custom-ui/BackButton";
 import NewGalaxyButton from "@/components/galactic/NewGalaxyButton";
+import DemoCtaPanel from "@/components/project/DemoCtaPanel";
 import {
   mockUniverseStats,
   mockContestData,
@@ -24,6 +25,33 @@ const selectedGalaxy = galaxyId
 
 // Get current user's starsunshines (for demo, using 0 to show locked state)
 const currentStarsunshines = 0;
+
+// Check if user is logged in (check for common auth cookies)
+const isLoggedIn =
+  Astro.cookies.get("session")?.value !== undefined ||
+  Astro.cookies.get("auth")?.value !== undefined ||
+  Astro.cookies.get("user")?.value !== undefined ||
+  Astro.cookies.get("token")?.value !== undefined;
+
+// Check demo cookies
+const demoCookie = Astro.cookies.get("demo");
+const demoExpirationCookie = Astro.cookies.get("demo-expiration");
+
+// Validate demo cookies
+let areDemoCookiesValid = false;
+if (demoCookie?.value && demoExpirationCookie?.value) {
+  try {
+    const expirationTimestamp = parseInt(demoExpirationCookie.value, 10);
+    const now = Date.now();
+    areDemoCookiesValid =
+      !isNaN(expirationTimestamp) && expirationTimestamp > now;
+  } catch (e) {
+    areDemoCookiesValid = false;
+  }
+}
+
+// Show DemoCtaPanel if user is not logged in and demo cookies are invalid
+const shouldShowDemoCta = !isLoggedIn && !areDemoCookiesValid;
 
 // Prepare all galaxies for display in the virtual screen
 const allGalaxies = mockTopGalaxies.map((galaxy, index) => ({
@@ -66,6 +94,7 @@ const allGalaxies = mockTopGalaxies.map((galaxy, index) => ({
     totalStars={mockUniverseStats.totalStars}
     totalUsers={mockUniverseStats.totalUsers}
   />
+  {shouldShowDemoCta && <DemoCtaPanel slot="center" client:only="react" />}
 
   <AllStarsLeaderboardPanel
     slot="right"
