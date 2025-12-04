@@ -1,20 +1,76 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { getIcon } from '@/components/icon';
 import NumberFlow from '@number-flow/react';
 import Tooltip from '@/components/custom-ui/Tooltip';
 import Button from '../custom-ui/Button';
+import CompassArrow from './CompassArrow';
 
 interface NavigationArrowProps {
-    distance?: number;
+    galaxyPosition?: { x: number; y: number };
+    mekgaPosition?: { x: number; y: number };
     onNavigate?: () => void;
 }
 
 const NavigationArrow: React.FC<NavigationArrowProps> = ({
-    distance: initialDistance = 1000,
+    galaxyPosition,
+    mekgaPosition,
     onNavigate,
 }) => {
+    // Calculate distance between galaxy and mekga positions
+    const calculateDistance = (pos1: { x: number; y: number }, pos2: { x: number; y: number }): number => {
+        const dx = pos2.x - pos1.x;
+        const dy = pos2.y - pos1.y;
+        return Math.sqrt(dx * dx + dy * dy);
+    };
+
+    // Get default positions (galaxy at center, mekga at origin or offset)
+    const getDefaultPositions = () => {
+        if (typeof window === 'undefined') {
+            return {
+                galaxy: { x: 0, y: 0 },
+                mekga: { x: 0, y: 0 },
+            };
+        }
+        const viewportCenter = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+        // If positions are provided, use them; otherwise use defaults
+        // Galaxy is at viewport center when viewing it, mekga (universe center) is at origin
+        return {
+            galaxy: galaxyPosition || viewportCenter,
+            mekga: mekgaPosition || { x: 0, y: 0 }, // Mekga at origin (center of universe)
+        };
+    };
+
+    const [positions, setPositions] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return getDefaultPositions();
+        }
+        return { galaxy: { x: 0, y: 0 }, mekga: { x: 0, y: 0 } };
+    });
+
+    // Update positions when window is available or props change
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const viewportCenter = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+            setPositions({
+                galaxy: galaxyPosition || viewportCenter,
+                mekga: mekgaPosition || { x: 0, y: 0 },
+            });
+        }
+    }, [galaxyPosition, mekgaPosition]);
+    const initialDistance = useMemo(() => {
+        return calculateDistance(positions.galaxy, positions.mekga);
+    }, [positions.galaxy, positions.mekga]);
+
     const [distance, setDistance] = useState(initialDistance);
     const [isNavigating, setIsNavigating] = useState(false);
+
+    // Update distance when positions change (but not during navigation)
+    useEffect(() => {
+        if (!isNavigating) {
+            const newDistance = calculateDistance(positions.galaxy, positions.mekga);
+            setDistance(newDistance);
+        }
+    }, [positions.galaxy, positions.mekga, isNavigating]);
 
     const handleClick = () => {
         if (isNavigating) return;
@@ -58,26 +114,27 @@ const NavigationArrow: React.FC<NavigationArrowProps> = ({
                 <Button
                     variant="secondary"
                     onClick={handleClick}
-                    className="flex items-center gap-3 px-4 py-2 rounded-lg bg-slate-100/20 dark:bg-slate-900/20 backdrop-blur-sm border border-slate-200/40 dark:border-slate-700/40 hover:bg-white/40 dark:hover:bg-slate-900/40 transition-all duration-300 "
+                    className="flex items-center gap-3 px-4 py-2 bg-transparent border-none dark:bg-transparent dark:border-none backdrop-blur-sm hover:bg-blue/20 dark:hover:bg-blue-400/20 transition-all duration-300 "
                     disabled={isNavigating}
                 >
                     {/* Blue futuristic Mekga icon */}
                     {getIcon({ iconType: 'mekga', className: 'w-6 h-6 text-blue-500' })}
 
-                    {/* Pointing arrow (40% rotated to left, pointing top-left) */}
-                    <div
-                        style={{ transform: 'rotate(-40deg)' }}
-                    >
-                        {getIcon({ iconType: 'arrow-right', className: 'w-5 h-5 text-slate-600 dark:text-slate-400' })}
-                    </div>
+                    <div className="flex items-center gap-1">
+                        {/* Compass arrow pointing from galaxy to mekga */}
+                        <CompassArrow
+                            currentPosition={positions.galaxy}
+                            targetPosition={positions.mekga}
+                        />
 
-                    {/* NumberFlow showing distance */}
-                    <NumberFlow
-                        value={Math.round(distance)}
-                        locales="en-US"
-                        format={{ style: 'decimal', maximumFractionDigits: 0 }}
-                        className="text-sm font-mono text-slate-700 dark:text-slate-300"
-                    />
+                        {/* NumberFlow showing distance */}
+                        <NumberFlow
+                            value={Math.round(distance)}
+                            locales="en-US"
+                            format={{ style: 'decimal', maximumFractionDigits: 0 }}
+                            className="text-sm font-mono text-slate-700 dark:text-slate-300"
+                        />
+                    </div>
                 </Button>
             </Tooltip>
         </div>
