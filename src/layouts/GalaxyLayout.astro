@@ -49,10 +49,7 @@ const {
   maxZoom,
   maxGalaxyContent,
   stars,
-  projectGoal,
   projectId,
-  projectX,
-  projectY,
   projectGalaxies,
 } = Astro.props;
 ---
@@ -112,15 +109,10 @@ const {
       class="z-2 relative border border-red-500/10"
       style="transform-origin: center center;"
     >
-      <Space 
-        client:only="react" 
-        users={stars || []} 
+      <Space
+        client:only="react"
+        users={stars || []}
         className="z-10"
-        projectGalaxy={projectName && projectX !== undefined && projectY !== undefined ? {
-          x: projectX,
-          y: projectY,
-          projectName: projectName
-        } : undefined}
         projectGalaxies={projectGalaxies}
       />
       <section class="mt-6">

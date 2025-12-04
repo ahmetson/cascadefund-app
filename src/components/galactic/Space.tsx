@@ -30,15 +30,6 @@ export interface UserStarData {
 interface SpaceProps {
   users: UserStarData[]
   className?: string
-  projectGalaxy?: {
-    x: number
-    y: number
-    projectName: string
-    projectId?: string
-    galaxyData?: GalaxyData
-    tags?: string[]
-    leaderboardPosition?: number
-  }
   projectGalaxies?: Array<{
     x: number
     y: number
@@ -50,7 +41,7 @@ interface SpaceProps {
   }>
 }
 
-const SpaceContent: React.FC<SpaceProps> = ({ users: initialUsers, className = '', projectGalaxy, projectGalaxies }) => {
+const SpaceContent: React.FC<SpaceProps> = ({ users: initialUsers, className = '', projectGalaxies }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const [initialViewport, setInitialViewport] = useState({ width: 0, height: 0 })
   const [users, setUsers] = useState<UserStarData[]>(initialUsers)
@@ -219,19 +210,6 @@ const SpaceContent: React.FC<SpaceProps> = ({ users: initialUsers, className = '
           />
         </div>
       ))}
-      {projectGalaxy && (
-        <div style={{ pointerEvents: 'auto' }}>
-          <ProjectGalaxy
-            x={projectGalaxy.x}
-            y={projectGalaxy.y}
-            projectName={projectGalaxy.projectName}
-            projectId={projectGalaxy.projectId}
-            galaxyData={projectGalaxy.galaxyData}
-            tags={projectGalaxy.tags || projectGalaxy.galaxyData?.tags}
-            leaderboardPosition={projectGalaxy.leaderboardPosition}
-          />
-        </div>
-      )}
       {projectGalaxies && projectGalaxies.map((galaxy, index) => (
         <div key={`galaxy-${galaxy.projectName}-${index}`} style={{ pointerEvents: 'auto' }}>
           <ProjectGalaxy

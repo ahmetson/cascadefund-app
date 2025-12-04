@@ -8,6 +8,7 @@ import AllStarsLeaderboardTabs from "@/components/galactic/AllStarsLeaderboardTa
 import GalaxyView from "@/components/galactic/GalaxyView";
 import UniverseResearchPanel from "@/components/galactic/UniverseResearchPanel";
 import GalaxyAutoZoom from "@/components/galactic/GalaxyAutoZoom";
+import BackButton from "@/components/custom-ui/BackButton";
 import {
   mockUniverseStats,
   mockContestData,
@@ -46,22 +47,22 @@ const allGalaxies = mockTopGalaxies.map((galaxy, index) => ({
   projectGalaxies={allGalaxies}
 >
   {
-    !selectedGalaxy && (
-      <UniverseHero
-        slot="center"
+    selectedGalaxy && (
+      <BackButton
+        slot="left"
         client:only="react"
-        totalGalaxies={mockUniverseStats.totalGalaxies}
-        totalStars={mockUniverseStats.totalStars}
-        totalUsers={mockUniverseStats.totalUsers}
+        uri={`/project?galaxy=${galaxyId}`}
       />
     )
   }
 
-  {
-    selectedGalaxy && (
-      <GalaxyView slot="center" client:only="react" galaxy={selectedGalaxy} />
-    )
-  }
+  <UniverseHero
+    slot="center"
+    client:only="react"
+    totalGalaxies={mockUniverseStats.totalGalaxies}
+    totalStars={mockUniverseStats.totalStars}
+    totalUsers={mockUniverseStats.totalUsers}
+  />
 
   <AllStarsLeaderboardPanel
     slot="right"

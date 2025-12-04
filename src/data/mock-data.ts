@@ -267,8 +267,8 @@ export const mockTopGalaxies: GalaxyData[] = [
     sunshines: 125000,
     users: 234,
     donationAmount: 450000,
-    x: 800,
-    y: 600,
+    x: 1300,
+    y: 100,
     tags: ['Payment', 'Protocol', 'Blockchain', 'Solidity', 'P2P'],
   },
   {
@@ -291,8 +291,8 @@ export const mockTopGalaxies: GalaxyData[] = [
     sunshines: 87000,
     users: 156,
     donationAmount: 280000,
-    x: 600,
-    y: 800,
+    x: 400,
+    y: 200,
     tags: ['Frontend', 'React', 'Astro', 'Web3', 'Open Source'],
   },
   {
@@ -304,7 +304,7 @@ export const mockTopGalaxies: GalaxyData[] = [
     users: 142,
     donationAmount: 240000,
     x: 1000,
-    y: 200,
+    y: 600,
     tags: ['Blockchain', 'Verification', 'Security', 'Tool', 'Ethereum'],
   },
   {
