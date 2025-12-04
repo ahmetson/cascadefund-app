@@ -8,18 +8,18 @@ import AllStarsLeaderboardTabs from "@/components/galactic/AllStarsLeaderboardTa
 import GalaxyView from "@/components/galactic/GalaxyView";
 import NavigationArrow from "@/components/galactic/NavigationArrow";
 import UniverseResearchPanel from "@/components/galactic/UniverseResearchPanel";
-import { 
-  mockUniverseStats, 
-  mockContestData, 
-  mockTopGalaxies, 
+import {
+  mockUniverseStats,
+  mockContestData,
+  mockTopGalaxies,
   mockTopLibraries,
-  type GalaxyData 
+  type GalaxyData,
 } from "@/data/mock-data";
 
 // Read galaxy query parameter
 const galaxyId = Astro.url.searchParams.get("galaxy");
-const selectedGalaxy = galaxyId 
-  ? mockTopGalaxies.find(g => g.id === galaxyId) 
+const selectedGalaxy = galaxyId
+  ? mockTopGalaxies.find((g) => g.id === galaxyId)
   : null;
 
 // Get current user's starsunshines (for demo, using 0 to show locked state)
@@ -31,24 +31,23 @@ const currentStarsunshines = 0;
   hideLinks={Object.keys(MenuName)}
   projectName="CascadeFund Universe"
 >
+  {
+    !selectedGalaxy && (
+      <UniverseHero
+        slot="center"
+        client:only="react"
+        totalGalaxies={mockUniverseStats.totalGalaxies}
+        totalStars={mockUniverseStats.totalStars}
+        totalUsers={mockUniverseStats.totalUsers}
+      />
+    )
+  }
 
-  {!selectedGalaxy && (
-    <UniverseHero
-      slot="center"
-      client:only="react"
-      totalGalaxies={mockUniverseStats.totalGalaxies}
-      totalStars={mockUniverseStats.totalStars}
-      totalUsers={mockUniverseStats.totalUsers}
-    />
-  )}
-
-  {selectedGalaxy && (
-    <GalaxyView
-      slot="center"
-      client:only="react"
-      galaxy={selectedGalaxy}
-    />
-  )}
+  {
+    selectedGalaxy && (
+      <GalaxyView slot="center" client:only="react" galaxy={selectedGalaxy} />
+    )
+  }
 
   <AllStarsLeaderboardPanel
     slot="right"
@@ -60,15 +59,18 @@ const currentStarsunshines = 0;
     leaderboardPosition={5}
   />
 
-  {selectedGalaxy && (
-    <NavigationArrow 
-      client:only="react"
-      distance={1000}
-      onNavigate={() => {
-        window.location.href = '/all-stars';
-      }}
-    />
-  )}
+  {
+    selectedGalaxy && (
+      <NavigationArrow
+        slot="header-navbar"
+        client:only="react"
+        distance={1000}
+        onNavigate={() => {
+          window.location.href = "/all-stars";
+        }}
+      />
+    )
+  }
 
   <AllStarsLeaderboardTabs
     client:only="react"
@@ -81,4 +83,3 @@ const currentStarsunshines = 0;
     starsunshines={currentStarsunshines}
   />
 </GalaxyLayout>
-
