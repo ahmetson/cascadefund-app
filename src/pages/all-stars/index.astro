@@ -4,8 +4,7 @@ import { MenuName } from "@/components/navbar/WorkNavbar.astro";
 
 import UniverseHero from "@/components/galactic/UniverseHero";
 import AllStarsLeaderboardPanel from "@/components/galactic/AllStarsLeaderboardPanel";
-import AllStarsLeaderboardTabs from "@/components/galactic/AllStarsLeaderboardTabs";
-import GalaxyView from "@/components/galactic/GalaxyView";
+import AllStarsLeaderboardPanels from "@/components/galactic/AllStarsLeaderboardPanels";
 import UniverseResearchPanel from "@/components/galactic/UniverseResearchPanel";
 import GalaxyAutoZoom from "@/components/galactic/GalaxyAutoZoom";
 import BackButton from "@/components/custom-ui/BackButton";
@@ -14,7 +13,6 @@ import {
   mockContestData,
   mockTopGalaxies,
   mockTopLibraries,
-  type GalaxyData,
 } from "@/data/mock-data";
 
 // Read galaxy query parameter
@@ -74,7 +72,8 @@ const allGalaxies = mockTopGalaxies.map((galaxy, index) => ({
     leaderboardPosition={5}
   />
 
-  <AllStarsLeaderboardTabs
+  <AllStarsLeaderboardPanels
+    slot="left"
     client:only="react"
     topGalaxies={mockTopGalaxies}
     topLibraries={mockTopLibraries}

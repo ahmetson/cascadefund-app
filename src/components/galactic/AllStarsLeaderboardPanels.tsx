@@ -1,23 +1,46 @@
-import React from 'react';
-import Tabs from '@/components/Tabs';
+import React, { useState, useEffect, useRef } from 'react';
+import BasePanel from '@/components/panel/Panel';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/animate-ui/components/radix/accordion';
 import { getIcon } from '@/components/icon';
 import Link from '@/components/custom-ui/Link';
 import Tooltip from '@/components/custom-ui/Tooltip';
 import NumberFlow from '@number-flow/react';
 import { GalaxyData, LibraryData } from '@/data/mock-data';
+import { BorderSize } from '@/types/eventTypes';
+import { cn } from '@/lib/utils';
 
-interface AllStarsLeaderboardTabsProps {
+interface AllStarsLeaderboardPanelsProps {
     topGalaxies?: GalaxyData[];
     topLibraries?: LibraryData[];
 }
 
-const AllStarsLeaderboardTabs: React.FC<AllStarsLeaderboardTabsProps> = ({
+const AllStarsLeaderboardPanels: React.FC<AllStarsLeaderboardPanelsProps> = ({
     topGalaxies = [],
     topLibraries = [],
 }) => {
+    const [expandedPanel, setExpandedPanel] = useState<string | null>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+
     // Sort galaxies by stars for biggest, by sunshines for brightest
     const biggestGalaxies = [...topGalaxies].sort((a, b) => b.stars - a.stars);
     const brightestGalaxies = [...topGalaxies].sort((a, b) => b.sunshines - a.sunshines);
+
+    // Handle click outside to collapse all panels
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+                setExpandedPanel(null);
+            }
+        };
+
+        if (expandedPanel) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [expandedPanel]);
 
     const renderBiggestGalaxies = () => (
         <div className="overflow-x-auto">
@@ -25,7 +48,7 @@ const AllStarsLeaderboardTabs: React.FC<AllStarsLeaderboardTabsProps> = ({
                 <thead>
                     <tr className="border-b border-slate-200/30 dark:border-slate-700/30">
                         <th className="text-left py-2 px-4 text-slate-600 dark:text-slate-400">#</th>
-                        <th className="text-left py-2 px-4 text-slate-600 dark:text-slate-400">Galaxy Name</th>
+                        <th className="text-left py-2 px-4 text-slate-600 dark:text-slate-400">Project Name</th>
                         <th className="text-right py-2 px-4 text-slate-600 dark:text-slate-400">Stars</th>
                     </tr>
                 </thead>
@@ -141,58 +164,107 @@ const AllStarsLeaderboardTabs: React.FC<AllStarsLeaderboardTabsProps> = ({
         </div>
     );
 
+    const borderColor = 'border-slate-200 dark:border-slate-700/10';
+    const blurredBorder = 'border-blur-xs';
+    const textColor = 'text-gray-600 dark:text-gray-500';
+    const titleColor = 'text-slate-600 dark:text-slate-400';
+    const transparentBg = `bg-white/30 dark:bg-slate-900/30 backdrop-blur-lg border-none ${textColor}`;
+
     return (
-        <div className="fixed bottom-40 left-8 z-40 w-96 max-h-96">
-            <div className="backdrop-blur-lg bg-white/5 dark:bg-slate-900/5 border border-slate-300/20 dark:border-slate-600/20 rounded-lg p-4">
-                <Tabs
-                    id="all-stars-leaderboard-tabs"
-                    activeTab="biggest"
-                    tabs={[
-                        {
-                            key: 'biggest',
-                            label: 'Top Biggest Galaxies',
-                            content: (
-                                <div>
-                                    <p className="text-xs text-slate-500 dark:text-slate-500 mb-4">
-                                        Galaxies (Open source projects) with the highest amount of the stars
-                                    </p>
-                                    {renderBiggestGalaxies()}
-                                </div>
-                            ),
-                            className: '',
-                        },
-                        {
-                            key: 'brightest',
-                            label: 'Top Brightest Galaxies',
-                            content: (
-                                <div>
-                                    <p className="text-xs text-slate-500 dark:text-slate-500 mb-4">
-                                        Galaxies that produce most sunshines (donations)
-                                    </p>
-                                    {renderBrightestGalaxies()}
-                                </div>
-                            ),
-                            className: '',
-                        },
-                        {
-                            key: 'libraries',
-                            label: 'Top Libraries',
-                            content: (
-                                <div>
-                                    <p className="text-xs text-slate-500 dark:text-slate-500 mb-4">
-                                        the most used libraries by projects
-                                    </p>
-                                    {renderTopLibraries()}
-                                </div>
-                            ),
-                            className: '',
-                        },
-                    ]}
-                />
-            </div>
+        <div ref={containerRef} className="fixed bottom-40 left-8 z-40 w-96 space-y-3">
+            <BasePanel
+                border={{ size: BorderSize.border1, color: `${borderColor} ${blurredBorder}`, className: 'filter' }}
+                bg="bg-transparent"
+                className={cn('shadow-none', transparentBg, 'border border-slate-300/20 dark:border-slate-600/20 hover:bg-blue-500/10 hover:border-blue-500 dark:hover:bg-blue-500/20')}
+            >
+                <Accordion
+                    value={expandedPanel === 'biggest' ? 'biggest' : undefined}
+                    onValueChange={(value) => setExpandedPanel(value === 'biggest' ? 'biggest' : undefined)}
+                    type='single'
+                    collapsible={true}
+
+                >
+                    <AccordionItem value="biggest" className="w-88">
+                        <AccordionTrigger className="flex items-center justify-between h-auto no-underline! p-0">
+                            <div className="font-georgia font-semibold text-base flex items-center gap-2">
+                                {getIcon({ iconType: 'star', fill: 'currentColor', className: titleColor })}
+                                <span>Top Biggest</span>
+                            </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="AccordionContent mt-4">
+                            <div className="font-noto-sans">
+                                <p className="text-xs text-slate-500 dark:text-slate-500 mb-4">
+                                    Galaxies (Open source projects) with the highest amount of the stars
+                                </p>
+                                {renderBiggestGalaxies()}
+                            </div>
+                        </AccordionContent>
+                    </AccordionItem>
+                </Accordion>
+            </BasePanel>
+
+            <BasePanel
+                border={{ size: BorderSize.border1, color: `${borderColor} ${blurredBorder}`, className: 'filter' }}
+                bg="bg-transparent"
+                className={cn('shadow-none', transparentBg, 'border border-slate-300/20 dark:border-slate-600/20 hover:bg-blue-500/10 hover:border-blue-500 dark:hover:bg-blue-500/20')}
+            >
+                <Accordion
+                    value={expandedPanel === 'brightest' ? 'brightest' : undefined}
+                    onValueChange={(value) => setExpandedPanel(value === 'brightest' ? 'brightest' : undefined)}
+                    type='single'
+                    collapsible={true}
+                >
+                    <AccordionItem value="brightest" className="w-88">
+                        <AccordionTrigger className="flex items-center justify-between h-auto no-underline! p-0">
+                            <div className="font-georgia font-semibold text-base flex items-center gap-2">
+                                {getIcon({ iconType: 'sunshine', fill: 'currentColor', className: titleColor })}
+                                <span>Top Brightest</span>
+                            </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="AccordionContent mt-4">
+                            <div className="font-noto-sans">
+                                <p className="text-xs text-slate-500 dark:text-slate-500 mb-4">
+                                    Galaxies that produce most sunshines (donations)
+                                </p>
+                                {renderBrightestGalaxies()}
+                            </div>
+                        </AccordionContent>
+                    </AccordionItem>
+                </Accordion>
+            </BasePanel>
+
+            <BasePanel
+                border={{ size: BorderSize.border1, color: `${borderColor} ${blurredBorder}`, className: 'filter' }}
+                bg="bg-transparent"
+                className={cn('shadow-none', transparentBg, 'border border-slate-300/20 dark:border-slate-600/20 hover:bg-blue-500/10 hover:border-blue-500 dark:hover:bg-blue-500/20')}
+            >
+                <Accordion
+                    value={expandedPanel === 'libraries' ? 'libraries' : undefined}
+                    onValueChange={(value) => setExpandedPanel(value === 'libraries' ? 'libraries' : undefined)}
+                    type='single'
+                    collapsible={true}
+                >
+                    <AccordionItem value="libraries" className="w-88">
+                        <AccordionTrigger className="flex items-center justify-between h-auto no-underline! p-0">
+                            <div className="font-georgia font-semibold text-base flex items-center gap-2">
+                                {getIcon({ iconType: 'project', fill: 'currentColor', className: titleColor })}
+                                <span>Top Libraries</span>
+                            </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="AccordionContent mt-4">
+                            <div className="font-noto-sans">
+                                <p className="text-xs text-slate-500 dark:text-slate-500 mb-4">
+                                    the most used libraries by projects
+                                </p>
+                                {renderTopLibraries()}
+                            </div>
+                        </AccordionContent>
+                    </AccordionItem>
+                </Accordion>
+            </BasePanel>
         </div>
     );
 };
 
-export default AllStarsLeaderboardTabs;
+export default AllStarsLeaderboardPanels;
 
