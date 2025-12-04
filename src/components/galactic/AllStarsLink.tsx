@@ -8,11 +8,15 @@ import PageLikePanel from '../panel/PageLikePanel';
 
 interface AllStarsLinkProps {
     className?: string;
+    projectId?: string;
 }
 
 const AllStarsLink: React.FC<AllStarsLinkProps> = ({
     className = '',
+    projectId,
 }) => {
+    const allStarsUri = projectId ? `/all-stars?galaxy=${projectId}` : '/all-stars';
+    
     return (
         <div className={`fixed bottom-36 left-8 z-50 ${className}`}>
             <Tooltip
@@ -22,7 +26,7 @@ const AllStarsLink: React.FC<AllStarsLinkProps> = ({
                     </PageLikePanel>
                 }
             >
-                <Link uri="/all-stars">
+                <Link uri={allStarsUri}>
                     <ControlPanel
                         className={cn(
                             'p-3 transition-all duration-300',

@@ -68,6 +68,9 @@ const projectData: ProjectInfoProps = {
   actions: [],
   projectGoal: 1000,
 };
+
+// Generate project ID from title (lowercase, replace spaces with hyphens)
+const projectId = projectData.title.toLowerCase().replace(/\s+/g, "-");
 ---
 
 <GalaxyLayout
@@ -76,6 +79,7 @@ const projectData: ProjectInfoProps = {
   projectName={projectData.title}
   stars={projectData.stars}
   projectGoal={projectData.projectGoal}
+  projectId={projectId}
 >
   <AllStarsContest
     slot="header-navbar"

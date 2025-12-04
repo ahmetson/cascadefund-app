@@ -10,6 +10,7 @@ interface GalaxyZoomWrapperProps {
   minZoom?: number;
   maxZoom?: number;
   maxGalaxyContent?: number;
+  projectId?: string;
 }
 
 const VIRTUAL_SCREEN_STEP = 128; // 128px step for virtual screen size increments
@@ -20,6 +21,7 @@ const GalaxyZoomWrapper: React.FC<GalaxyZoomWrapperProps> = ({
   minZoom = 25,
   maxZoom = 100,
   maxGalaxyContent = 100,
+  projectId,
 }) => {
   const [zoom, setZoom] = useState(initialZoom);
   const [showDialog, setShowDialog] = useState(false);
@@ -119,7 +121,8 @@ const GalaxyZoomWrapper: React.FC<GalaxyZoomWrapperProps> = ({
 
   const handleConfirm = () => {
     setShowDialog(false);
-    window.location.href = '/all-stars';
+    const url = projectId ? `/all-stars?galaxy=${projectId}` : '/all-stars';
+    window.location.href = url;
   };
 
   const handleCancel = () => {
@@ -182,7 +185,7 @@ const GalaxyZoomWrapper: React.FC<GalaxyZoomWrapperProps> = ({
       />
 
       {/* All Stars Link - Not scaled, always at 100% */}
-      <AllStarsLink />
+      <AllStarsLink projectId={projectId} />
 
       {/* Navigation Dialog - Not scaled, always at 100% */}
       <GalaxyNavigationDialog

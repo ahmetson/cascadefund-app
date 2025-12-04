@@ -26,6 +26,7 @@ interface Props {
   maxGalaxyContent?: number;
   stars?: UserStarData[];
   projectGoal?: number;
+  projectId?: string;
 }
 const {
   hideLinks,
@@ -38,6 +39,7 @@ const {
   maxGalaxyContent,
   stars,
   projectGoal,
+  projectId,
 } = Astro.props;
 ---
 
@@ -120,6 +122,7 @@ const {
       minZoom={minZoom}
       maxZoom={maxZoom}
       maxGalaxyContent={maxGalaxyContent}
+      projectId={projectId}
     />
   </body>
 </html>
