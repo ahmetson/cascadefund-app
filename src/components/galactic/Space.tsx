@@ -70,13 +70,39 @@ const SpaceContent: React.FC<SpaceProps> = ({ users: initialUsers, className = '
     }
   }, [])
 
+  // Listen for user star position updates (when dragging within Space)
+  useEffect(() => {
+    const handleUserStarMoved = (event: CustomEvent) => {
+      const { nickname, x, y } = event.detail as { nickname: string; x: number; y: number }
+      setUsers((prevUsers) => {
+        const existingIndex = prevUsers.findIndex((u) => u.nickname === nickname)
+        if (existingIndex >= 0) {
+          // Update existing user position
+          const updated = [...prevUsers]
+          updated[existingIndex] = {
+            ...updated[existingIndex],
+            x,
+            y,
+          }
+          return updated
+        }
+        return prevUsers
+      })
+    }
+
+    window.addEventListener('user-star-moved', handleUserStarMoved as EventListener)
+    return () => {
+      window.removeEventListener('user-star-moved', handleUserStarMoved as EventListener)
+    }
+  }, [])
+
   // Update users when initialUsers prop changes
   useEffect(() => {
     setUsers(initialUsers)
   }, [initialUsers])
 
   // Make Space a drop target
-  const [{ isOver, canDrop }, drop] = useDrop({
+  const [{ isOver, canDrop, isDraggingAny }, drop] = useDrop({
     accept: 'user-star',
     drop: (item: UserStarData, monitor) => {
       const container = document.querySelector('[data-galaxy-content]')
@@ -108,10 +134,11 @@ const SpaceContent: React.FC<SpaceProps> = ({ users: initialUsers, className = '
     collect: (monitor) => ({
       isOver: monitor.isOver(),
       canDrop: monitor.canDrop(),
+      isDraggingAny: !!monitor.getItem(), // Check if any compatible item is being dragged
     }),
   })
 
-  const isDragging = canDrop
+  const isDragging = isDraggingAny || canDrop
 
   // Combine refs
   const combinedRef = (node: HTMLDivElement | null) => {
