@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import Tooltip from '@/components/custom-ui/Tooltip';
 import InfoPanel from '../panel/InfoPanel';
 import TimeAgo from 'timeago-react';
+import { useTimer } from 'react-timer-hook';
 
 interface AllStarsLeaderboardPanelProps {
     prizePool?: number;
@@ -23,7 +24,20 @@ const AllStarsLeaderboardPanel: React.FC<AllStarsLeaderboardPanelProps> = ({
 }) => {
     const [currentTime, setCurrentTime] = useState(new Date());
 
-    // Update current time every second for time ago display
+    // Use timer hook for countdown to contest end date
+    const {
+        days,
+        hours,
+        minutes,
+        seconds,
+        isRunning,
+    } = useTimer({
+        expiryTimestamp: contestToDate || new Date(),
+        autoStart: true,
+        onExpire: () => console.warn('Contest ended'),
+    });
+
+    // Update current time every second for progress calculation
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentTime(new Date());
@@ -148,16 +162,35 @@ const AllStarsLeaderboardPanel: React.FC<AllStarsLeaderboardPanelProps> = ({
                 <div className="w-full space-y-3 px-4 py-4 rounded-lg bg-white/5 dark:bg-slate-900/5 border border-slate-200/20 dark:border-slate-700/20">
                     <div className="text-xs text-slate-600 dark:text-slate-400 mb-3">Timeline</div>
 
-                    {/* Start Time */}
-                    <div className="flex items-center justify-between text-xs">
-                        <span className="text-slate-500 dark:text-slate-400">Start:</span>
-                        <span className="text-slate-700 dark:text-slate-300 font-medium">
-                            {contestFromDate ? formatDateTime(contestFromDate) : 'N/A'}
-                        </span>
-                    </div>
-
                     {/* Progress Slider */}
                     <div className="w-full space-y-2">
+                        {/* Start and End Times */}
+                        <div className="flex items-center justify-between text-xs">
+                            {contestFromDate ? (
+                                <div className="text-slate-700 dark:text-slate-300">
+                                    <TimeAgo datetime={contestFromDate} live={false} />
+                                </div>
+                            ) : (
+                                <span className="text-slate-500 dark:text-slate-400">N/A</span>
+                            )}
+                            {contestToDate ? (
+                                <div className="text-slate-700 dark:text-slate-300 font-mono">
+                                    {isRunning ? (
+                                        <span>
+                                            {days > 0 && `${days}d `}
+                                            {String(hours).padStart(2, '0')}:
+                                            {String(minutes).padStart(2, '0')}:
+                                            {String(seconds).padStart(2, '0')}
+                                        </span>
+                                    ) : (
+                                        <span>Ended</span>
+                                    )}
+                                </div>
+                            ) : (
+                                <span className="text-slate-500 dark:text-slate-400">N/A</span>
+                            )}
+                        </div>
+
                         <div className="relative w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
                             <div
                                 className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-1000 ease-out"
@@ -169,33 +202,6 @@ const AllStarsLeaderboardPanel: React.FC<AllStarsLeaderboardPanelProps> = ({
                             <span className="text-slate-700 dark:text-slate-300 font-medium">
                                 {Math.round(progress)}%
                             </span>
-                        </div>
-                    </div>
-
-                    {/* End Time with Time Ago */}
-                    <div className="flex items-center justify-between text-xs">
-                        <span className="text-slate-500 dark:text-slate-400">End:</span>
-                        <div className="flex items-center gap-2">
-                            {contestToDate && (
-                                <>
-                                    <span className="text-slate-700 dark:text-slate-300 font-medium">
-                                        {formatDateTime(contestToDate)}
-                                    </span>
-                                    <span className="text-slate-500 dark:text-slate-400">
-                                        (
-                                        {isEnded ? (
-                                            <span>ended</span>
-                                        ) : isNotStarted ? (
-                                            <span>starts in</span>
-                                        ) : (
-                                            <span>ends in</span>
-                                        )}
-                                        {' '}
-                                        <TimeAgo datetime={contestToDate} live={true} />
-                                        )
-                                    </span>
-                                </>
-                            )}
                         </div>
                     </div>
                 </div>

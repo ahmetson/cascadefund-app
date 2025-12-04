@@ -253,8 +253,8 @@ export const mockUniverseStats: UniverseStats = {
 
 export const mockContestData: ContestData = {
   prizePool: 125000,
-  fromDate: new Date('2024-12-01'),
-  toDate: new Date('2025-01-01'),
+  fromDate: new Date('2025-12-01'),
+  toDate: new Date('2027-01-01'),
   description: '5% of the funds from 1st december to 1st january. The funds is given to the 1/100 of the top star gained galaxy. It includes all users, contributors and maintainers receiving equivalent to their earned stars',
 };
 
