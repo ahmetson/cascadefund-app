@@ -17,7 +17,7 @@ import {
   mockTopLibraries,
 } from "@/data/mock-data";
 import { getAllGalaxies, getGalaxyById } from "@/scripts/galaxy";
-import { setupDemoGalaxies } from "@/scripts/setup-demo";
+import { setupDemoGalaxies } from "@/scripts/demo-setup";
 
 // Setup demo galaxies (creates first 5 if they don't exist)
 await setupDemoGalaxies();
@@ -42,7 +42,7 @@ const allGalaxies = allGalaxiesData.map((galaxy, index) => ({
   x: galaxy.x,
   y: galaxy.y,
   projectName: galaxy.name,
-  projectId: galaxy.id,
+  projectId: galaxy._id?.toString() || "",
   galaxyData: galaxy,
   tags: galaxy.tags,
   leaderboardPosition: index + 1,

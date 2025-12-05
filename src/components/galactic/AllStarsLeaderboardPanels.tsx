@@ -124,46 +124,46 @@ const AllStarsLeaderboardPanels: React.FC<AllStarsLeaderboardPanelsProps> = ({
         </div>
     );
 
-    const renderTopLibraries = () => (
-        <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-                <thead>
-                    <tr className="border-b border-slate-200/30 dark:border-slate-700/30">
-                        <th className="text-left py-2 px-4 text-slate-600 dark:text-slate-400">#</th>
-                        <th className="text-left py-2 px-4 text-slate-600 dark:text-slate-400">Library Name</th>
-                        <th className="text-right py-2 px-4 text-slate-600 dark:text-slate-400">Depends on</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {topLibraries.slice(0, 10).map((library, index) => (
-                        <tr key={library.id} className="border-b border-slate-200/20 dark:border-slate-700/20 hover:bg-white/5 dark:hover:bg-slate-900/5">
-                            <td className="py-3 px-4 text-slate-700 dark:text-slate-300">{index + 1}</td>
-                            <td className="py-3 px-4">
-                                <Tooltip content={`View '${library.name}' galaxy`}>
-                                    <Link uri={`/all-stars?galaxy=${library.id}`} className="text-blue-500 dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-300">
-                                        {library.name}
-                                    </Link>
-                                </Tooltip>
-                            </td>
-                            <td className="py-3 px-4 text-right">
-                                <div className="flex items-center justify-end gap-1">
-                                    <NumberFlow
-                                        value={library.dependsOn}
-                                        locales="en-US"
-                                        format={{ style: 'decimal', maximumFractionDigits: 0 }}
-                                        className="text-slate-800 dark:text-slate-200"
-                                    />
-                                    <Tooltip content={`Number of projects using this library`}>
-                                        {getIcon({ iconType: 'info', className: 'w-4 h-4 text-slate-500' })}
-                                    </Tooltip>
-                                </div>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
-    );
+    // const renderTopLibraries = () => (
+    //     <div className="overflow-x-auto">
+    //         <table className="w-full text-sm">
+    //             <thead>
+    //                 <tr className="border-b border-slate-200/30 dark:border-slate-700/30">
+    //                     <th className="text-left py-2 px-4 text-slate-600 dark:text-slate-400">#</th>
+    //                     <th className="text-left py-2 px-4 text-slate-600 dark:text-slate-400">Library Name</th>
+    //                     <th className="text-right py-2 px-4 text-slate-600 dark:text-slate-400">Depends on</th>
+    //                 </tr>
+    //             </thead>
+    //             <tbody>
+    //                 {topLibraries.slice(0, 10).map((library, index) => (
+    //                     <tr key={library.id} className="border-b border-slate-200/20 dark:border-slate-700/20 hover:bg-white/5 dark:hover:bg-slate-900/5">
+    //                         <td className="py-3 px-4 text-slate-700 dark:text-slate-300">{index + 1}</td>
+    //                         <td className="py-3 px-4">
+    //                             <Tooltip content={`View '${library.name}' galaxy`}>
+    //                                 <Link uri={`/all-stars?galaxy=${library.id}`} className="text-blue-500 dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-300">
+    //                                     {library.name}
+    //                                 </Link>
+    //                             </Tooltip>
+    //                         </td>
+    //                         <td className="py-3 px-4 text-right">
+    //                             <div className="flex items-center justify-end gap-1">
+    //                                 <NumberFlow
+    //                                     value={library.dependsOn}
+    //                                     locales="en-US"
+    //                                     format={{ style: 'decimal', maximumFractionDigits: 0 }}
+    //                                     className="text-slate-800 dark:text-slate-200"
+    //                                 />
+    //                                 <Tooltip content={`Number of projects using this library`}>
+    //                                     {getIcon({ iconType: 'info', className: 'w-4 h-4 text-slate-500' })}
+    //                                 </Tooltip>
+    //                             </div>
+    //                         </td>
+    //                     </tr>
+    //                 ))}
+    //             </tbody>
+    //         </table>
+    //     </div>
+    // );
 
     const borderColor = 'border-slate-200 dark:border-slate-700/10';
     const blurredBorder = 'border-blur-xs';
@@ -234,7 +234,7 @@ const AllStarsLeaderboardPanels: React.FC<AllStarsLeaderboardPanelsProps> = ({
                 </Accordion>
             </BasePanel>
 
-            <BasePanel
+            {/* <BasePanel
                 border={{ size: BorderSize.border1, color: `${borderColor} ${blurredBorder}`, className: 'filter' }}
                 bg="bg-transparent"
                 className={cn('shadow-none', transparentBg, 'border border-slate-300/20 dark:border-slate-600/20 hover:bg-blue-500/10 hover:border-blue-500 dark:hover:bg-blue-500/20')}
@@ -262,7 +262,7 @@ const AllStarsLeaderboardPanels: React.FC<AllStarsLeaderboardPanelsProps> = ({
                         </AccordionContent>
                     </AccordionItem>
                 </Accordion>
-            </BasePanel>
+            </BasePanel> */}
         </div>
     );
 };
