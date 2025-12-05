@@ -51,9 +51,6 @@ const blockchainExplorerLink = project.socialLinks.find(
 const documentationLink = project.socialLinks.find(
   (link) => link.type === "documentation",
 );
-const projectUriLink = project.socialLinks.find(
-  (link) => link.type === "projectUri",
-);
 
 // Place Mode: If the page is in place mode, the user can place their star on the web page.
 const isPlaceMode = Astro.url.searchParams.get("place") === "true";
@@ -132,10 +129,10 @@ const projectData: ProjectInfoProps = {
   <AllStarsContest
     slot="header-navbar"
     client:only="react"
-    projectGoal={projectData.projectGoal}
-    currentStars={projectData.rating.stars}
-    projectName={projectData.title}
-    projectUri={projectData.uri}
+    projectGoal={1000}
+    currentStars={galaxy.stars}
+    projectName={galaxy.name}
+    projectUri={`/project?galaxy=${galaxyIdParam}`}
     contest={{
       title: "Galaxy Formation Contest",
       description:

@@ -1,14 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'motion/react';
-import Button from '@/components/custom-ui/Button';
-import Tooltip from '@/components/custom-ui/Tooltip';
+import React, { useState, useEffect, useMemo } from 'react';
 import Badge from '@/components/badge/Badge';
-import { getIcon } from '@/components/icon';
-import { cn } from '@/lib/utils';
-import DemoAuthPanel from '@/demo-runtime-cookies/components/DemoAuthPanel';
 import { getDemo, changeRole } from '@/demo-runtime-cookies/client-side';
 import { actions } from 'astro:actions';
 import ObtainSunshinesDialog from './ObtainSunshinesDialog';
+import ProjectCTAStepPanel from './ProjectCTAStepPanel';
 import NumberFlow from '@number-flow/react';
 
 interface ProjectCTAPanelProps {
@@ -17,7 +12,6 @@ interface ProjectCTAPanelProps {
 }
 
 const ProjectCTAPanel: React.FC<ProjectCTAPanelProps> = ({ galaxyId, projectName }) => {
-  const [isHovered, setIsHovered] = useState(false);
   const [demoStep, setDemoStep] = useState<number | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingStep, setIsLoadingStep] = useState(true);
@@ -119,90 +113,171 @@ const ProjectCTAPanel: React.FC<ProjectCTAPanelProps> = ({ galaxyId, projectName
     }
   };
 
-  // Show "Obtain Sunshines" if step is undefined or 0
-  const shouldShowObtainSunshines = demoStep === undefined || demoStep === 0;
+  // Define steps content (after handleObtainSunshines is defined)
+  const stepsContent = useMemo(() => [
+    {
+      // Step 0: Obtain Sunshines
+      title: 'Join this open source project',
+      tooltipContent,
+      hintText: (
+        <>
+          <Badge>demo</Badge> donating
+          <NumberFlow value={50} locales="en-US" format={{ style: 'currency', currency: 'USD', maximumFractionDigits: 2 }} /> to '{projectName}' maintainer.
+        </>
+      ),
+      buttonText: 'Obtain Sunshines',
+      buttonLoadingText: 'Processing...',
+      onClick: handleObtainSunshines,
+    },
+    {
+      // Step 1: Create Issue
+      title: 'Create an issue',
+      tooltipContent: (
+        <div className="text-sm max-w-xs">
+          <p>Create an issue to collaborate with the maintainer on the project.</p>
+        </div>
+      ),
+      hintText: (
+        <>
+          <Badge>demo</Badge> Create an issue for '{projectName}' project.
+        </>
+      ),
+      buttonText: 'Go to Issues',
+      buttonLoadingText: 'Loading...',
+      uri: `/project/issues?galaxy=${galaxyId}`,
+    },
+    {
+      // Step 2: Assign Contributor
+      title: 'Assign a contributor',
+      tooltipContent: (
+        <div className="text-sm max-w-xs">
+          <p>Assign a contributor to work on the issue you created.</p>
+        </div>
+      ),
+      hintText: (
+        <>
+          <Badge>demo</Badge> Assign a contributor to work on '{projectName}' issues.
+        </>
+      ),
+      buttonText: 'Go to Issues',
+      buttonLoadingText: 'Loading...',
+      uri: `/project/issues?galaxy=${galaxyId}`,
+    },
+    {
+      // Step 3: Move to Roadmap
+      title: 'Move issue to roadmap',
+      tooltipContent: (
+        <div className="text-sm max-w-xs">
+          <p>Move the assigned issue to the project roadmap.</p>
+        </div>
+      ),
+      hintText: (
+        <>
+          <Badge>demo</Badge> Move issue to '{projectName}' roadmap.
+        </>
+      ),
+      buttonText: 'Go to Roadmap',
+      buttonLoadingText: 'Loading...',
+      uri: `/project/roadmap?galaxy=${galaxyId}`,
+    },
+    {
+      // Step 4: Create Patch
+      title: 'Create a patch',
+      tooltipContent: (
+        <div className="text-sm max-w-xs">
+          <p>Create a patch for the issue in the roadmap.</p>
+        </div>
+      ),
+      hintText: (
+        <>
+          <Badge>demo</Badge> Create a patch for '{projectName}' issue.
+        </>
+      ),
+      buttonText: 'Go to Roadmap',
+      buttonLoadingText: 'Loading...',
+      uri: `/project/roadmap?galaxy=${galaxyId}`,
+    },
+    {
+      // Step 5: Mark Version Complete
+      title: 'Mark version complete',
+      tooltipContent: (
+        <div className="text-sm max-w-xs">
+          <p>Mark the version as complete after the patch is ready.</p>
+        </div>
+      ),
+      hintText: (
+        <>
+          <Badge>demo</Badge> Mark '{projectName}' version as complete.
+        </>
+      ),
+      buttonText: 'Go to Roadmap',
+      buttonLoadingText: 'Loading...',
+      uri: `/project/roadmap?galaxy=${galaxyId}`,
+    },
+    {
+      // Step 6: Test Completed
+      title: 'Test the completed version',
+      tooltipContent: (
+        <div className="text-sm max-w-xs">
+          <p>Test the completed version of the project.</p>
+        </div>
+      ),
+      hintText: (
+        <>
+          <Badge>demo</Badge> Test the completed '{projectName}' version.
+        </>
+      ),
+      buttonText: 'Go to Roadmap',
+      buttonLoadingText: 'Loading...',
+      uri: `/project/roadmap?galaxy=${galaxyId}`,
+    },
+    {
+      // Step 7-9: Place Star in Galaxy
+      title: 'Place your star in the galaxy',
+      tooltipContent: (
+        <div className="text-sm max-w-xs">
+          <p>Place your star in the galaxy to show your contribution.</p>
+        </div>
+      ),
+      hintText: (
+        <>
+          <Badge>demo</Badge> Place your star in the '{projectName}' galaxy.
+        </>
+      ),
+      buttonText: 'Place Star',
+      buttonLoadingText: 'Loading...',
+      uri: `/project?galaxy=${galaxyId}&place=true`,
+    },
+  ], [galaxyId, projectName, tooltipContent, handleObtainSunshines]);
+
+  // Get current step content (default to step 0 if undefined)
+  const currentStep = demoStep !== undefined ? demoStep : 0;
+  const stepContent = stepsContent[Math.min(currentStep, stepsContent.length - 1)];
 
   // Don't render if still loading step
   if (isLoadingStep) {
     return (
-      <DemoAuthPanel>
-        <div className="w-full max-w-md mx-auto mt-1 p-6 text-center">
-          <p className="text-slate-600 dark:text-slate-400">Loading...</p>
-        </div>
-      </DemoAuthPanel>
+      <div className="w-full max-w-md mx-auto mt-1 p-6 text-center">
+        <p className="text-slate-600 dark:text-slate-400">Loading...</p>
+      </div>
     );
   }
 
   return (
     <>
-      {shouldShowObtainSunshines && <DemoAuthPanel>
-        <motion.div
-          className={cn(
-            "relative w-full max-w-md mx-auto mt-1",
-            "backdrop-blur-md bg-white/20 dark:bg-slate-900/20",
-            "border border-slate-200/30 dark:border-slate-700/30",
-            "rounded-lg p-6",
-            "transition-all duration-300",
-            "hover:bg-white/30 dark:hover:bg-slate-900/30",
-            "hover:border-slate-300/50 dark:hover:border-slate-600/50",
-            "hover:shadow-xl hover:shadow-blue-500/20"
-          )}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          animate={{
-            scale: isHovered ? 1.02 : 1,
-            y: isHovered ? -4 : 0,
-          }}
-          transition={{
-            type: "spring",
-            stiffness: 300,
-            damping: 20,
-          }}
-        >
-          {/* Animated gradient overlay on hover */}
-          {isHovered && (
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 rounded-lg pointer-events-none"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-            />
-          )}
-
-          {/* Content */}
-          <div className="relative z-10 flex flex-col items-center gap-4">
-            {/* Title with Info Badge */}
-            <div className="flex items-center gap-3">
-              <h3 className="text-xl font-bold text-slate-700 dark:text-slate-300">
-                Join this open source project
-              </h3>
-              <Tooltip content={tooltipContent}>
-                <span className="flex items-center gap-1 cursor-help">
-                  {getIcon({ iconType: 'info', className: 'w-4 h-4' })}
-                </span>
-              </Tooltip>
-            </div>
-
-            {/* Hint text with badge */}
-            <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 h-6">
-              <Badge>demo</Badge> donating
-              <NumberFlow value={50} locales="en-US" format={{ style: 'currency', currency: 'USD', maximumFractionDigits: 2 }} /> to '{projectName}' maintainer.
-            </div>
-
-            {/* CTA Button */}
-            <Button
-              variant="primary"
-              size="lg"
-              className="w-full text-shadow-lg"
-              onClick={handleObtainSunshines}
-              disabled={isLoading}
-            >
-              {isLoading ? 'Processing...' : 'Obtain Sunshines'}
-            </Button>
-          </div>
-        </motion.div>
-      </DemoAuthPanel>}
+      {stepContent && (
+        <ProjectCTAStepPanel
+          title={stepContent.title}
+          tooltipContent={stepContent.tooltipContent}
+          hintText={stepContent.hintText}
+          buttonText={stepContent.buttonText}
+          buttonLoadingText={stepContent.buttonLoadingText}
+          onClick={stepContent.onClick}
+          uri={stepContent.uri}
+          isLoading={isLoading && currentStep === 0}
+          disabled={isLoading}
+        />
+      )}
 
       {/* Success Dialog */}
       {showDialog && dialogData && (
@@ -221,4 +296,3 @@ const ProjectCTAPanel: React.FC<ProjectCTAPanelProps> = ({ galaxyId, projectName
 };
 
 export default ProjectCTAPanel;
-
