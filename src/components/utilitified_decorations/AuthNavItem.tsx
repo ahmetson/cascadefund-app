@@ -5,8 +5,7 @@ import WalletBalance from '@/components/utilitified_decorations/WalletBalance'
 import { useDemoStart } from '@/hooks/use-demo-start'
 import DemoCongratulationsDialog from '@/components/project/DemoCongratulationsDialog'
 import { cn } from '@/lib/utils'
-import { useDemoClient } from '@/scripts/demo-client'
-import type { DemoUserCreatedEvent, DemoRoleChangeEvent } from '@/scripts/demo-client'
+import { type DemoUserCreatedEvent, type DemoRoleChangeEvent, DEMO_EVENT_TYPES } from '@/demo-runtime-cookies'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,7 +17,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/animate-ui/components/radix/dropdown-menu'
 import { ChevronDownIcon } from 'lucide-react'
-import { Roles } from '@/scripts/user'
+import { Roles, type UserModel } from '@/scripts/user'
+import { startDemo, clearDemo, changeRole, getDemo } from '@/demo-runtime-cookies/client-side'
 
 interface Props {
   className?: string
@@ -27,53 +27,78 @@ interface Props {
 const AuthNavItem: React.FC<Props> = ({ className }) => {
   const [isLoading, setIsLoading] = useState(false)
   const { showDialog, demoUsers, setShowDialog, handleSuccess } = useDemoStart()
-  const { currentUser, startDemo, users, changeRole, clearDemo, role } = useDemoClient()
-  const [demoUser, setDemoUser] = useState(currentUser)
 
-  // Update demoUser when currentUser changes
-  useEffect(() => {
-    setDemoUser(currentUser)
-  }, [currentUser])
+  // Get initial demo state
+  const demoState = getDemo()
+  const [demoUser, setDemoUser] = useState<UserModel | null>(
+    demoState.users && demoState.role
+      ? demoState.users.find((u) => u.role === demoState.role) || demoState.users[0] || null
+      : null
+  )
+  const [users, setUsers] = useState<UserModel[] | null>(demoState.users)
+  const [role, setRole] = useState<Roles | null>(demoState.role)
 
-  // Listen for demo events (only once on mount)
+  // Update state when demo changes
   useEffect(() => {
+    const updateDemoState = () => {
+      const currentDemo = getDemo()
+      setUsers(currentDemo.users)
+      setRole(currentDemo.role)
+      if (currentDemo.users && currentDemo.role) {
+        const user = currentDemo.users.find((u) => u.role === currentDemo.role) || currentDemo.users[0] || null
+        setDemoUser(user)
+      } else {
+        setDemoUser(null)
+      }
+    }
+
+    // Initial update
+    updateDemoState()
+
+    // Listen for demo events
     const handleDemoUserCreated = (event: Event) => {
       const customEvent = event as CustomEvent<DemoUserCreatedEvent>
-      // Update to show MenuAvatar with new user
       if (customEvent.detail.users && customEvent.detail.role) {
+        setUsers(customEvent.detail.users)
+        setRole(customEvent.detail.role)
         const user = customEvent.detail.users.find((u) => u.role === customEvent.detail.role)
         if (user) {
           setDemoUser(user)
         }
+        // Show dialog and trigger confetti using the hook
+        handleSuccess(customEvent.detail.users, customEvent.detail.email)
       }
     }
 
     const handleDemoUserDeleted = () => {
-      // Show "Start Demo" button
       setDemoUser(null)
+      setUsers(null)
+      setRole(null)
+      setShowDialog(false)
     }
 
     const handleDemoRoleChange = (event: Event) => {
       const customEvent = event as CustomEvent<DemoRoleChangeEvent>
-      // Update MenuAvatar with new role's user
-      if (users && customEvent.detail.role) {
-        const user = users.find((u) => u.role === customEvent.detail.role)
+      const currentDemo = getDemo()
+      if (currentDemo.users && customEvent.detail.role) {
+        setRole(customEvent.detail.role)
+        const user = currentDemo.users.find((u) => u.role === customEvent.detail.role)
         if (user) {
           setDemoUser(user)
         }
       }
     }
 
-    window.addEventListener('demo-user-created', handleDemoUserCreated as EventListener)
-    window.addEventListener('demo-user-deleted', handleDemoUserDeleted)
-    window.addEventListener('demo-role-change', handleDemoRoleChange as EventListener)
+    window.addEventListener(DEMO_EVENT_TYPES.USER_CREATED, handleDemoUserCreated as EventListener)
+    window.addEventListener(DEMO_EVENT_TYPES.USER_DELETED, handleDemoUserDeleted)
+    window.addEventListener(DEMO_EVENT_TYPES.ROLE_CHANGED, handleDemoRoleChange as EventListener)
 
     return () => {
-      window.removeEventListener('demo-user-created', handleDemoUserCreated as EventListener)
-      window.removeEventListener('demo-user-deleted', handleDemoUserDeleted)
-      window.removeEventListener('demo-role-change', handleDemoRoleChange as EventListener)
+      window.removeEventListener(DEMO_EVENT_TYPES.USER_CREATED, handleDemoUserCreated as EventListener)
+      window.removeEventListener(DEMO_EVENT_TYPES.USER_DELETED, handleDemoUserDeleted)
+      window.removeEventListener(DEMO_EVENT_TYPES.ROLE_CHANGED, handleDemoRoleChange as EventListener)
     }
-  }, [users])
+  }, [])
 
   const handleStartClick = async () => {
     // Prompt user for email address
@@ -98,11 +123,12 @@ const AuthNavItem: React.FC<Props> = ({ className }) => {
     try {
       const result = await startDemo(trimmedEmail)
 
-      if (result.success && 'users' in result && result.users && Array.isArray(result.users)) {
-        // Show congratulations dialog with confetti
-        handleSuccess(result.users, trimmedEmail)
+      if (result.success) {
+        // The event listener will handle updating state and showing dialog
+        // The startDemo function already emits the demo-user-created event
+        // handleSuccess will be called by the event listener
       } else {
-        alert('error' in result ? result.error || 'Failed to start demo' : 'Failed to start demo')
+        alert(result.error || 'Failed to start demo')
       }
     } catch (err: any) {
       alert(err.message || 'An error occurred. Please try again.')

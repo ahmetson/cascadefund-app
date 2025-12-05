@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '@/lib/utils';
 import { useDemoStart } from '@/hooks/use-demo-start';
 import DemoCongratulationsDialog from './DemoCongratulationsDialog';
-import { useDemoClient } from '@/scripts/demo-client';
+import { startDemo, demoExists } from '@/demo-runtime-cookies/client-side';
 
 const DemoCtaPanel: React.FC = () => {
     const [isHovered, setIsHovered] = useState(false);
@@ -12,7 +12,6 @@ const DemoCtaPanel: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
     const { showDialog, demoUsers, setShowDialog, handleSuccess } = useDemoStart();
-    const { startDemo, hasDemo } = useDemoClient();
 
     // Listen for demo-user-created event (only once on mount)
     useEffect(() => {
@@ -30,10 +29,10 @@ const DemoCtaPanel: React.FC = () => {
 
     // Hide panel if demo already exists
     useEffect(() => {
-        if (hasDemo) {
+        if (demoExists()) {
             setIsVisible(false);
         }
-    }, [hasDemo]);
+    }, [demoExists]);
 
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value);

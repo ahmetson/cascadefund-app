@@ -1,6 +1,6 @@
 import { defineAction } from 'astro:actions'
 import { z } from 'astro:schema'
-import { getDemoByEmail, createDemo } from '@/scripts/demo'
+import { getDemoByEmail, createDemo } from '@/demo-runtime-cookies/server-side'
 import { UserModel, Roles, emailToNickname, createUsers, getUserByIds } from '@/scripts/user'
 
 /**
@@ -97,7 +97,7 @@ export const server = {
                 if (!created) {
                     return {
                         success: false,
-                        error: 'Failed to create demo',
+                        error: 'Failed to create a new demo',
                     }
                 }
 
@@ -115,7 +115,7 @@ export const server = {
                 console.error('Error in demo start action:', error)
                 return {
                     success: false,
-                    error: 'An error occurred while starting the demo',
+                    error: 'An error occurred while starting a new demo',
                 }
             }
         },

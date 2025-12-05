@@ -3,7 +3,7 @@ import PageLikePanel from '@/components/panel/PageLikePanel'
 import Link from '@/components/custom-ui/Link'
 import Button from '@/components/custom-ui/Button'
 import { cn } from '@/lib/utils'
-import { demoProjectName } from '@/scripts/demo-constants'
+import { demoProjectName } from '@/demo-runtime-cookies'
 import type { UserModel } from '@/scripts/user'
 
 interface DemoCongratulationsDialogProps {

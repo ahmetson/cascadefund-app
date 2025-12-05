@@ -1,6 +1,6 @@
-import { getCollection } from './db'
-import { getOrCreateUserByEmail } from './user'
-import { GalaxyModel } from './galaxy'
+import { getCollection } from '../scripts/db'
+import { getOrCreateUserByEmail } from '../scripts/user'
+import { GalaxyModel } from '../scripts/galaxy'
 
 // Initial galaxy data for demo setup
 const initialGalaxies: Omit<GalaxyModel, '_id' | 'maintainer'>[] = [
@@ -64,7 +64,7 @@ const initialGalaxies: Omit<GalaxyModel, '_id' | 'maintainer'>[] = [
 /**
  * Setup demo galaxies - checks if galaxies exist, creates first 5 if missing
  */
-export async function setupDemoGalaxies(): Promise<void> {
+export async function setup(): Promise<void> {
     try {
         // Check if any galaxies exist
         const collection = await getCollection<GalaxyModel>('galaxies')

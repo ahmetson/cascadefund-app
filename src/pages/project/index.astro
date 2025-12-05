@@ -13,7 +13,7 @@ import BackButton from "@/components/custom-ui/BackButton";
 import AllStarsContest from "@/components/galactic/AllStarsContest";
 import { mockUserStars } from "@/data/mock-data";
 
-// Read place query parameter
+// Place Mode: If the page is in place mode, the user can place their star on the web page.
 const isPlaceMode = Astro.url.searchParams.get("place") === "true";
 
 // Set draggable property on current user's star (for demo, using first star as current user)

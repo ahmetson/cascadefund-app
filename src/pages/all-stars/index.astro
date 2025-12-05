@@ -10,13 +10,12 @@ import GalaxyAutoZoom from "@/components/galactic/GalaxyAutoZoom";
 import BackButton from "@/components/custom-ui/BackButton";
 import NewGalaxyButton from "@/components/galactic/NewGalaxyButton";
 import DemoCtaPanel from "@/components/project/DemoCtaPanel";
-import { isCookieExist } from "@/scripts/demo";
 import { mockContestData } from "@/data/mock-data";
 import { getAllGalaxies, getGalaxyById } from "@/scripts/galaxy";
-import { setupDemoGalaxies } from "@/scripts/demo-setup";
+import { setup } from "@/demo-runtime-cookies/setup";
 
 // Setup demo galaxies (creates first 5 if they don't exist)
-await setupDemoGalaxies();
+await setup();
 
 // Read galaxy query parameter
 const galaxyId = Astro.url.searchParams.get("galaxy");
@@ -27,11 +26,6 @@ const allGalaxiesData = await getAllGalaxies();
 
 // Get current user's starsunshines (for demo, using 0 to show locked state)
 const currentStarsunshines = 0;
-
-// Check if demo cookies exist
-const demoCookiesExist = await isCookieExist(Astro.cookies);
-
-const shouldShowDemoCta = !demoCookiesExist;
 
 // Prepare all galaxies for display in the virtual screen
 const allGalaxies = allGalaxiesData.map((galaxy, index) => ({
@@ -68,7 +62,7 @@ const allGalaxies = allGalaxiesData.map((galaxy, index) => ({
   </div>
 
   <UniverseHero slot="center" client:only="react" />
-  {shouldShowDemoCta && <DemoCtaPanel slot="center" client:only="react" />}
+  <DemoCtaPanel slot="center" client:only="react" />
 
   <AllStarsContestPanel
     slot="right"

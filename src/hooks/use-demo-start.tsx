@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react'
-import { DEMO_COOKIE_NAMES, demoProjectName } from '@/scripts/demo-constants'
-import { Roles } from '@/scripts/user'
 import type { UserModel } from '@/scripts/user'
 import confetti from 'canvas-confetti'
 
@@ -21,21 +19,7 @@ export function useDemoStart(): UseDemoStartResult {
   const [demoUsers, setDemoUsers] = useState<UserModel[]>([])
   const [hasTriggeredConfetti, setHasTriggeredConfetti] = useState(false)
 
-  const handleSuccess = (users: UserModel[], email: string) => {
-    // Set cookies
-    const emailValue = email.trim()
-    const usersValue = JSON.stringify(users)
-    const roleValue: Roles = 'maintainer' // Default role
-
-    // Set cookies with expiration (30 days)
-    const expirationDate = new Date()
-    expirationDate.setDate(expirationDate.getDate() + 30)
-    const expires = expirationDate.toUTCString()
-
-    document.cookie = `${DEMO_COOKIE_NAMES.email}=${emailValue}; expires=${expires}; path=/`
-    document.cookie = `${DEMO_COOKIE_NAMES.users}=${encodeURIComponent(usersValue)}; expires=${expires}; path=/`
-    document.cookie = `${DEMO_COOKIE_NAMES.role}=${roleValue}; expires=${expires}; path=/`
-
+  const handleSuccess = (users: UserModel[]) => {
     // Show congratulations dialog
     setDemoUsers(users)
     setShowDialog(true)
@@ -91,6 +75,4 @@ export function useDemoStart(): UseDemoStartResult {
     triggerConfetti,
   }
 }
-
-export { demoProjectName }
 
