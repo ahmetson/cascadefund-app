@@ -54,8 +54,8 @@ const ProjectCTAPanel: React.FC = () => {
       <div className="relative z-10 flex flex-col items-center gap-4">
         {/* Title with Info Badge */}
         <div className="flex items-center gap-3">
-          <h3 className="text-xl font-bold text-slate-800 dark:text-slate-200">
-            Show your star on blockchain
+          <h3 className="text-xl font-bold text-slate-700 dark:text-slate-300">
+            Join this open-source project
           </h3>
           <Tooltip content={tooltipContent}>
             <span className="flex items-center gap-1 cursor-help">
@@ -74,7 +74,7 @@ const ProjectCTAPanel: React.FC = () => {
             console.log('Show your star clicked');
           }}
         >
-          Get Started
+          Obtain Sunshines
         </Button>
       </div>
     </motion.div>
