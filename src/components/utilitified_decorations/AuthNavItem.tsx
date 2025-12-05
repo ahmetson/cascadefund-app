@@ -38,7 +38,7 @@ const AuthNavItem: React.FC<Props> = ({ className }) => {
   const [users, setUsers] = useState<UserModel[] | null>(demoState.users)
   const [role, setRole] = useState<Roles | null>(demoState.role)
 
-  // Update state when demo changes
+  // Mount only once on the client side
   useEffect(() => {
     const updateDemoState = () => {
       const currentDemo = getDemo()
@@ -123,11 +123,7 @@ const AuthNavItem: React.FC<Props> = ({ className }) => {
     try {
       const result = await startDemo(trimmedEmail)
 
-      if (result.success) {
-        // The event listener will handle updating state and showing dialog
-        // The startDemo function already emits the demo-user-created event
-        // handleSuccess will be called by the event listener
-      } else {
+      if (!result.success) {
         alert(result.error || 'Failed to start demo')
       }
     } catch (err: any) {

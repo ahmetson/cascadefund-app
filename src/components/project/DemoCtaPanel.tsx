@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { useDemoStart } from '@/hooks/use-demo-start';
 import DemoCongratulationsDialog from './DemoCongratulationsDialog';
 import { startDemo, demoExists } from '@/demo-runtime-cookies/client-side';
+import { DEMO_EVENT_TYPES } from '@/demo-runtime-cookies';
 
 const DemoCtaPanel: React.FC = () => {
     const [isHovered, setIsHovered] = useState(false);
@@ -13,17 +14,17 @@ const DemoCtaPanel: React.FC = () => {
     const [isVisible, setIsVisible] = useState(true);
     const { showDialog, demoUsers, setShowDialog, handleSuccess } = useDemoStart();
 
-    // Listen for demo-user-created event (only once on mount)
+    // Listen for USER_CREATED event (only once on mount)
     useEffect(() => {
         const handleDemoUserCreated = () => {
             // Hide panel with animation
             setIsVisible(false);
         };
 
-        window.addEventListener('demo-user-created', handleDemoUserCreated as EventListener);
+        window.addEventListener(DEMO_EVENT_TYPES.USER_CREATED, handleDemoUserCreated as EventListener);
 
         return () => {
-            window.removeEventListener('demo-user-created', handleDemoUserCreated as EventListener);
+            window.removeEventListener(DEMO_EVENT_TYPES.USER_CREATED, handleDemoUserCreated as EventListener);
         };
     }, []);
 
