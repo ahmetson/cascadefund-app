@@ -44,11 +44,11 @@ const authorName =
   maintainer?.nickname || maintainer?.email?.split("@")[0] || "Unknown";
 
 // Extract social links
-const githubLink = project.socialLinks.find((link) => link.type === "github");
-const blockchainExplorerLink = project.socialLinks.find(
+const githubLink = project.socialLinks?.find((link) => link.type === "github");
+const blockchainExplorerLink = project.socialLinks?.find(
   (link) => link.type === "blockchain-explorer",
 );
-const documentationLink = project.socialLinks.find(
+const documentationLink = project.socialLinks?.find(
   (link) => link.type === "documentation",
 );
 

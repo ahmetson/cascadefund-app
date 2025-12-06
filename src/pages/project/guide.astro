@@ -1,10 +1,40 @@
 ---
 import Layout from "@/layouts/PanelViewLayout.astro";
 import { MenuName } from "@/components/navbar/WorkNavbar.astro";
+import { ObjectId } from "mongodb";
+import { getGalaxyById } from "@/scripts/galaxy";
+import { getProjectById } from "@/scripts/project";
 import MenuPanel from "@/components/menu/MenuPanel";
-
 import QuestPanel from "@/components/quest/QuestPanel";
 import Hyperspeed from "@/components/Hyperspeed";
+
+// Get galaxy ID from query parameter
+const galaxyIdParam = Astro.url.searchParams.get("galaxy");
+
+// Validate galaxy ID
+if (!galaxyIdParam) {
+  return Astro.redirect("/project/404?method=getGalaxyParam");
+}
+
+// Validate ObjectId format
+let galaxyId: ObjectId;
+try {
+  galaxyId = new ObjectId(galaxyIdParam);
+} catch (error) {
+  return Astro.redirect("/project/404?method=validateGalaxyId");
+}
+
+// Fetch galaxy from database
+const galaxy = await getGalaxyById(galaxyIdParam);
+if (!galaxy || !galaxy.projectLink) {
+  return Astro.redirect("/project/404?method=getGalaxyById");
+}
+
+// Fetch project from database
+const project = await getProjectById(galaxy.projectLink);
+if (!project) {
+  return Astro.redirect("/project/404?method=getProjectById");
+}
 // the component will fill the height/width of its parent container, edit the CSS to change this
 // the options below are the default values
 ---
@@ -52,6 +82,14 @@ import Hyperspeed from "@/components/Hyperspeed";
     className="fixed h-screen w-screen z-2 pointer-events-none opacity-40"
     client:load
   />
-  <MenuPanel slot="left" activeMenuItem="guide" client:load />
+  <MenuPanel
+    slot="left"
+    activeMenuItem="guide"
+    galaxy={galaxy}
+    projectIcon={project.socialLinks?.find((link) => link.type === "project")
+      ?.uri}
+    projectName={galaxy.name}
+    starCount={galaxy.stars}
+  />
   <QuestPanel slot="center" title="Automatic Guide" client:load />
 </Layout>

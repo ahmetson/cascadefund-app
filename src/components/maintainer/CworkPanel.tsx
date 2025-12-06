@@ -1,5 +1,4 @@
 import React from 'react'
-import type { TabProps } from '@/components/Tabs';
 import ProjectListPanel from '../project/ProjectListPanel';
 import { ProjectInfoProps } from '../project/ProjectLink';
 
@@ -45,31 +44,27 @@ const CworkPanel: React.FC = () => {
           top: 5
         }
       },
-      influencers: [
+      stars: [
         {
+          x: 100,
+          y: 100,
           uri: '/profile/jane-smith',
-          children: 'Jane Smith',
-          icon: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=32&h=32&fit=crop&crop=face',
-          rating: {
-            ratingType: 'influencer',
-            lvl: 7,
-            maxLvl: 10,
-            top: 12
-          }
+          nickname: 'Jane Smith',
+          src: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=32&h=32&fit=crop&crop=face',
+          stars: 3.5,
+          role: 'Influencer'
         },
         {
+          x: 150,
+          y: 150,
           uri: '/profile/mike-johnson',
-          children: 'Mike Johnson',
-          icon: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=32&h=32&fit=crop&crop=face',
-          rating: {
-            ratingType: 'contributor',
-            lvl: 6,
-            maxLvl: 10,
-            top: 25
-          }
+          nickname: 'Mike Johnson',
+          src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=32&h=32&fit=crop&crop=face',
+          stars: 3.0,
+          role: 'Contributor'
         }
       ],
-      collaborators: []
+      actions: []
     }
   ]
 
