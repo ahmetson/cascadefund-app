@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react'
-import type { UserModel } from '@/scripts/user'
+import type { User } from '@/types/user'
 import confetti from 'canvas-confetti'
 
 interface UseDemoStartResult {
   showDialog: boolean
-  demoUsers: UserModel[]
+  demoUsers: User[]
   hasTriggeredConfetti: boolean
   setShowDialog: (show: boolean) => void
-  handleSuccess: (users: UserModel[], email: string) => void
+  handleSuccess: (users: User[], email: string) => void
   triggerConfetti: () => void
 }
 
@@ -16,10 +16,10 @@ interface UseDemoStartResult {
  */
 export function useDemoStart(): UseDemoStartResult {
   const [showDialog, setShowDialog] = useState(false)
-  const [demoUsers, setDemoUsers] = useState<UserModel[]>([])
+  const [demoUsers, setDemoUsers] = useState<User[]>([])
   const [hasTriggeredConfetti, setHasTriggeredConfetti] = useState(false)
 
-  const handleSuccess = (users: UserModel[]) => {
+  const handleSuccess = (users: User[]) => {
     // Show congratulations dialog
     setDemoUsers(users)
     setShowDialog(true)

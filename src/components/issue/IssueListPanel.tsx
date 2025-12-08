@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import FilterableList from '@/components/list/FilterableList'
 import IssueLink from '@/components/issue/IssueLink'
 import BasePanel from '@/components/panel/Panel'
-import type { Issue, IssueModelClient } from '@/scripts/issue'
+import type { Issue } from '@/types/issue'
+import { IssueTag } from '@/types/issue'
 import DraggableIssueLink from './DraggableIssueLink'
 import { FilterOption } from '@/components/list/FilterToggle'
 import { getIcon } from '../icon'
@@ -29,67 +30,23 @@ const ContentArea: React.FC<Props> = ({ title = 'Issues', draggable = false, fil
       }
 
       try {
-        // Actions return serialized data (ObjectIds are already strings)
-        let issueModels: any[] = [];
+        // Actions return serialized Issue data directly
+        let fetchedIssues: Issue[] = [];
 
         if (title === 'Shining Issues') {
           const result = await actions.getShiningIssues({ galaxyId });
-          issueModels = result.data?.data || [];
+          console.log('shining issues result', result);
+          fetchedIssues = result.data?.data || [];
         } else if (title === 'Public Backlog') {
           const result = await actions.getPublicBacklogIssues({ galaxyId });
-          issueModels = result.data?.data || [];
+          fetchedIssues = result.data?.data || [];
         } else {
           // For other tabs, fetch all issues (can be filtered later)
           const result = await actions.getIssuesByGalaxy({ galaxyId });
-          issueModels = result.data?.issues || [];
+          fetchedIssues = result.data?.issues || [];
         }
 
-        // Transform serialized IssueModel (with string IDs) to Issue
-        const transformedIssues: Issue[] = await Promise.all(
-          issueModels.map(async (issueModel: any) => {
-            // Serialized ObjectIds are already strings
-            const maintainerId = typeof issueModel.maintainer === 'string'
-              ? issueModel.maintainer
-              : issueModel.maintainer?.toString() || '';
-
-            // Fetch maintainer user data
-            const maintainerResult = await actions.getUserById({ userId: maintainerId });
-            const maintainer = maintainerResult.data?.data;
-
-            return {
-              id: typeof issueModel._id === 'string' ? issueModel._id : issueModel._id?.toString() || undefined,
-              uri: issueModel.uri,
-              number: issueModel.number,
-              title: issueModel.title,
-              description: issueModel.description,
-              type: issueModel.type,
-              storage: issueModel.storage,
-              author: maintainer ? {
-                uri: maintainer.uri || `/profile?email=${maintainer.email}`,
-                children: maintainer.nickname || maintainer.email?.split('@')[0] || 'Unknown',
-                icon: maintainer.src,
-                rating: maintainer.role === 'maintainer' ? {
-                  ratingType: 'maintainer',
-                  lvl: Math.floor((maintainer.stars || 0) * 2),
-                  maxLvl: 10,
-                  top: 0
-                } : undefined
-              } : undefined,
-              projectId: issueModel.projectId,
-              categoryId: issueModel.categoryId,
-              stats: issueModel.stats,
-              createdTime: issueModel.createdTime
-                ? (typeof issueModel.createdTime === 'string'
-                  ? issueModel.createdTime
-                  : new Date(issueModel.createdTime).toISOString())
-                : undefined,
-              sunshines: issueModel.sunshines,
-              usersCount: issueModel.users?.length || 0
-            } as Issue;
-          })
-        );
-
-        setIssues(transformedIssues);
+        setIssues(fetchedIssues);
       } catch (error) {
         console.error('Error fetching issues:', error);
       } finally {
@@ -100,7 +57,7 @@ const ContentArea: React.FC<Props> = ({ title = 'Issues', draggable = false, fil
     fetchIssues();
   }, [galaxyId, title]);
 
-  // Create filters based on IssueType
+  // Create filters based on IssueTag
   const filters: FilterOption[] = [
     {
       id: 'all',
@@ -112,7 +69,7 @@ const ContentArea: React.FC<Props> = ({ title = 'Issues', draggable = false, fil
       ]
     },
     {
-      id: 'bug',
+      id: IssueTag.BUG,
       label: 'Bug',
       sortIds: [
         { id: 'priority', label: 'Priority' },
@@ -121,7 +78,7 @@ const ContentArea: React.FC<Props> = ({ title = 'Issues', draggable = false, fil
       ]
     },
     {
-      id: 'feature',
+      id: IssueTag.FEATURE,
       label: 'Feature',
       sortIds: [
         { id: 'priority', label: 'Priority' },
@@ -130,7 +87,7 @@ const ContentArea: React.FC<Props> = ({ title = 'Issues', draggable = false, fil
       ]
     },
     {
-      id: 'improvement',
+      id: IssueTag.IMPROVEMENT,
       label: 'Improvement',
       sortIds: [
         { id: 'priority', label: 'Priority' },
@@ -139,7 +96,7 @@ const ContentArea: React.FC<Props> = ({ title = 'Issues', draggable = false, fil
       ]
     },
     {
-      id: 'enhancement',
+      id: IssueTag.ENHANCEMENT,
       label: 'Enhancement',
       sortIds: [
         { id: 'priority', label: 'Priority' },
@@ -148,7 +105,7 @@ const ContentArea: React.FC<Props> = ({ title = 'Issues', draggable = false, fil
       ]
     },
     {
-      id: 'wish',
+      id: IssueTag.WISH,
       label: 'Wish',
       sortIds: [
         { id: 'priority', label: 'Priority' },
@@ -157,7 +114,7 @@ const ContentArea: React.FC<Props> = ({ title = 'Issues', draggable = false, fil
       ]
     },
     {
-      id: 'custom',
+      id: IssueTag.CUSTOM,
       label: 'Custom',
       sortIds: [
         { id: 'priority', label: 'Priority' },

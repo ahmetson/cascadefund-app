@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from '../custom-ui/Link'
 import { getIcon, IconType } from '../icon'
-import type { Issue } from '@/scripts/issue'
+import type { Issue } from '@/types/issue'
 import { getIssueStatIcon } from './utils'
 import Badge from '../badge/Badge'
 import PanelFooter from '../panel/PanelFooter'

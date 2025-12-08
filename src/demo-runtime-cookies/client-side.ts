@@ -1,6 +1,6 @@
 import { actions } from 'astro:actions';
 import { clearCookie, getCookie, setCookie, emitEvent, callAction } from '@/scripts/astro-runtime-cookies'
-import { Roles, type UserModel } from '../scripts/user'
+import type { Roles, User } from '../types/user'
 import { DEMO_COOKIE_NAMES, DEMO_EVENT_TYPES } from './index'
 
 
@@ -10,7 +10,7 @@ export const demoExists = (): boolean => {
 }
 
 // (Client Side) Get demo from the cookies
-export const getDemo = (): { email: string | null; users: UserModel[] | null; role: Roles | null } => {
+export const getDemo = (): { email: string | null; users: User[] | null; role: Roles | null } => {
     return getDemoCookies()
 }
 
@@ -60,14 +60,14 @@ export const changeRole = (role: Roles) => {
 // Get all demo cookies
 function getDemoCookies(): {
     email: string | null
-    users: UserModel[] | null
+    users: User[] | null
     role: Roles | null
 } {
     const email = getCookie(DEMO_COOKIE_NAMES.email)
     const usersStr = getCookie(DEMO_COOKIE_NAMES.users)
     const role = getCookie(DEMO_COOKIE_NAMES.role) as Roles | null
 
-    let users: UserModel[] | null = null
+    let users: User[] | null = null
     if (usersStr) {
         try {
             users = JSON.parse(usersStr)
@@ -95,7 +95,7 @@ function clearDemoCookies(): void {
 // Set all demo cookies
 function setDemoCookies(
     email: string,
-    users: UserModel[],
+    users: User[],
     role: Roles,
     days: number = 30
 ): void {
@@ -106,7 +106,7 @@ function setDemoCookies(
 
 
 // Call the start action
-async function callStartAction(email: string): Promise<{ success: boolean; users?: UserModel[]; error?: string }> {
+async function callStartAction(email: string): Promise<{ success: boolean; users?: User[]; error?: string }> {
     const result = await callAction(actions.start, { email: email.trim() })
 
     if (result.success) {

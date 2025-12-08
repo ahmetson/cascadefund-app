@@ -17,7 +17,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/animate-ui/components/radix/dropdown-menu'
 import { ChevronDownIcon } from 'lucide-react'
-import { Roles, type UserModel } from '@/scripts/user'
+import type { Roles, User } from '@/types/user'
 import { startDemo, clearDemo, changeRole, getDemo } from '@/demo-runtime-cookies/client-side'
 
 interface Props {
@@ -30,12 +30,12 @@ const AuthNavItem: React.FC<Props> = ({ className }) => {
 
   // Get initial demo state
   const demoState = getDemo()
-  const [demoUser, setDemoUser] = useState<UserModel | null>(
+  const [demoUser, setDemoUser] = useState<User | null>(
     demoState.users && demoState.role
       ? demoState.users.find((u) => u.role === demoState.role) || demoState.users[0] || null
       : null
   )
-  const [users, setUsers] = useState<UserModel[] | null>(demoState.users)
+  const [users, setUsers] = useState<User[] | null>(demoState.users)
   const [role, setRole] = useState<Roles | null>(demoState.role)
 
   // Mount only once on the client side

@@ -4,7 +4,7 @@ import { getIcon } from '@/components/icon';
 import NumberFlow from '@number-flow/react';
 import Tooltip from '@/components/custom-ui/Tooltip';
 import { actions } from 'astro:actions';
-import { type AllStarStats } from '@/scripts/all-stars';
+import { type AllStarStats } from '@/types/all-stars';
 
 /**
  * Custom hook to fetch and poll all star stats every 10 seconds

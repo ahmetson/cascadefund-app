@@ -3,14 +3,14 @@ import Tooltip from '@/components/custom-ui/Tooltip'
 import Link from '@/components/custom-ui/Link'
 import { getIcon } from '@/components/icon'
 import NumberFlow from '@number-flow/react'
-import { GalaxyModel } from '@/scripts/galaxy'
+import type { Galaxy } from '@/types/galaxy'
 
 interface ProjectGalaxyProps {
   x: number
   y: number
   projectName: string
   projectId?: string
-  galaxyData?: GalaxyModel
+  galaxyData?: Galaxy
   tags?: string[]
   leaderboardPosition?: number
   className?: string

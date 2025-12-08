@@ -1,10 +1,13 @@
 import { ObjectId } from 'mongodb'
 import { getCollection } from './db'
+import type { Roles, User } from '@/types/user'
 
-export type Roles = 'user' | 'maintainer' | 'contributor'
+// Re-export types for backward compatibility
+export type { Roles, User } from '@/types/user'
 
-export interface UserModel {
-    _id?: any
+// Internal model type (not exported)
+interface UserModel {
+    _id?: ObjectId
     email?: string
     src?: string
     alt?: string
@@ -16,6 +19,37 @@ export interface UserModel {
     balance?: number
 }
 
+// Serialization functions
+function userModelToUser(model: UserModel | null): User | null {
+    if (!model) return null
+    return {
+        _id: model._id?.toString(),
+        email: model.email,
+        src: model.src,
+        alt: model.alt,
+        uri: model.uri,
+        nickname: model.nickname,
+        sunshines: model.sunshines,
+        stars: model.stars,
+        role: model.role,
+        balance: model.balance,
+    }
+}
+
+function userToUserModel(user: User): UserModel {
+    return {
+        _id: user._id ? new ObjectId(user._id) : undefined,
+        email: user.email,
+        src: user.src,
+        alt: user.alt,
+        uri: user.uri,
+        nickname: user.nickname,
+        sunshines: user.sunshines,
+        stars: user.stars,
+        role: user.role,
+        balance: user.balance,
+    }
+}
 
 export const emailToNickname = (email: string): string => {
     return email.split('@')[0]
@@ -23,11 +57,11 @@ export const emailToNickname = (email: string): string => {
 /**
  * Get user by email
  */
-export async function getUserByEmail(email: string): Promise<UserModel | null> {
+export async function getUserByEmail(email: string): Promise<User | null> {
     try {
         const collection = await getCollection<UserModel>('users')
         const result = await collection.findOne({ email })
-        return result
+        return userModelToUser(result)
     } catch (error) {
         console.error('Error getting user by email:', error)
         return null
@@ -37,12 +71,12 @@ export async function getUserByEmail(email: string): Promise<UserModel | null> {
 /**
  * Get user by ID
  */
-export async function getUserById(id: string | ObjectId): Promise<UserModel | null> {
+export async function getUserById(id: string | ObjectId): Promise<User | null> {
     try {
         const collection = await getCollection<UserModel>('users')
         const objectId = typeof id === 'string' ? new ObjectId(id) : id
         const result = await collection.findOne({ _id: objectId })
-        return result
+        return userModelToUser(result)
     } catch (error) {
         console.error('Error getting user by id:', error)
         return null
@@ -52,14 +86,15 @@ export async function getUserById(id: string | ObjectId): Promise<UserModel | nu
 /**
  * Get multiple users by IDs
  */
-export async function getUserByIds(ids: ObjectId[]): Promise<UserModel[]> {
+export async function getUserByIds(ids: ObjectId[] | string[]): Promise<User[]> {
     try {
         if (ids.length === 0) {
             return []
         }
         const collection = await getCollection<UserModel>('users')
-        const result = await collection.find({ _id: { $in: ids } }).toArray()
-        return result
+        const objectIds = ids.map(id => typeof id === 'string' ? new ObjectId(id) : id)
+        const result = await collection.find({ _id: { $in: objectIds } }).toArray()
+        return result.map(userModelToUser).filter((u): u is User => u !== null)
     } catch (error) {
         console.error('Error getting users by ids:', error)
         return []
@@ -69,11 +104,12 @@ export async function getUserByIds(ids: ObjectId[]): Promise<UserModel[]> {
 /**
  * Create a new user
  */
-export async function createUser(user: UserModel): Promise<ObjectId> {
+export async function createUser(user: User): Promise<string> {
     try {
         const collection = await getCollection<UserModel>('users')
-        const result = await collection.insertOne(user as any)
-        return result.insertedId
+        const userModel = userToUserModel(user)
+        const result = await collection.insertOne(userModel as any)
+        return result.insertedId.toString()
     } catch (error) {
         console.error('Error creating user:', error)
         throw error
@@ -83,14 +119,15 @@ export async function createUser(user: UserModel): Promise<ObjectId> {
 /**
  * Create multiple users in bulk
  */
-export async function createUsers(users: UserModel[]): Promise<ObjectId[]> {
+export async function createUsers(users: User[]): Promise<string[]> {
     try {
         if (users.length === 0) {
             return []
         }
         const collection = await getCollection<UserModel>('users')
-        const result = await collection.insertMany(users as any)
-        return Object.values(result.insertedIds)
+        const userModels = users.map(userToUserModel)
+        const result = await collection.insertMany(userModels as any)
+        return Object.values(result.insertedIds).map(id => id.toString())
     } catch (error) {
         console.error('Error creating users:', error)
         throw error
@@ -98,9 +135,9 @@ export async function createUsers(users: UserModel[]): Promise<ObjectId[]> {
 }
 
 /**
- * Get or create user by email (returns ObjectId)
+ * Get or create user by email (returns user ID as string)
  */
-export async function getOrCreateUserByEmail(email: string): Promise<ObjectId> {
+export async function getOrCreateUserByEmail(email: string): Promise<string> {
     try {
         // Try to get existing user
         const existingUser = await getUserByEmail(email)
@@ -109,7 +146,7 @@ export async function getOrCreateUserByEmail(email: string): Promise<ObjectId> {
         }
 
         // Create new user if doesn't exist
-        const newUser: UserModel = {
+        const newUser: User = {
             email,
             role: 'maintainer',
             nickname: emailToNickname(email),

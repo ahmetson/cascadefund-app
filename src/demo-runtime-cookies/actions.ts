@@ -1,15 +1,18 @@
 import { defineAction } from 'astro:actions'
 import { z } from 'astro:schema'
 import { getDemoByEmail, createDemo, updateDemoStep } from '@/demo-runtime-cookies/server-side'
-import { UserModel, Roles, emailToNickname, createUsers, getUserByIds, getUserById, updateUserSunshines } from '@/scripts/user'
-import { getGalaxyById, getGalaxyByName, updateGalaxySunshines, GalaxyModel } from '@/scripts/galaxy'
+import { emailToNickname, createUsers, getUserByIds, getUserById, updateUserSunshines } from '@/scripts/user'
+import { getGalaxyById, getGalaxyByName, updateGalaxySunshines } from '@/scripts/galaxy'
 import { processPayment } from '@/scripts/payment-gateway'
-import { getIssuesByGalaxy, getShiningIssues, getPublicBacklogIssues, IssueModel } from '@/scripts/issue'
+import { getIssuesByGalaxy, getShiningIssues, getPublicBacklogIssues } from '@/scripts/issue'
+import type { User, Roles } from '@/types/user'
+import type { Galaxy } from '@/types/galaxy'
+import type { Issue, IssueUser, IssueStat, IssueStatType } from '@/types/issue'
 
 /**
  * Generate a random user with profile picture from DiceBear
  */
-function generateRandomUser(role: Roles, index: number): UserModel {
+function generateRandomUser(role: Roles, index: number): User {
     const randomSeed = `${role}-${index}-${Date.now()}-${Math.random()}`
     const avatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${randomSeed}&size=256`
 
@@ -48,7 +51,7 @@ function generateRandomUser(role: Roles, index: number): UserModel {
 /**
  * Create three demo users with different roles
  */
-async function generateDemoUsers(email: string): Promise<UserModel[]> {
+async function generateDemoUsers(email: string): Promise<User[]> {
     const users = [{
         email,
         role: 'user',
@@ -56,9 +59,9 @@ async function generateDemoUsers(email: string): Promise<UserModel[]> {
         src: `https://api.dicebear.com/9.x/avataaars/svg?seed=${email}&size=256`,
         alt: 'Donator avatar',
         uri: '/profile?email=' + emailToNickname(email),
-    } as UserModel,
-    generateRandomUser('maintainer', 1) as UserModel,
-    generateRandomUser('contributor', 2) as UserModel
+    } as User,
+    generateRandomUser('maintainer', 1) as User,
+    generateRandomUser('contributor', 2) as User
     ]
     const createdIds = await createUsers(users)
     return createdIds.map((id, index) => ({
@@ -74,7 +77,7 @@ export const server = {
         input: z.object({
             email: z.string().email(),
         }),
-        handler: async ({ email }): Promise<{ success: boolean; users?: UserModel[]; error?: string }> => {
+        handler: async ({ email }): Promise<{ success: boolean; users?: User[]; error?: string }> => {
             try {
                 // Check if demo exists
                 const existingDemo = await getDemoByEmail(email)
@@ -83,19 +86,15 @@ export const server = {
                     // Return existing users
                     const users = await getUserByIds(existingDemo.users)
                     // Convert ObjectId to string for serialization
-                    const serializedUsers = users.map(user => ({
-                        ...user,
-                        _id: user._id?.toString(),
-                    }))
                     return {
                         success: true,
-                        users: serializedUsers,
+                        users: users,
                     }
                 }
 
                 // Create new demo with three users
                 const users = await generateDemoUsers(email)
-                const created = await createDemo(email, users.map(user => user._id))
+                const created = await createDemo(email, users.map(user => user._id!))
 
                 if (!created) {
                     return {
@@ -104,15 +103,9 @@ export const server = {
                     }
                 }
 
-                // Convert ObjectId to string for serialization
-                const serializedUsers = users.map(user => ({
-                    ...user,
-                    _id: user._id?.toString(),
-                }))
-
                 return {
                     success: true,
-                    users: serializedUsers,
+                    users: users,
                 }
             } catch (error) {
                 console.error('Error in demo start action:', error)
@@ -155,7 +148,7 @@ export const server = {
         input: z.object({
             galaxyId: z.string(),
         }),
-        handler: async ({ galaxyId }): Promise<{ success: boolean; galaxy?: GalaxyModel; error?: string }> => {
+        handler: async ({ galaxyId }): Promise<{ success: boolean; galaxy?: Galaxy; error?: string }> => {
             try {
                 // Try to get by ID first
                 let galaxy = await getGalaxyById(galaxyId)
@@ -299,12 +292,41 @@ export const server = {
         input: z.object({
             galaxyId: z.string(),
         }),
-        handler: async ({ galaxyId }): Promise<{ success: boolean; issues?: IssueModel[]; error?: string }> => {
+        handler: async ({ galaxyId }): Promise<{ success: boolean; issues?: Issue[]; error?: string }> => {
             try {
                 const issues = await getIssuesByGalaxy(galaxyId);
+                // Serialize IssueModel to IssueModelClient (convert ObjectIds and Dates to unix timestamps)
+                const serializedIssues: Issue[] = issues.map(issue => ({
+                    _id: issue._id?.toString(),
+                    galaxy: issue.galaxy?.toString() || '',
+                    uri: issue.uri,
+                    title: issue.title,
+                    description: issue.description,
+                    tags: issue.tags,
+                    maintainer: issue.maintainer?.toString() || '',
+                    categoryId: issue.categoryId,
+                    stats: issue.stats ? Object.entries(issue.stats).reduce((acc, [key, stat]) => {
+                        if (stat) {
+                            acc[key as IssueStatType] = {
+                                type: stat.type,
+                                hint: typeof stat.hint === 'string' ? stat.hint : String(stat.hint || ''),
+                                filled: stat.filled,
+                                children: typeof stat.children === 'number' ? stat.children : (typeof stat.children === 'string' ? stat.children : String(stat.children || ''))
+                            } as IssueStat;
+                        }
+                        return acc;
+                    }, {} as { [key in IssueStatType]?: IssueStat }) : undefined,
+                    createdTime: issue.createdTime ? (issue.createdTime instanceof Date ? Math.floor(issue.createdTime.getTime() / 1000) : (typeof issue.createdTime === 'number' ? issue.createdTime : Math.floor(new Date(issue.createdTime).getTime() / 1000))) : undefined,
+                    sunshines: issue.sunshines,
+                    users: issue.users?.map(user => ({
+                        username: user.username,
+                        starshineAmount: user.starshineAmount,
+                        transactionDate: user.transactionDate instanceof Date ? Math.floor(user.transactionDate.getTime() / 1000) : (typeof user.transactionDate === 'number' ? user.transactionDate : Math.floor(new Date(user.transactionDate).getTime() / 1000))
+                    } as IssueUser)) || []
+                }));
                 return {
                     success: true,
-                    issues,
+                    issues: serializedIssues,
                 };
             } catch (error) {
                 console.error('Error getting issues by galaxy:', error);
@@ -319,12 +341,41 @@ export const server = {
         input: z.object({
             galaxyId: z.string(),
         }),
-        handler: async ({ galaxyId }): Promise<{ success: boolean; data?: IssueModel[]; error?: string }> => {
+        handler: async ({ galaxyId }): Promise<{ success: boolean; data?: Issue[]; error?: string }> => {
             try {
                 const issues = await getShiningIssues(galaxyId);
+                // Serialize IssueModel to IssueModelClient (convert ObjectIds and Dates to unix timestamps)
+                const serializedIssues: Issue[] = issues.map(issue => ({
+                    _id: issue._id?.toString(),
+                    galaxy: issue.galaxy?.toString() || '',
+                    uri: issue.uri,
+                    title: issue.title,
+                    description: issue.description,
+                    tags: issue.tags,
+                    maintainer: issue.maintainer?.toString() || '',
+                    categoryId: issue.categoryId,
+                    stats: issue.stats ? Object.entries(issue.stats).reduce((acc, [key, stat]) => {
+                        if (stat) {
+                            acc[key as IssueStatType] = {
+                                type: stat.type,
+                                hint: typeof stat.hint === 'string' ? stat.hint : String(stat.hint || ''),
+                                filled: stat.filled,
+                                children: typeof stat.children === 'number' ? stat.children : (typeof stat.children === 'string' ? stat.children : String(stat.children || ''))
+                            } as IssueStat;
+                        }
+                        return acc;
+                    }, {} as { [key in IssueStatType]?: IssueStat }) : undefined,
+                    createdTime: issue.createdTime ? (issue.createdTime instanceof Date ? Math.floor(issue.createdTime.getTime() / 1000) : (typeof issue.createdTime === 'number' ? issue.createdTime : Math.floor(new Date(issue.createdTime).getTime() / 1000))) : undefined,
+                    sunshines: issue.sunshines,
+                    users: issue.users?.map(user => ({
+                        username: user.username,
+                        starshineAmount: user.starshineAmount,
+                        transactionDate: user.transactionDate instanceof Date ? Math.floor(user.transactionDate.getTime() / 1000) : (typeof user.transactionDate === 'number' ? user.transactionDate : Math.floor(new Date(user.transactionDate).getTime() / 1000))
+                    } as IssueUser)) || []
+                }));
                 return {
                     success: true,
-                    data: issues,
+                    data: serializedIssues,
                 };
             } catch (error) {
                 console.error('Error getting shining issues:', error);
@@ -339,12 +390,41 @@ export const server = {
         input: z.object({
             galaxyId: z.string(),
         }),
-        handler: async ({ galaxyId }): Promise<{ success: boolean; data?: IssueModel[]; error?: string }> => {
+        handler: async ({ galaxyId }): Promise<{ success: boolean; data?: Issue[]; error?: string }> => {
             try {
                 const issues = await getPublicBacklogIssues(galaxyId);
+                // Serialize IssueModel to IssueModelClient (convert ObjectIds and Dates to unix timestamps)
+                const serializedIssues: Issue[] = issues.map(issue => ({
+                    _id: issue._id?.toString(),
+                    galaxy: issue.galaxy?.toString() || '',
+                    uri: issue.uri,
+                    title: issue.title,
+                    description: issue.description,
+                    tags: issue.tags,
+                    maintainer: issue.maintainer?.toString() || '',
+                    categoryId: issue.categoryId,
+                    stats: issue.stats ? Object.entries(issue.stats).reduce((acc, [key, stat]) => {
+                        if (stat) {
+                            acc[key as IssueStatType] = {
+                                type: stat.type,
+                                hint: typeof stat.hint === 'string' ? stat.hint : String(stat.hint || ''),
+                                filled: stat.filled,
+                                children: typeof stat.children === 'number' ? stat.children : (typeof stat.children === 'string' ? stat.children : String(stat.children || ''))
+                            } as IssueStat;
+                        }
+                        return acc;
+                    }, {} as { [key in IssueStatType]?: IssueStat }) : undefined,
+                    createdTime: issue.createdTime ? (issue.createdTime instanceof Date ? Math.floor(issue.createdTime.getTime() / 1000) : (typeof issue.createdTime === 'number' ? issue.createdTime : Math.floor(new Date(issue.createdTime).getTime() / 1000))) : undefined,
+                    sunshines: issue.sunshines,
+                    users: issue.users?.map(user => ({
+                        username: user.username,
+                        starshineAmount: user.starshineAmount,
+                        transactionDate: user.transactionDate instanceof Date ? Math.floor(user.transactionDate.getTime() / 1000) : (typeof user.transactionDate === 'number' ? user.transactionDate : Math.floor(new Date(user.transactionDate).getTime() / 1000))
+                    } as IssueUser)) || []
+                }));
                 return {
                     success: true,
-                    data: issues,
+                    data: serializedIssues,
                 };
             } catch (error) {
                 console.error('Error getting public backlog issues:', error);
@@ -359,7 +439,7 @@ export const server = {
         input: z.object({
             userId: z.string(),
         }),
-        handler: async ({ userId }): Promise<{ success: boolean; data?: UserModel; error?: string }> => {
+        handler: async ({ userId }): Promise<{ success: boolean; data?: User; error?: string }> => {
             try {
                 const user = await getUserById(userId);
                 if (user) {

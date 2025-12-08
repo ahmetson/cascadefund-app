@@ -1,0 +1,21 @@
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+*.log
+
+# environment variables
+.env
+.env.production
+
+# macOS-specific files
+.DS_Store
+
+.idea/
+.cursor/
+src/stories/
+storybook-static
+

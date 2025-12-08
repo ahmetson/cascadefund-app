@@ -1,12 +1,22 @@
 import { getCollection } from './db'
 import { getAllGalaxies } from './galaxy'
-import { UserModel } from './user'
+import type { AllStarStats } from '@/types/all-stars'
 
-export interface AllStarStats {
-    totalGalaxies: number;
-    totalStars: number;
-    totalUsers: number;
-    totalSunshines?: number;
+// Re-export type for backward compatibility
+export type { AllStarStats } from '@/types/all-stars'
+
+// Internal model type (not exported)
+interface UserModel {
+    _id?: any
+    email?: string
+    src?: string
+    alt?: string
+    uri?: string
+    nickname?: string
+    sunshines?: number
+    stars?: number
+    role?: string
+    balance?: number
 }
 
 /**

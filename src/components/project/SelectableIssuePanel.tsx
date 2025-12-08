@@ -1,6 +1,6 @@
 import React from 'react'
 import BasePanel from '@/components/panel/Panel'
-import { Issue } from '@/scripts/issue'
+import { Issue } from '@/types/issue'
 
 interface IssueCardProps {
   issue: Issue

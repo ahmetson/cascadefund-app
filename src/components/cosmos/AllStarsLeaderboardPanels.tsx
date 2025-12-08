@@ -5,12 +5,12 @@ import { getIcon } from '@/components/icon';
 import Link from '@/components/custom-ui/Link';
 import Tooltip from '@/components/custom-ui/Tooltip';
 import NumberFlow from '@number-flow/react';
-import { GalaxyModel } from '@/scripts/galaxy';
+import type { Galaxy } from '@/types/galaxy';
 import { BorderSize } from '@/types/eventTypes';
 import { cn } from '@/lib/utils';
 
 interface AllStarsLeaderboardPanelsProps {
-    topGalaxies?: GalaxyModel[];
+    topGalaxies?: Galaxy[];
 }
 
 const AllStarsLeaderboardPanels: React.FC<AllStarsLeaderboardPanelsProps> = ({

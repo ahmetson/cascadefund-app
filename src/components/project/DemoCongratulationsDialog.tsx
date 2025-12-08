@@ -3,11 +3,11 @@ import PageLikePanel from '@/components/panel/PageLikePanel'
 import Link from '@/components/custom-ui/Link'
 import Button from '@/components/custom-ui/Button'
 import { cn } from '@/lib/utils'
-import type { UserModel } from '@/scripts/user'
+import type { User } from '@/types/user'
 
 interface DemoCongratulationsDialogProps {
   isOpen: boolean
-  users: UserModel[]
+  users: User[]
   onClose: () => void
   projectName: string
   galaxyId: string

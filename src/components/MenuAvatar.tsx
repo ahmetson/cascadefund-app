@@ -3,7 +3,7 @@ import Link from '@/components/custom-ui/Link'
 import Tooltip from './custom-ui/Tooltip'
 import NumberFlow from '@number-flow/react'
 import { getIcon } from './icon'
-import { Roles } from '@/scripts/user'
+import { Roles } from '@/types/user'
 import { cn } from '@/lib/utils'
 
 interface MenuAvatarProps {

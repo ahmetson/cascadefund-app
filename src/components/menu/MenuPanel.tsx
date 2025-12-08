@@ -6,7 +6,7 @@ import Tooltip from '@/components/custom-ui/Tooltip';
 import { getIcon } from '@/components/icon';
 import Link from '@/components/custom-ui/Link';
 import Galaxy from '../Galaxy';
-import { GalaxyModel } from '@/scripts/galaxy';
+import type { Galaxy } from '@/types/galaxy';
 
 type MenuName = 'ihistory' | 'iwork' | 'balance' | 'cbalance' | 'project' | 'marketing' | 'work' | 'cwork' | 'guide' | 'dependencies' | 'roadmap' | 'issues' | 'share-btn' | 'donations';
 
@@ -19,7 +19,7 @@ interface Props {
   projectIcon?: string
   projectName?: string
   starCount?: number
-  galaxy?: GalaxyModel
+  galaxy?: Galaxy
 }
 
 const isOnlyInfluencerMenu = (activeMenuItem: MenuName): boolean => {

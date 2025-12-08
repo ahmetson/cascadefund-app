@@ -1,5 +1,5 @@
 import type { IconType } from '@/components/icon';
-import type { IssueStatType } from '@/scripts/issue';
+import type { IssueStatType } from '@/types/issue';
 
 export const getIssueStatIcon = (statType: IssueStatType): IconType => {
     switch (statType) {

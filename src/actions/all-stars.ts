@@ -1,5 +1,6 @@
 import { defineAction } from 'astro:actions'
-import { getAllStarStats, type AllStarStats } from '@/scripts/all-stars'
+import { getAllStarStats } from '@/scripts/all-stars'
+import type { AllStarStats } from '@/types/all-stars'
 
 export const server = {
     allStarStats: defineAction({

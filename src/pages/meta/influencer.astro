@@ -169,11 +169,8 @@ const projectStats = [
 ];
 ---
 
-<V2Layout
-  active={ItemName.InfluencerLanding}
-  subtitle="For open source users (a.k.a influencers)"
->
-  <HeroSection {...heroSection} />
+<V2Layout>
+  <HeroSection {...heroSection as SectionProps} />
   <LeftImageRightPanels
     cols={3}
     prefix="influencerChallanges"
@@ -225,9 +222,9 @@ const projectStats = [
     icon={getIcon("energy")}
   >
     <p class="text-lg text-gray-200 mb-8">
-      Ara's open-source, transparent management system makes it easy to
-      track progress. And if a maintainer doesn't want to continue on a project,
-      your voting power will even help make a fork that builds your vision.
+      Ara's open-source, transparent management system makes it easy to track
+      progress. And if a maintainer doesn't want to continue on a project, your
+      voting power will even help make a fork that builds your vision.
     </p>
   </Section>
   <HorizontalPanels
@@ -240,12 +237,12 @@ const projectStats = [
   <Section
     actions={[
       {
-        variant: "blue",
+        variant: "primary",
         children: "Sign In as Influencer",
         uri: "/login?role=influencer",
       },
       {
-        variant: "gray",
+        variant: "secondary",
         children: "Browse Projects",
         uri: "/data/projects?role=influencer",
       },
@@ -268,8 +265,8 @@ const projectStats = [
         <p class="text-yellow-100 mb-4">
           By getting upvote votes, you could request your own features. Upon
           successful issue resolution, both you and developer will earn rating
-          points. But, first you need to be a registered user of Ara.
-          And then obtain voting power for each project!
+          points. But, first you need to be a registered user of Ara. And then
+          obtain voting power for each project!
         </p>
       </div>
     </div>
@@ -283,7 +280,7 @@ const projectStats = [
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         {
           projectStats.map((stat, index) => (
-            <BasePanel key={index} className="text-center">
+            <BasePanel key={index.toString()} className="text-center">
               <div class="mb-4 round-lg border-round-lg bg-green-50">
                 <div class="text-3xl font-bold text-cascade-blue mb-1">
                   {stat.number}

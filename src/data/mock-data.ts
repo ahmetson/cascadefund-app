@@ -1,8 +1,8 @@
 import { type Transaction } from '../types/transaction';
 import { type UserStarData } from '../components/cosmos/Space';
-import { UserModel } from '@/scripts/user';
+import type { User } from '@/types/user';
 
-export const mockUser: UserModel = {
+export const mockUser: User = {
   nickname: 'Ahmeton',
   src: 'https://dummyimage.com/32x32/4A90E2/ffffff?text=A',
   sunshines: 230
