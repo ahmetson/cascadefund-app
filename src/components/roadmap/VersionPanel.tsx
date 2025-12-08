@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import PageLikePanel from '@/components/panel/PageLikePanel'
 import Button from '../custom-ui/Button'
 import Tooltip from '../custom-ui/Tooltip'
@@ -6,53 +6,101 @@ import Link from '../custom-ui/Link'
 import { getIcon } from '../icon'
 import PanelFooter from '../panel/PanelFooter'
 import PanelStat from '../panel/PanelStat'
-import TimeAgo from 'timeago-react'
 import NumberFlow from '@number-flow/react'
 import * as RadixSlider from '@radix-ui/react-slider'
 import { Checkbox, CheckboxIndicator } from '@/components/animate-ui/primitives/radix/checkbox'
 import ByAuthor from '../ByAuthor'
-import MenuAvatar from '../MenuAvatar'
 import { ProfileLink } from '../profile/types'
 import LoadingSpinner from '../LoadingSpinner'
+import type { Version, Patch } from '@/types/roadmap'
+import type { User } from '@/types/user'
+import type { Issue } from '@/types/issue'
+import { actions } from 'astro:actions'
 
-export interface Issue {
-  title: string
-  id: string
-  uri: string
-  completed: boolean
-  maintainer: string
-  contributor: string
-  sunshines: number
-}
-
-export interface ProjectVersionProps {
-  version: string
-  date: number
-  status: 'completed' | 'active' | 'planned'
-  issues: Issue[]
-  completedIssues?: number
-  totalIssues?: number
-  authors: string[]
-  projectId: string
-}
-
-const ProjectVersionPanel: React.FC<ProjectVersionProps> = ({
-  version,
-  date,
+const ProjectVersionPanel: React.FC<Version> = ({
+  tag,
+  createdTime,
   status: initialStatus,
-  issues,
-  completedIssues: initialCompletedIssues,
-  totalIssues: initialTotalIssues,
-  authors,
-  projectId
+  patches,
+  maintainer,
+  galaxy,
+  _id: versionId
 }) => {
   const [status, setStatus] = useState<'completed' | 'active' | 'planned'>(initialStatus)
-  const [completedIssues, setCompletedIssues] = useState<number>(initialCompletedIssues ?? 0)
-  const [totalIssues, setTotalIssues] = useState<number>(initialTotalIssues ?? 0)
   const [loading, setLoading] = useState<boolean>(false)
-  const [issuesList, setIssuesList] = useState<Issue[]>(issues)
+  const [patchesList, setPatchesList] = useState<Patch[]>(patches)
   const [revertingIssueId, setRevertingIssueId] = useState<string | null>(null)
   const [notificationMessage, setNotificationMessage] = useState<string | null>(null)
+  const [maintainerUser, setMaintainerUser] = useState<User | null>(null)
+  const [isLoadingMaintainer, setIsLoadingMaintainer] = useState<boolean>(false)
+  const [totalSunshines, setTotalSunshines] = useState<number>(0)
+  const [isLoadingSunshines, setIsLoadingSunshines] = useState<boolean>(false)
+
+  // Fetch maintainer user data from maintainer ID
+  useEffect(() => {
+    if (maintainer && typeof maintainer === 'string') {
+      setIsLoadingMaintainer(true)
+      actions.getUserById({ userId: maintainer })
+        .then((result: { data?: { success?: boolean; data?: User; error?: string } }) => {
+          if (result.data?.success && result.data.data) {
+            setMaintainerUser(result.data.data)
+          }
+        })
+        .catch((error: unknown) => {
+          console.error('Error fetching maintainer:', error)
+        })
+        .finally(() => {
+          setIsLoadingMaintainer(false)
+        })
+    } else {
+      setMaintainerUser(null)
+    }
+  }, [maintainer])
+
+  // Fetch sunshines from patches if patches is not empty
+  useEffect(() => {
+    if (patchesList.length === 0) {
+      setTotalSunshines(0)
+      return
+    }
+
+    setIsLoadingSunshines(true)
+    const fetchSunshines = async () => {
+      try {
+        const issuePromises = patchesList.map(patch =>
+          actions.getIssueById({ issueId: patch.issueId })
+        )
+        const results = await Promise.all(issuePromises)
+        const total = results.reduce((sum, result) => {
+          if (result.data?.success && result.data.data) {
+            return sum + (result.data.data.sunshines || 0)
+          }
+          return sum
+        }, 0)
+        setTotalSunshines(total)
+      } catch (error) {
+        console.error('Error fetching sunshines from patches:', error)
+      } finally {
+        setIsLoadingSunshines(false)
+      }
+    }
+
+    fetchSunshines()
+  }, [patchesList])
+
+  // Calculate completedIssues and totalIssues dynamically from patches
+  const completedIssues = useMemo(() => {
+    return patchesList.filter(patch => patch.completed).length
+  }, [patchesList])
+
+  const totalIssues = useMemo(() => {
+    return patchesList.length
+  }, [patchesList])
+
+  // Calculate stars from sunshines (divide by 180)
+  const stars = useMemo(() => {
+    return totalSunshines > 0 ? totalSunshines / 180 : 0
+  }, [totalSunshines])
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -63,11 +111,16 @@ const ProjectVersionPanel: React.FC<ProjectVersionProps> = ({
     }
   }
 
-  // Convert authors string array to ProfileLink format for ByAuthor component
-  const authorProfile: ProfileLink | undefined = authors.length > 0 ? {
-    uri: `/profile/${authors[0]}`,
-    children: authors[0]
-  } : undefined
+  // Convert maintainer user to ProfileLink format for ByAuthor component
+  const authorProfile: ProfileLink | undefined = useMemo(() => {
+    if (!maintainerUser) return undefined
+
+    return {
+      uri: maintainerUser.uri || `/profile/${maintainerUser._id}`,
+      children: maintainerUser.nickname || maintainerUser.email?.split('@')[0] || 'Unknown',
+      icon: maintainerUser.src,
+    }
+  }, [maintainerUser])
 
   const getStatusText = (status: string) => {
     switch (status) {
@@ -79,36 +132,20 @@ const ProjectVersionPanel: React.FC<ProjectVersionProps> = ({
   }
 
   const handleStatusUpdate = async () => {
-    if (loading || status === 'completed') return
+    if (loading || status === 'completed' || !versionId) return
 
     setLoading(true)
     try {
-      const response = await fetch('/api-json', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          jsonrpc: '2.0',
-          method: 'updateProjectVersionStatus',
-          params: {
-            projectId,
-            currentStatus: status,
-            completedIssues,
-            totalIssues
-          },
-          id: 1
-        })
+      const result = await actions.updateVersionStatus({
+        versionId,
+        status: status === 'active' ? 'completed' : status === 'planned' ? 'active' : status,
       })
 
-      const data = await response.json()
-
-      if (data.error) {
-        console.error('Error updating status:', data.error)
-      } else if (data.result) {
-        setStatus(data.result.status)
-        setCompletedIssues(data.result.completedIssues)
-        setTotalIssues(data.result.totalIssues)
+      if (result.data?.success) {
+        const newStatus = status === 'active' ? 'completed' : status === 'planned' ? 'active' : status
+        setStatus(newStatus)
+      } else {
+        console.error('Error updating status:', result.data?.error)
       }
     } catch (error) {
       console.error('Error calling API:', error)
@@ -122,43 +159,21 @@ const ProjectVersionPanel: React.FC<ProjectVersionProps> = ({
 
     setRevertingIssueId(issueId)
     try {
-      const response = await fetch('/api-json', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          jsonrpc: '2.0',
-          method: 'revert-patch',
-          params: {
-            projectId,
-            version,
-            issueId
-          },
-          id: 1
-        })
+      const result = await actions.revertPatch({
+        galaxyId: galaxy,
+        versionTag: tag,
+        issueId
       })
 
-      const data = await response.json()
-
-      if (data.error) {
-        console.error('Error reverting patch:', data.error)
-        alert('Failed to revert patch. Please try again.')
-      } else if (data.result) {
-        // Find the issue before removing it
-        const removedIssue = issuesList.find(issue => issue.id === issueId)
-        // Remove issue from list
-        setIssuesList(prevIssues => prevIssues.filter(issue => issue.id !== issueId))
-        // Update counts
-        if (removedIssue) {
-          setTotalIssues(prev => Math.max(0, prev - 1))
-          if (removedIssue.completed) {
-            setCompletedIssues(prev => Math.max(0, prev - 1))
-          }
-        }
+      if (result.data?.success) {
+        // Remove patch from list
+        setPatchesList(prevPatches => prevPatches.filter(patch => patch.issueId !== issueId))
         // Show notification
         setNotificationMessage('Issue was added to the Issue page.')
         setTimeout(() => setNotificationMessage(null), 3000)
+      } else {
+        console.error('Error reverting patch:', result.data?.error)
+        alert('Failed to revert patch. Please try again.')
       }
     } catch (error) {
       console.error('Error calling API:', error)
@@ -171,7 +186,7 @@ const ProjectVersionPanel: React.FC<ProjectVersionProps> = ({
   return (
     <PageLikePanel
       interactive={false}
-      title={version}
+      title={tag}
       rightHeader={
         status !== 'completed' &&
         <Button variant='secondary' disabled={loading} onClick={handleStatusUpdate}>
@@ -186,7 +201,7 @@ const ProjectVersionPanel: React.FC<ProjectVersionProps> = ({
       }
       className={`w-full ${getStatusColor(status)} mb-4`}
     >
-      {status !== 'completed' && completedIssues !== undefined && totalIssues !== undefined && (
+      {status !== 'completed' && (
         <div className="w-full p-2">
           {/* Slider Labels */}
           <div className="flex items-center justify-between">
@@ -246,42 +261,11 @@ const ProjectVersionPanel: React.FC<ProjectVersionProps> = ({
           </h4>
         </Tooltip>
         <ul className="space-y-2">
-          {issuesList.map((issue) => {
-            const issueTooltipContent = (
+          {patchesList.map((patch) => {
+            const patchTooltipContent = (
               <div className="text-sm space-y-3">
-                <div className="flex items-center gap-3">
-                  <div className="flex flex-col gap-2">
-                    <div className="flex items-center gap-2">
-                      <span className="text-slate-400 dark:text-slate-500 text-xs">Maintainer:</span>
-                      <MenuAvatar
-                        nickname={issue.maintainer}
-                        uri={`/data/profile?nickname=${issue.maintainer}`}
-                        className="w-6! h-6!"
-                      />
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-slate-400 dark:text-slate-500 text-xs">Contributor:</span>
-                      <MenuAvatar
-                        nickname={issue.contributor}
-                        uri={`/data/profile?nickname=${issue.contributor}`}
-                        className="w-6! h-6!"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  {getIcon({ iconType: 'sunshine', className: 'w-4 h-4 text-yellow-500' })}
-                  <span className="text-slate-300 dark:text-slate-400">Sunshines: </span>
-                  <NumberFlow
-                    value={issue.sunshines}
-                    locales="en-US"
-                    format={{ useGrouping: false }}
-                    className="text-slate-200 dark:text-slate-300 font-semibold"
-                  />
-                </div>
-                <hr className="border-slate-600 dark:border-slate-700" />
                 <Link
-                  uri={`/data/issue?id=${issue.id}`}
+                  uri={`/data/issue?id=${patch.issueId}`}
                   className="text-blue-400 hover:text-blue-300 dark:text-blue-500 dark:hover:text-blue-400 text-xs underline"
                 >
                   Click to see more about this issue
@@ -290,31 +274,31 @@ const ProjectVersionPanel: React.FC<ProjectVersionProps> = ({
             )
 
             return (
-              <li key={issue.id} className="flex items-center space-x-2">
+              <li key={patch.issueId} className="flex items-center space-x-2">
                 <Checkbox
-                  checked={issue.completed || status === 'completed'}
+                  checked={patch.completed || status === 'completed'}
                   disabled
                   className="w-4 h-4 rounded-sm border-2 border-slate-400 dark:border-slate-600 bg-white dark:bg-slate-600 data-[state=checked]:bg-slate-600 dark:data-[state=checked]:bg-slate-400 data-[state=checked]:border-slate-600 dark:data-[state=checked]:border-slate-400 flex items-center justify-center"
                 >
                   <CheckboxIndicator className="w-3 h-3 text-white dark:text-slate-700" />
                 </Checkbox>
-                <Tooltip content={issueTooltipContent}>
+                <Tooltip content={patchTooltipContent}>
                   <Link
-                    uri={`/data/issue?id=${issue.id}`}
+                    uri={`/data/issue?id=${patch.issueId}`}
                     className="text-sm text-slate-700 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer"
                   >
-                    {issue.title}
+                    {patch.title}
                   </Link>
                 </Tooltip>
-                {!issue.completed && status !== 'completed' && (
+                {!patch.completed && status !== 'completed' && (
                   <Button
                     variant="secondary"
                     size="sm"
-                    disabled={revertingIssueId === issue.id}
-                    onClick={() => handleRevertPatch(issue.id)}
+                    disabled={revertingIssueId === patch.issueId}
+                    onClick={() => handleRevertPatch(patch.issueId)}
                     className="ml-auto"
                   >
-                    {revertingIssueId === issue.id ? (
+                    {revertingIssueId === patch.issueId ? (
                       <LoadingSpinner />
                     ) : (
                       getIcon({ iconType: 'revert', className: 'w-4 h-4' })
@@ -331,39 +315,50 @@ const ProjectVersionPanel: React.FC<ProjectVersionProps> = ({
           </div>
         )}
         {/* Author and date at bottom right */}
-        <ByAuthor author={authorProfile} createdTime={date} />
+        <ByAuthor author={authorProfile} createdTime={createdTime} />
       </div>
 
       <PanelFooter>
         <PanelStat
-          iconType="clock"
-          hint="Date of the version"
+          iconType="sunshine"
+          hint="Total sunshines from all patches"
           fill={true}
         >
-          {!date ? 'N/A' :
-            <TimeAgo datetime={new Date(date * 1000)} />
-          }
+          {isLoadingSunshines ? (
+            <LoadingSpinner />
+          ) : (
+            <NumberFlow
+              value={totalSunshines}
+              locales="en-US"
+              format={{ useGrouping: true }}
+            />
+          )}
         </PanelStat>
         <PanelStat
-          iconType="heart"
-          hint="Likes of the version"
-          fill={true}
+          iconType={status === 'completed' ? 'star' : 'star'}
+          hint="Stars calculated from sunshines (sunshines / 180)"
+          fill={status === 'completed' ? true : false}
         >
-          15
-        </PanelStat>
-        <PanelStat
-          iconType="energy"
-          hint="Energy of the version"
-          fill={true}
-        >
-          12
+          {isLoadingSunshines ? (
+            <LoadingSpinner />
+          ) : (
+            <NumberFlow
+              value={stars}
+              locales="en-US"
+              format={{
+                useGrouping: false,
+                minimumFractionDigits: 1,
+                maximumFractionDigits: 1
+              }}
+            />
+          )}
         </PanelStat>
         <PanelStat
           iconType={status === 'completed' ? 'star' : 'project'}
-          hint="Stars of the version"
+          hint="Version status"
           fill={status === 'completed' ? true : false}
         >
-          {status === 'completed' ? '1.2' : status}
+          {status === 'completed' ? 'Archived' : status}
         </PanelStat>
       </PanelFooter>
 

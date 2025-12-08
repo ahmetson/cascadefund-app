@@ -8,6 +8,7 @@ interface InputProps {
   placeholder?: string
   className?: string
   disabled?: boolean
+  ref?: React.RefObject<HTMLInputElement | null>
 }
 
 const Input: React.FC<InputProps> = ({
@@ -17,10 +18,12 @@ const Input: React.FC<InputProps> = ({
   onChange,
   placeholder,
   className = '',
-  disabled = false
+  disabled = false,
+  ref
 }) => {
   return (
     <input
+      ref={ref}
       id={id}
       type={type}
       value={value}

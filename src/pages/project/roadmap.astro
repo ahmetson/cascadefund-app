@@ -5,7 +5,8 @@ import { MenuName } from "@/components/navbar/WorkNavbar.astro";
 import { ObjectId } from "mongodb";
 import { getGalaxyById } from "@/scripts/galaxy";
 import { getProjectById } from "@/scripts/project";
-import RoadmapTabs from "@/components/maintainer/RoadmapTabs";
+import RoadmapTabs from "@/components/roadmap/RoadmapTabs";
+import CreateVersionCTA from "@/components/roadmap/CreateVersionCTA";
 
 // Get galaxy ID from query parameter
 const galaxyIdParam = Astro.url.searchParams.get("galaxy");
@@ -16,9 +17,8 @@ if (!galaxyIdParam) {
 }
 
 // Validate ObjectId format
-let galaxyId: ObjectId;
 try {
-  galaxyId = new ObjectId(galaxyIdParam);
+  new ObjectId(galaxyIdParam);
 } catch (error) {
   return Astro.redirect("/project/404?method=validateGalaxyId");
 }
@@ -41,9 +41,11 @@ if (!project) {
     activeMenuItem="roadmap"
     slot="left"
     galaxy={galaxy}
-    projectIcon={project.socialLinks?.find((link) => link.type === "project")?.uri}
+    projectIcon={project.socialLinks?.find((link) => link.type === "project")
+      ?.uri}
     projectName={galaxy.name}
     starCount={galaxy.stars}
   />
-  <RoadmapTabs slot="center" client:load />
+  <RoadmapTabs slot="center" galaxyId={galaxyIdParam} client:load />
+  <CreateVersionCTA slot="center" galaxyId={galaxyIdParam} client:load />
 </Layout>
