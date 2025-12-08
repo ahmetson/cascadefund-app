@@ -15,6 +15,7 @@ import type { User } from '@/types/user'
 import { Spinner } from '@/components/ui/shadcn-io/spinner'
 import SunshinesPopover from './SunshinesPopover'
 import { getDemo } from '@/demo-runtime-cookies/client-side'
+import Tooltip from '../custom-ui/Tooltip'
 
 interface IssueLinkProps extends Issue {
   actions?: ActionProps[];
@@ -125,14 +126,28 @@ const IssueLinkPanel4: React.FC<IssueLinkProps> = (issue) => {
     <div className='flex flex-row gap-1 items-start w-full'>
       {/* Issue storage and number */}
       <div className="flex items-center space-x-3 mt-0.5">
-        <Link uri={issue.uri} asNewTab={false}>
-          <Badge variant='info' static={true}>
-            <div className="flex items-center space-x-1">
-              {getIcon('ara')}
-              <span className="text-xs font-medium">{issueNumber}</span>
+
+        <Tooltip
+          content={
+            <div className="text-sm flex gap-1">
+              Got to see the  {getIcon({ iconType: 'arrow-right', className: 'w-4 h-4 mt-0.5' })}
+              <p className='flex-1 bg-slate-100/20 rounded-sm'>
+                {issue.title}
+              </p>
+              {getIcon({ iconType: 'arrow-left', className: 'w-4 h-4 mt-0.5' })}
+              issue page
             </div>
-          </Badge>
-        </Link>
+          }
+        >
+          <Link uri={`/issue?id=${issue._id!}&galaxy=${issue.galaxy}`} asNewTab={false}>
+            <Badge variant='info' static={true}>
+              <div className="flex items-center space-x-1">
+                {getIcon('ara')}
+                <span className="text-xs font-medium underline">...</span>
+              </div>
+            </Badge>
+          </Link>
+        </Tooltip>
       </div>
 
       <div className='w-full'>

@@ -50,7 +50,7 @@ const C: React.FC<WorkPanelProps> = ({ galaxyId }) => {
   const tabs: TabProps[] = isMaintainer ? [
     {
       label: <><span className="text-amber-600 dark:text-amber-400 font-semibold">Shining issues</span></>,
-      key: "funded-issues",
+      key: "shining",
       content: <DndProvider backend={HTML5Backend}>
         <IssueListPanel title={'Shining Issues'} draggable={true} galaxyId={galaxyId} />
       </DndProvider>,
@@ -58,14 +58,14 @@ const C: React.FC<WorkPanelProps> = ({ galaxyId }) => {
     },
     {
       label: <>Public Backlog</>,
-      key: "public-issues",
+      key: "public",
       content: <DndProvider backend={HTML5Backend}>
         <IssueListPanel title={'Public Backlog'} draggable={true} galaxyId={galaxyId} />
       </DndProvider>
     },
     {
       label: <DndProvider backend={HTML5Backend}><DropTarget id="detailize-list" accept={["issue"]} onDrop={(e) => console.log(e)}>Interesting Issues</DropTarget></DndProvider>,
-      key: "detailize",
+      key: "interesting",
       content: <DndProvider backend={HTML5Backend}>
         <IssueListPanel title={'Interesting Issues'} draggable={true} description="Interesting issues for the maintainer. It could mean anything, but basically its worth maintainer's attention" galaxyId={galaxyId} />
       </DndProvider>,
@@ -73,7 +73,7 @@ const C: React.FC<WorkPanelProps> = ({ galaxyId }) => {
     },
     {
       label: <DndProvider backend={HTML5Backend}><DropTarget id="hard-list" accept={["issue"]} onDrop={(e) => console.log(e)}>Boring Issues</DropTarget></DndProvider>,
-      key: "hard",
+      key: "boring",
       content: <DndProvider backend={HTML5Backend}>
         <IssueListPanel title={'Boring Issues'} draggable={true} description="Issues that are boring for the maintainer. It could be for any reason, but basically maintainer will not spend time on them." galaxyId={galaxyId} />
       </DndProvider>
@@ -86,34 +86,34 @@ const C: React.FC<WorkPanelProps> = ({ galaxyId }) => {
   ] : [
     {
       label: <><span className="text-amber-600 dark:text-amber-400 font-semibold">Shining issues</span></>,
-      key: "funded-issues",
+      key: "shining",
       content: <IssueListPanel title={'Shining Issues'} draggable={false} galaxyId={galaxyId} />,
       className: 'bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-amber-900/20 dark:to-yellow-900/20',
     },
     {
       label: <>Public Backlog</>,
-      key: "public-issues",
+      key: "public",
       content: <IssueListPanel title={'Public Backlog'} draggable={false} galaxyId={galaxyId} />
     },
     {
       label: <>Interesting Issues</>,
-      key: "interesting-issues",
+      key: "interesting",
       content: <IssueListPanel title={'Interesting Issues'} draggable={false} description="Interesting issues for the maintainer. It could mean anything, but basically its worth maintainer's attention" galaxyId={galaxyId} />
     },
     {
       label: <>Boring Issues</>,
-      key: "boring-issues",
+      key: "boring",
       content: <IssueListPanel title={'Boring Issues'} draggable={false} description="Issues that are boring for the maintainer. It could be for any reason, but basically maintainer will not spend time on them." galaxyId={galaxyId} />
     },
     {
       label: <>Closed Issues</>,
-      key: "closed-issues",
+      key: "closed",
       content: <IssueListPanel title={'Closed Issues'} galaxyId={galaxyId} />
     }
   ]
 
   return (
-    <Tabs id="work" activeTab='funded-issues' tabs={tabs} />
+    <Tabs id="work" activeTab='shining' tabs={tabs} />
   )
 }
 

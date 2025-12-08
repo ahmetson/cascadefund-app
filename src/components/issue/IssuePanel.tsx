@@ -9,35 +9,88 @@ import Editable from '@/components/custom-ui/Editable'
 import EditableMenuPanel from '@/components/custom-ui/EditableMenuPanel'
 import Tooltip from '@/components/custom-ui/Tooltip'
 import { getIcon, IconType } from '@/components/icon'
-import type { Issue } from '@/types/issue'
+import type { Issue, IssueTag } from '@/types/issue'
 import { getIssueStatIcon } from './utils'
 import { ActionProps } from '@/types/eventTypes'
 import PanelFooter from '@/components/panel/PanelFooter'
 import PanelStat from '@/components/panel/PanelStat'
 import PanelAction from '@/components/panel/PanelAction'
-import VotePopover from './VotePopover'
 import MenuAvatar from '@/components/MenuAvatar'
-import ProfileRating from '@/components/rating/ProfileRating'
-import AvatarList from '@/components/AvatarList'
 import TimeAgo from 'timeago-react'
 import YourBadge from '../badge/YourBadge'
 import EditableBadge from '../badge/EditableBadge'
+import { actions as astroActions } from 'astro:actions'
+import type { User } from '@/types/user'
+import { getDemo } from '@/demo-runtime-cookies/client-side'
+import { actions } from 'astro:actions'
 
 interface IssueContentPanelProps extends Issue {
   actions?: ActionProps[]
-  editable?: boolean
   onSave?: (updates: { title?: string; description?: string; technicalRequirements?: string }) => void
 }
 
 const IssueContentPanel: React.FC<IssueContentPanelProps> = ({
-  actions,
-  editable = false,
+  actions: actionsProp,
   onSave,
   ...issue
 }) => {
-  // Check if this is a rating issue (has voting power > 0)
-  const votingPower = issue.stats?.['voting-power']?.children
-  const isRatingIssue = issue.storage === 'arada-' && votingPower && Number(votingPower) > 0
+  // Derive properties from Issue
+  const issueNumber = issue._id ? `#${issue._id.slice(-6)}` : '#0'
+  const primaryTag = issue.tags && issue.tags.length > 0 ? issue.tags[0] : undefined
+  const issueType = primaryTag || 'improvement'
+
+  // Check if this is a shining issue (has sunshines > 0)
+  const isShiningIssue = issue.sunshines > 0
+
+  // State for author user data
+  const [authorUser, setAuthorUser] = useState<User | null>(null)
+  const [isLoadingAuthor, setIsLoadingAuthor] = useState(false)
+
+  // State for current user
+  const [currentUser, setCurrentUser] = useState<User | null>(null)
+
+  // Fetch author user data from issue.author (string ID)
+  useEffect(() => {
+    if (issue.author && typeof issue.author === 'string') {
+      setIsLoadingAuthor(true)
+      astroActions.getUserById({ userId: issue.author })
+        .then((result: { data?: { success?: boolean; data?: User; error?: string } }) => {
+          if (result.data?.success && result.data.data) {
+            setAuthorUser(result.data.data)
+          }
+        })
+        .catch((error: unknown) => {
+          console.error('Error fetching author:', error)
+        })
+        .finally(() => {
+          setIsLoadingAuthor(false)
+        })
+    }
+  }, [issue.author])
+
+  // Fetch current user from demo
+  useEffect(() => {
+    const demo = getDemo()
+    if (demo.email && demo.users && demo.role) {
+      const user = demo.users.find(u => u.role === demo.role) || demo.users[0]
+      if (user && user._id) {
+        actions.getUserById({ userId: user._id.toString() })
+          .then((result) => {
+            if (result.data?.success && result.data.data) {
+              setCurrentUser(result.data.data)
+            }
+          })
+          .catch((error) => {
+            console.error('Error fetching current user:', error)
+          })
+      }
+    }
+  }, [])
+
+  // Check if current user is author or maintainer
+  const isAuthor = currentUser && issue.author && currentUser._id === issue.author
+  const isMaintainer = currentUser?.role === 'maintainer'
+  const canEdit = isAuthor || isMaintainer
 
   // State management for editable content
   const [value, setValue] = useState<Record<string, any>>({
@@ -58,9 +111,9 @@ const IssueContentPanel: React.FC<IssueContentPanelProps> = ({
     }
   }, [saving])
 
-  // Handle VP change from VotePopover
-  const handleVPChange = (newVP: number) => {
-    console.log(`VP changed for issue ${issue.id}: ${newVP}`)
+  // Handle edit action
+  const handleEdit = () => {
+    alert('Heyya!')
   }
 
   // Event props for editable components
@@ -94,8 +147,8 @@ const IssueContentPanel: React.FC<IssueContentPanelProps> = ({
     },
   }
 
-  // Non-rating actions
-  const nonRatingActions = (
+  // Non-shining actions
+  const nonShiningActions = (
     <div className="flex flex-col space-y-2 w-full">
       <Button onClick={() => console.log('Liked')} variant="secondary" size="sm" className="h-7 px-2 text-xs w-full">
         {getIcon({ iconType: 'likes', className: 'w-3 h-3 mr-0.5' })}
@@ -112,24 +165,20 @@ const IssueContentPanel: React.FC<IssueContentPanelProps> = ({
     </div>
   )
 
-  // Rating actions
-  const ratingActions = isRatingIssue && issue.vpAmount && issue.currentVP !== undefined && issue.topVP !== undefined && issue.minVP !== undefined ? (
-    <VotePopover
-      vpAmount={issue.vpAmount}
-      currentVP={issue.currentVP}
-      topVP={issue.topVP}
-      minVP={issue.minVP}
-      issueTitle={issue.title}
-      onApply={handleVPChange}
-    />
-  ) : null
-
   // Prepare actions with default className
   const defaultActionClassName = ' py-0 px-1 h-6 text-sm'
-  const preparedActions = actions ? actions.map((action) => ({
+  const preparedActions = actionsProp ? actionsProp.map((action) => ({
     ...action,
     className: action.className ? action.className + defaultActionClassName : defaultActionClassName
   })) : []
+
+  // Add edit action if user is author or maintainer
+  const editAction: ActionProps | null = canEdit ? {
+    icon: 'settings',
+    children: getIcon({ iconType: 'settings', className: 'w-4 h-4' }),
+    onClick: handleEdit,
+    className: defaultActionClassName
+  } : null
 
   return (
     <BasePanel className={`${saving && 'cursor-progress'}`}>
@@ -142,16 +191,15 @@ const IssueContentPanel: React.FC<IssueContentPanelProps> = ({
       <div className="flex items-start space-x-4">
         {/* Left column: Issue badge and actions */}
         <div className="w-16 overflow-hidden flex flex-col space-y-2 items-center">
-          <Link uri={issue.uri} asNewTab={issue.storage !== 'arada-'}>
+          <Link uri={issue.uri} asNewTab={false}>
             <Badge variant='info' static={true}>
               <div className="flex items-center space-x-1">
-                {getIcon(issue.storage as IconType || 'github')}
-                <span className="text-xs font-medium">{issue.number}</span>
+                {getIcon('cascadefund' as IconType)}
+                <span className="text-xs font-medium">{issueNumber}</span>
               </div>
             </Badge>
           </Link>
-          {!isRatingIssue && nonRatingActions}
-          {ratingActions}
+          {!isShiningIssue && nonShiningActions}
         </div>
 
         {/* Right column: Editable content */}
@@ -163,12 +211,12 @@ const IssueContentPanel: React.FC<IssueContentPanelProps> = ({
                 openDelay={2000}
                 content={
                   <div className="text-sm">
-                    {editable ? 'Title is editable for issue owners.' : 'Issue title'}
+                    {canEdit ? 'Title is editable for issue owners.' : 'Issue title'}
                   </div>
                 }
               >
                 <h1 className="text-xl font-bold text-gray-500 dark:text-slate-100 flex space-x-1 items-center gap-1">
-                  {editable ? (
+                  {canEdit ? (
                     <Editable
                       id="title"
                       content={value['title'] || 'No title'}
@@ -180,27 +228,25 @@ const IssueContentPanel: React.FC<IssueContentPanelProps> = ({
                   ) : (
                     <div className='mt-1'>{value['title'] || 'No title'}</div>
                   )}
-                  {editable ? <YourBadge saving={saving} label='issue' /> : <Badge variant='gray' static={true}>Not editable</Badge>}
-                  {editable && <EditableBadge showEditBar={showEditBar} setShowEditBar={setShowEditBar} />}
+                  {canEdit ? <YourBadge saving={saving} label='issue' /> : <Badge variant='gray' static={true}>Not editable</Badge>}
+                  {canEdit && <EditableBadge showEditBar={showEditBar} setShowEditBar={setShowEditBar} />}
                 </h1>
               </Tooltip>
-              {/* Voting power badge for arada- storage */}
-              {issue.storage === 'arada-' && (
-                <Badge variant={isRatingIssue ? 'success' : 'gray'} static={true}>
-                  {isRatingIssue ? 'Rating Issue' : 'Non-Rating Issue'}
-                </Badge>
-              )}
+              {/* Shining badge */}
+              <Badge variant={isShiningIssue ? 'success' : 'gray'} static={true}>
+                {isShiningIssue ? 'Shining' : 'Public Backlog'}
+              </Badge>
             </div>
             <Badge
               variant={
-                issue.type === 'bug' ? 'danger' :
-                  issue.type === 'feature' ? 'blue' :
-                    issue.type === 'improvement' ? 'success' :
-                      issue.type === 'enhancement' ? 'warning' : 'info'
+                issueType === 'bug' ? 'danger' :
+                  issueType === 'feature' ? 'blue' :
+                    issueType === 'improvement' ? 'success' :
+                      issueType === 'enhancement' ? 'warning' : 'info'
               }
               static={true}
             >
-              {issue.type}
+              {issueType}
             </Badge>
           </div>
 
@@ -210,11 +256,11 @@ const IssueContentPanel: React.FC<IssueContentPanelProps> = ({
               openDelay={2000}
               content={
                 <div className="text-sm">
-                  {editable ? 'Description is editable for issue owners.' : 'Issue description'}
+                  {canEdit ? 'Description is editable for issue owners.' : 'Issue description'}
                 </div>
               }
             >
-              {editable ? (
+              {canEdit ? (
                 <Editable
                   id="description"
                   content={value['description'] || 'No description'}
@@ -229,17 +275,17 @@ const IssueContentPanel: React.FC<IssueContentPanelProps> = ({
           </div>
 
           {/* Technical Requirements */}
-          <div className="mb-4 text-slate-700">
-            <h3 className="text-lg ">Technical Requirements:</h3>
+          <div className="mb-4 text-slate-600 dark:text-slate-400 text-sm">
+            <h3 className="text-lg text-slate-700 dark:text-slate-300">Technical Requirements</h3>
             <Tooltip
               openDelay={2000}
               content={
                 <div className="text-sm">
-                  {editable ? 'Technical requirements are editable for issue owners.' : 'Technical requirements'}
+                  {canEdit ? 'Technical requirements are editable for issue owners.' : 'Technical requirements'}
                 </div>
               }
             >
-              {editable ? (
+              {canEdit ? (
                 <Editable
                   id="technicalRequirements"
                   content={value['technicalRequirements']}
@@ -254,31 +300,54 @@ const IssueContentPanel: React.FC<IssueContentPanelProps> = ({
           </div>
 
           {/* Author and created time */}
-          {(issue.author || issue.createdTime) && (
+          {(authorUser || issue.createdTime) && (
             <div className="flex justify-end items-center space-x-1 text-gray-500 gap-1 text-xs mb-2">
-              {issue.author && (
+              {authorUser && (
                 <>
-                  By {Array.isArray(issue.author) ? (
-                    <AvatarList contributors={issue.author} showLastRating={true} />
+                  By{' '}
+                  {isLoadingAuthor ? (
+                    <span className="text-xs text-gray-400">Loading...</span>
                   ) : (
                     <>
-                      <MenuAvatar src={issue.author?.icon} uri={issue.author?.uri} className='w-7! h-7!' />
-                      {issue.author.rating && <ProfileRating {...issue.author.rating} />}
+                      <MenuAvatar
+                        src={authorUser.src}
+                        uri={authorUser.uri}
+                        className='w-7! h-7!'
+                      />
+                      {/* Note: ProfileRating would need rating data from User type if available */}
                     </>
                   )}
                 </>
               )}
               {issue.createdTime && (
-                <TimeAgo datetime={issue.createdTime} />
+                <TimeAgo datetime={typeof issue.createdTime === 'number' ? issue.createdTime * 1000 : issue.createdTime} />
               )}
             </div>
           )}
 
           {/* Footer with actions and stats */}
-          {(issue.stats || preparedActions.length > 0 || (issue.storage === 'arada-')) && (
+          {(issue.stats || preparedActions.length > 0 || editAction) && (
             <PanelFooter className='flex flex-row justify-between items-center mt-2'>
               <div className="flex items-center gap-2">
                 {preparedActions.length > 0 && <PanelAction className='' actions={preparedActions} />}
+                {editAction && (
+                  <Tooltip
+                    openDelay={500}
+                    content={
+                      <div className="text-sm">
+                        Edit the issue
+                      </div>
+                    }
+                  >
+                    <Button
+                      onClick={editAction.onClick}
+                      className={editAction.className}
+                      variant={editAction.variant}
+                    >
+                      {editAction.children}
+                    </Button>
+                  </Tooltip>
+                )}
               </div>
               {issue.stats && Object.values(issue.stats).map((stat, index) => (
                 <PanelStat
