@@ -5,7 +5,7 @@ import { getDemoByEmail, createDemo, updateDemoStep } from '@/demo-runtime-cooki
 import { emailToNickname, createUsers, getUserByIds, getUserById, updateUserSunshines } from '@/scripts/user'
 import { getGalaxyById, getGalaxyByName, updateGalaxySunshines } from '@/scripts/galaxy'
 import { processPayment } from '@/scripts/payment-gateway'
-import { getIssuesByGalaxy, getShiningIssues, getPublicBacklogIssues, createIssue, updateIssueSunshines, getIssueById, IssueTag } from '@/scripts/issue'
+import { getIssuesByGalaxy, getShiningIssues, getPublicBacklogIssues, createIssue, updateIssueSunshines, getIssueById, setIssueContributor, unsetIssueContributor, IssueTag } from '@/scripts/issue'
 import type { User, Roles } from '@/types/user'
 import type { Galaxy } from '@/types/galaxy'
 import type { Issue, IssueUser, IssueStat, IssueStatType } from '@/types/issue'
@@ -416,6 +416,32 @@ export const server = {
             }
         },
     }),
+    getIssueById: defineAction({
+        input: z.object({
+            issueId: z.string(),
+        }),
+        handler: async ({ issueId }): Promise<{ success: boolean; data?: Issue; error?: string }> => {
+            try {
+                const issue = await getIssueById(issueId);
+                if (!issue) {
+                    return {
+                        success: false,
+                        error: 'Issue not found',
+                    };
+                }
+                return {
+                    success: true,
+                    data: issue,
+                };
+            } catch (error) {
+                console.error('Error getting issue by id:', error);
+                return {
+                    success: false,
+                    error: 'An error occurred while getting issue',
+                };
+            }
+        },
+    }),
     getPublicBacklogIssues: defineAction({
         input: z.object({
             galaxyId: z.string(),
@@ -673,6 +699,142 @@ export const server = {
                 return {
                     success: false,
                     error: 'An error occurred while updating issue sunshines',
+                };
+            }
+        },
+    }),
+    setContributor: defineAction({
+        accept: 'json',
+        input: z.object({
+            issueId: z.string(),
+            userId: z.string(),
+            email: z.string().email(),
+        }),
+        handler: async ({ issueId, userId, email }): Promise<{ success: boolean; error?: string }> => {
+            try {
+                // Get demo and validate
+                const demo = await getDemoByEmail(email);
+                if (!demo) {
+                    return {
+                        success: false,
+                        error: 'Demo not found',
+                    };
+                }
+
+                // Get current user
+                const user = await getUserById(userId);
+                if (!user) {
+                    return {
+                        success: false,
+                        error: 'User not found',
+                    };
+                }
+
+                // Verify user is maintainer in demo
+                const demoUser = demo.users.find(id => id.toString() === userId);
+                if (!demoUser) {
+                    return {
+                        success: false,
+                        error: 'User not found in demo',
+                    };
+                }
+
+                // Check if user role is maintainer (we need to check the actual user role)
+                if (user.role !== 'maintainer') {
+                    return {
+                        success: false,
+                        error: 'Only maintainers can assign contributors',
+                    };
+                }
+
+                // Get issue
+                const issue = await getIssueById(issueId);
+                if (!issue) {
+                    return {
+                        success: false,
+                        error: 'Issue not found',
+                    };
+                }
+
+                // Set contributor
+                const username = user.nickname || user.email?.split('@')[0] || 'unknown';
+                const updated = await setIssueContributor(issueId, userId, username);
+                if (!updated) {
+                    return {
+                        success: false,
+                        error: 'Failed to set contributor',
+                    };
+                }
+
+                return {
+                    success: true,
+                };
+            } catch (error) {
+                console.error('Error setting contributor:', error);
+                return {
+                    success: false,
+                    error: 'An error occurred while setting contributor',
+                };
+            }
+        },
+    }),
+    unsetContributor: defineAction({
+        accept: 'json',
+        input: z.object({
+            issueId: z.string(),
+            email: z.string().email(),
+        }),
+        handler: async ({ issueId, email }): Promise<{ success: boolean; error?: string }> => {
+            try {
+                // Get demo and validate
+                const demo = await getDemoByEmail(email);
+                if (!demo) {
+                    return {
+                        success: false,
+                        error: 'Demo not found',
+                    };
+                }
+
+                // Get issue to verify maintainer
+                const issue = await getIssueById(issueId);
+                if (!issue) {
+                    return {
+                        success: false,
+                        error: 'Issue not found',
+                    };
+                }
+
+                // Verify user is maintainer (check if any demo user is maintainer)
+                const maintainerUser = await getUserById(issue.maintainer);
+                if (!maintainerUser || maintainerUser.role !== 'maintainer') {
+                    // Check if any demo user is maintainer
+                    const demoUsers = await getUserByIds(demo.users);
+                    const isMaintainer = demoUsers.some(u => u.role === 'maintainer');
+                    if (!isMaintainer) {
+                        return {
+                            success: false,
+                            error: 'Only maintainers can unset contributors',
+                        };
+                    }
+                }
+
+                // Unset contributor
+                const updated = await unsetIssueContributor(issueId);
+                if (!updated) {
+                    return {
+                        success: false,
+                        error: 'Failed to unset contributor',
+                    };
+                }
+
+                return {
+                    success: true,
+                };
+            } catch (error) {
+                console.error('Error unsetting contributor:', error);
+                return {
+                    success: false,
+                    error: 'An error occurred while unsetting contributor',
                 };
             }
         },

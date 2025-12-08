@@ -37,6 +37,7 @@ interface IssueModel {
     sunshines: number; // Cached sum of users sunshines
     users: IssueUserServer[]; // Array of users with their contributions
     author?: ObjectId; // Reference to UserModel who created the issue
+    contributor?: ObjectId; // Reference to UserModel assigned as contributor
 }
 
 // Serialization functions
@@ -99,6 +100,7 @@ function issueModelToIssue(model: IssueModel | null): Issue | null {
         sunshines: model.sunshines,
         users: model.users.map(issueUserServerToIssueUser),
         author: model.author?.toString(),
+        contributor: model.contributor?.toString(),
     }
 }
 
@@ -122,6 +124,7 @@ function issueToIssueModel(issue: Issue): IssueModel {
         sunshines: issue.sunshines,
         users: issue.users.map(issueUserToIssueUserServer),
         author: issue.author ? new ObjectId(issue.author) : undefined,
+        contributor: issue.contributor ? new ObjectId(issue.contributor) : undefined,
     }
 }
 
@@ -270,6 +273,82 @@ export async function updateIssueSunshines(
         }
     } catch (error) {
         console.error('Error updating issue sunshines:', error);
+        return false;
+    }
+}
+
+/**
+ * Set contributor for an issue and add user to users array if not present
+ */
+export async function setIssueContributor(
+    issueId: string | ObjectId,
+    userId: string | ObjectId,
+    username: string
+): Promise<boolean> {
+    try {
+        const collection = await getCollection<IssueModel>('issues');
+        const issueObjectId = typeof issueId === 'string' ? new ObjectId(issueId) : issueId;
+        const userObjectId = typeof userId === 'string' ? new ObjectId(userId) : userId;
+
+        // Get current issue
+        const issue = await collection.findOne({ _id: issueObjectId });
+        if (!issue) {
+            return false;
+        }
+
+        // Check if user is already in users array
+        const existingUserIndex = issue.users.findIndex(
+            (u) => u.username === username
+        );
+
+        const updateOps: any = {
+            $set: {
+                contributor: userObjectId,
+            },
+        };
+
+        // If user is not in users array, add them with 0 sunshines
+        if (existingUserIndex < 0) {
+            const newUser: IssueUserServer = {
+                username,
+                starshineAmount: 0,
+                transactionDate: new Date(),
+            };
+            updateOps.$push = { users: newUser };
+        }
+
+        const result = await collection.updateOne(
+            { _id: issueObjectId },
+            updateOps
+        );
+        return result.modifiedCount > 0;
+    } catch (error) {
+        console.error('Error setting issue contributor:', error);
+        return false;
+    }
+}
+
+/**
+ * Unset contributor for an issue
+ */
+export async function unsetIssueContributor(
+    issueId: string | ObjectId
+): Promise<boolean> {
+    try {
+        const collection = await getCollection<IssueModel>('issues');
+        const issueObjectId = typeof issueId === 'string' ? new ObjectId(issueId) : issueId;
+
+        const result = await collection.updateOne(
+            { _id: issueObjectId },
+            {
+                $unset: {
+                    contributor: '',
+                },
+            }
+        );
+        return result.modifiedCount > 0;
+    } catch (error) {
+        console.error('Error unsetting issue contributor:', error);
         return false;
     }
 }

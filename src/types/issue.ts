@@ -40,5 +40,10 @@ export interface Issue {
     sunshines: number;
     users: IssueUser[];
     author?: string; // ID of the user who created the issue
+    contributor?: string; // ID of the user assigned as contributor
 }
+
+export const ISSUE_EVENT_TYPES = {
+    ISSUE_UPDATE: 'issue-update',
+} as const
 

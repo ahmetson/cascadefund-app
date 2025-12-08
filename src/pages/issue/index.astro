@@ -3,6 +3,7 @@ import Layout from "@/layouts/PanelViewLayout.astro";
 import BackButton from "@/components/custom-ui/BackButton";
 import IssuePanel from "@/components/issue/IssuePanel";
 import IssueStatsPanel from "@/components/issue/IssueStatsPanel";
+import AssignToMeCTA from "@/components/issue/AssignToMeCTA";
 import { getIssueById } from "@/scripts/issue";
 import { ObjectId } from "mongodb";
 import { MenuName } from "@/components/navbar/WorkNavbar.astro";
@@ -39,5 +40,6 @@ const backUri = galaxyParam
     <BackButton slot="left" uri={backUri} />
 
     <IssuePanel slot="center" {...issue} client:load />
+    <AssignToMeCTA slot="center" client:only="react" issueId={issueIdParam} />
     <!-- <IssueStatsPanel slot="right" client:load /> -->
 </Layout>

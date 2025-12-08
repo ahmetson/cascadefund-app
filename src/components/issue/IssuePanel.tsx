@@ -9,7 +9,7 @@ import Editable from '@/components/custom-ui/Editable'
 import EditableMenuPanel from '@/components/custom-ui/EditableMenuPanel'
 import Tooltip from '@/components/custom-ui/Tooltip'
 import { getIcon, IconType } from '@/components/icon'
-import type { Issue, IssueTag } from '@/types/issue'
+import type { Issue } from '@/types/issue'
 import { getIssueStatIcon } from './utils'
 import { ActionProps } from '@/types/eventTypes'
 import PanelFooter from '@/components/panel/PanelFooter'
@@ -23,6 +23,7 @@ import { actions as astroActions } from 'astro:actions'
 import type { User } from '@/types/user'
 import { getDemo } from '@/demo-runtime-cookies/client-side'
 import { actions } from 'astro:actions'
+import { ISSUE_EVENT_TYPES } from '@/types/issue'
 
 interface IssueContentPanelProps extends Issue {
   actions?: ActionProps[]
@@ -34,26 +35,42 @@ const IssueContentPanel: React.FC<IssueContentPanelProps> = ({
   onSave,
   ...issue
 }) => {
+  // State for issue data (to update on events)
+  const [issueData, setIssueData] = useState<Issue>(issue)
+
+  // Update issueData when issue prop changes
+  useEffect(() => {
+    setIssueData(issue)
+  }, [issue._id, issue.contributor, issue.author, issue.maintainer, issue.title, issue.description])
+
   // Derive properties from Issue
-  const issueNumber = issue._id ? `#${issue._id.slice(-6)}` : '#0'
-  const primaryTag = issue.tags && issue.tags.length > 0 ? issue.tags[0] : undefined
+  const issueNumber = issueData._id ? `#${issueData._id.slice(-6)}` : '#0'
+  const primaryTag = issueData.tags && issueData.tags.length > 0 ? issueData.tags[0] : undefined
   const issueType = primaryTag || 'improvement'
 
   // Check if this is a shining issue (has sunshines > 0)
-  const isShiningIssue = issue.sunshines > 0
+  const isShiningIssue = issueData.sunshines > 0
 
   // State for author user data
   const [authorUser, setAuthorUser] = useState<User | null>(null)
   const [isLoadingAuthor, setIsLoadingAuthor] = useState(false)
+
+  // State for contributor user data
+  const [contributorUser, setContributorUser] = useState<User | null>(null)
+  const [isLoadingContributor, setIsLoadingContributor] = useState(false)
+
+  // State for maintainer user data
+  const [maintainerUser, setMaintainerUser] = useState<User | null>(null)
+  const [isLoadingMaintainer, setIsLoadingMaintainer] = useState(false)
 
   // State for current user
   const [currentUser, setCurrentUser] = useState<User | null>(null)
 
   // Fetch author user data from issue.author (string ID)
   useEffect(() => {
-    if (issue.author && typeof issue.author === 'string') {
+    if (issueData.author && typeof issueData.author === 'string') {
       setIsLoadingAuthor(true)
-      astroActions.getUserById({ userId: issue.author })
+      astroActions.getUserById({ userId: issueData.author })
         .then((result: { data?: { success?: boolean; data?: User; error?: string } }) => {
           if (result.data?.success && result.data.data) {
             setAuthorUser(result.data.data)
@@ -65,8 +82,52 @@ const IssueContentPanel: React.FC<IssueContentPanelProps> = ({
         .finally(() => {
           setIsLoadingAuthor(false)
         })
+    } else {
+      setAuthorUser(null)
     }
-  }, [issue.author])
+  }, [issueData.author])
+
+  // Fetch contributor user data from issue.contributor (string ID)
+  useEffect(() => {
+    if (issueData.contributor && typeof issueData.contributor === 'string') {
+      setIsLoadingContributor(true)
+      astroActions.getUserById({ userId: issueData.contributor })
+        .then((result: { data?: { success?: boolean; data?: User; error?: string } }) => {
+          if (result.data?.success && result.data.data) {
+            setContributorUser(result.data.data)
+          }
+        })
+        .catch((error: unknown) => {
+          console.error('Error fetching contributor:', error)
+        })
+        .finally(() => {
+          setIsLoadingContributor(false)
+        })
+    } else {
+      setContributorUser(null)
+    }
+  }, [issueData.contributor])
+
+  // Fetch maintainer user data from issue.maintainer (string ID)
+  useEffect(() => {
+    if (issueData.maintainer && typeof issueData.maintainer === 'string') {
+      setIsLoadingMaintainer(true)
+      astroActions.getUserById({ userId: issueData.maintainer })
+        .then((result: { data?: { success?: boolean; data?: User; error?: string } }) => {
+          if (result.data?.success && result.data.data) {
+            setMaintainerUser(result.data.data)
+          }
+        })
+        .catch((error: unknown) => {
+          console.error('Error fetching maintainer:', error)
+        })
+        .finally(() => {
+          setIsLoadingMaintainer(false)
+        })
+    } else {
+      setMaintainerUser(null)
+    }
+  }, [issueData.maintainer])
 
   // Fetch current user from demo
   useEffect(() => {
@@ -87,17 +148,39 @@ const IssueContentPanel: React.FC<IssueContentPanelProps> = ({
     }
   }, [])
 
+  // Listen for issue-update events
+  useEffect(() => {
+    const handleIssueUpdate = async (event: Event) => {
+      const customEvent = event as CustomEvent<Issue>
+      setIssueData(customEvent.detail)
+    }
+
+    window.addEventListener(ISSUE_EVENT_TYPES.ISSUE_UPDATE, handleIssueUpdate)
+    return () => {
+      window.removeEventListener(ISSUE_EVENT_TYPES.ISSUE_UPDATE, handleIssueUpdate)
+    }
+  }, [issueData._id])
+
   // Check if current user is author or maintainer
-  const isAuthor = currentUser && issue.author && currentUser._id === issue.author
+  const isAuthor = currentUser && issueData.author && currentUser._id === issueData.author
   const isMaintainer = currentUser?.role === 'maintainer'
   const canEdit = isAuthor || isMaintainer
 
   // State management for editable content
   const [value, setValue] = useState<Record<string, any>>({
-    title: issue.title,
-    description: issue.description,
+    title: issueData.title,
+    description: issueData.description,
     technicalRequirements: '<p>Implement unified OAuth client library</p><p>Create consistent token storage mechanism</p><p>Design user permission management interface</p><p>Develop automated token refresh process</p><p>Ensure GDPR compliance for all data transfers</p>'
   })
+
+  // Update value when issueData changes
+  useEffect(() => {
+    setValue({
+      title: issueData.title,
+      description: issueData.description,
+      technicalRequirements: value.technicalRequirements, // Keep existing technical requirements
+    })
+  }, [issueData.title, issueData.description])
   const [saving, setSaving] = useState(false)
   const [showEditBar, setShowEditBar] = useState(false)
   const [editor, setEditor] = useState<Editor | null>(null)
@@ -191,7 +274,7 @@ const IssueContentPanel: React.FC<IssueContentPanelProps> = ({
       <div className="flex items-start space-x-4">
         {/* Left column: Issue badge and actions */}
         <div className="w-16 overflow-hidden flex flex-col space-y-2 items-center">
-          <Link uri={issue.uri} asNewTab={false}>
+          <Link uri={issueData.uri} asNewTab={false}>
             <Badge variant='info' static={true}>
               <div className="flex items-center space-x-1">
                 {getIcon('cascadefund' as IconType)}
@@ -299,34 +382,62 @@ const IssueContentPanel: React.FC<IssueContentPanelProps> = ({
             </Tooltip>
           </div>
 
-          {/* Author and created time */}
-          {(authorUser || issue.createdTime) && (
-            <div className="flex justify-end items-center space-x-1 text-gray-500 gap-1 text-xs mb-2">
+          {/* Author, Contributor, Maintainer and created time */}
+          {(contributorUser || maintainerUser || authorUser || issueData.createdTime) && (
+            <div className={`flex items-center space-x-1 text-gray-500 gap-1 text-xs mb-2 ${contributorUser ? 'justify-between' : 'justify-end'}`}>
+              {contributorUser && maintainerUser && (
+                <>
+                  <div className="flex items-center gap-1">
+                    <span>Contributor</span>
+                    {isLoadingContributor ? (
+                      <span className="text-xs text-gray-400">Loading...</span>
+                    ) : (
+                      <MenuAvatar
+                        src={contributorUser.src}
+                        uri={contributorUser.uri}
+                        className='w-7! h-7!'
+                      />
+                    )}
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span>Maintainer</span>
+                    {isLoadingMaintainer ? (
+                      <span className="text-xs text-gray-400">Loading...</span>
+                    ) : (
+                      <MenuAvatar
+                        src={maintainerUser.src}
+                        uri={maintainerUser.uri}
+                        className='w-7! h-7!'
+                      />
+                    )}
+                  </div>
+                </>
+              )}
               {authorUser && (
                 <>
-                  By{' '}
-                  {isLoadingAuthor ? (
-                    <span className="text-xs text-gray-400">Loading...</span>
-                  ) : (
-                    <>
+                  <div className="flex items-center gap-1">
+                    <span>By</span>
+                    {isLoadingAuthor ? (
+                      <span className="text-xs text-gray-400">Loading...</span>
+                    ) : (
                       <MenuAvatar
                         src={authorUser.src}
                         uri={authorUser.uri}
                         className='w-7! h-7!'
                       />
-                      {/* Note: ProfileRating would need rating data from User type if available */}
-                    </>
-                  )}
+                    )}
+                    {issueData.createdTime && (
+                      <TimeAgo datetime={typeof issueData.createdTime === 'number' ? issueData.createdTime * 1000 : issueData.createdTime} />
+                    )}
+                  </div>
                 </>
               )}
-              {issue.createdTime && (
-                <TimeAgo datetime={typeof issue.createdTime === 'number' ? issue.createdTime * 1000 : issue.createdTime} />
-              )}
+
             </div>
           )}
 
           {/* Footer with actions and stats */}
-          {(issue.stats || preparedActions.length > 0 || editAction) && (
+          {(issueData.stats || preparedActions.length > 0 || editAction) && (
             <PanelFooter className='flex flex-row justify-between items-center mt-2'>
               <div className="flex items-center gap-2">
                 {preparedActions.length > 0 && <PanelAction className='' actions={preparedActions} />}
@@ -349,9 +460,9 @@ const IssueContentPanel: React.FC<IssueContentPanelProps> = ({
                   </Tooltip>
                 )}
               </div>
-              {issue.stats && Object.values(issue.stats).map((stat, index) => (
+              {issueData.stats && Object.values(issueData.stats).map((stat, index) => (
                 <PanelStat
-                  key={index}
+                  key={index.toString()}
                   triggerClassName='text-sm'
                   iconType={getIssueStatIcon(stat.type)}
                   hint={stat.hint}
