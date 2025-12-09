@@ -9,6 +9,7 @@ export { type Patch, type Version } from '@/types/roadmap'
 interface PatchModel {
     id: ObjectId; // Reference to IssueModel
     completed: boolean;
+    tested?: boolean;
     title: string;
     sunshines?: number;
 }
@@ -19,7 +20,7 @@ interface VersionModel {
     galaxy: ObjectId; // Reference to GalaxyModel
     tag: string;
     createdTime: Date;
-    status: 'completed' | 'active' | 'planned';
+    status: 'complete' | 'testing' | 'release' | 'archived';
     patches: PatchModel[];
     maintainer: ObjectId; // Reference to UserModel
 }
@@ -29,6 +30,7 @@ function patchModelToPatch(model: PatchModel): Patch {
     return {
         id: model.id.toString(),
         completed: model.completed,
+        tested: model.tested,
         title: model.title,
         sunshines: model.sunshines,
     }
@@ -38,6 +40,7 @@ function patchToPatchModel(patch: Patch): PatchModel {
     return {
         id: new ObjectId(patch.id),
         completed: patch.completed,
+        tested: patch.tested,
         title: patch.title,
         sunshines: patch.sunshines,
     }
@@ -116,7 +119,7 @@ export async function createVersion(version: Version): Promise<boolean> {
  */
 export async function updateVersionStatus(
     versionId: string | ObjectId,
-    status: 'completed' | 'active' | 'planned'
+    status: 'complete' | 'testing' | 'release' | 'archived'
 ): Promise<boolean> {
     try {
         const collection = await getCollection<VersionModel>('versions');
@@ -264,6 +267,37 @@ export async function completePatch(
         return result.modifiedCount > 0;
     } catch (error) {
         console.error('Error completing patch:', error);
+        return false;
+    }
+}
+
+/**
+ * Update a single patch's tested status in a version
+ */
+export async function testPatch(
+    versionId: string | ObjectId,
+    patchId: string | ObjectId,
+    tested: boolean
+): Promise<boolean> {
+    try {
+        const collection = await getCollection<VersionModel>('versions');
+        const versionObjectId = typeof versionId === 'string' ? new ObjectId(versionId) : versionId;
+        const patchObjectId = typeof patchId === 'string' ? new ObjectId(patchId) : patchId;
+
+        const result = await collection.updateOne(
+            {
+                _id: versionObjectId,
+                'patches.id': patchObjectId
+            },
+            {
+                $set: {
+                    'patches.$.tested': tested,
+                },
+            }
+        );
+        return result.modifiedCount > 0;
+    } catch (error) {
+        console.error('Error updating patch tested status:', error);
         return false;
     }
 }

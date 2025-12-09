@@ -44,8 +44,8 @@ const RoadmapTabs: React.FC<RoadmapTabsProps> = ({ galaxyId }) => {
     }
   }, [fetchVersions])
 
-  const versions = allVersions.filter(v => v.status !== 'completed')
-  const archive = allVersions.filter(v => v.status === 'completed')
+  const versions = allVersions.filter(v => v.status !== 'archived')
+  const archive = allVersions.filter(v => v.status === 'archived')
 
   if (loading) {
     return <div className="text-center py-8">Loading roadmap...</div>

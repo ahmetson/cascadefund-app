@@ -127,7 +127,7 @@ async function handleJoinWishlistUnsafe(params: { email?: string, action: 'hero'
     }
 }
 
-async function handleUpdateProjectVersionStatus(params: { projectId?: string, currentStatus?: 'planned' | 'active' | 'completed', completedIssues?: number, totalIssues?: number }): Promise<{ status: 'planned' | 'active' | 'completed', completedIssues: number, totalIssues: number }> {
+async function handleUpdateProjectVersionStatus(params: { projectId?: string, currentStatus?: 'complete' | 'testing' | 'release' | 'archived', completedIssues?: number, testedIssues?: number, totalIssues?: number }): Promise<{ status: 'complete' | 'testing' | 'release' | 'archived', completedIssues: number, testedIssues: number, totalIssues: number }> {
     if (!params.projectId) {
         throw {
             code: -32602,
@@ -148,16 +148,19 @@ async function handleUpdateProjectVersionStatus(params: { projectId?: string, cu
     await sleep(1000)
 
     // Determine new status based on transition rules
-    let newStatus: 'planned' | 'active' | 'completed'
+    let newStatus: 'complete' | 'testing' | 'release' | 'archived'
     switch (params.currentStatus) {
-        case 'planned':
-            newStatus = 'active'
+        case 'complete':
+            newStatus = 'testing'
             break
-        case 'active':
-            newStatus = 'completed'
+        case 'testing':
+            newStatus = 'release'
             break
-        case 'completed':
-            newStatus = 'completed' // No change
+        case 'release':
+            newStatus = 'release' // no auto-archive here
+            break
+        case 'archived':
+            newStatus = 'archived'
             break
         default:
             throw {
@@ -168,21 +171,14 @@ async function handleUpdateProjectVersionStatus(params: { projectId?: string, cu
     }
 
     // Calculate new issue counts based on transition
-    let completedIssues = params.completedIssues ?? 0
-    let totalIssues = params.totalIssues ?? 0
-
-    if (params.currentStatus === 'active' && newStatus === 'completed') {
-        // When completing, mark all remaining issues as completed
-        completedIssues = totalIssues
-    } else if (params.currentStatus === 'planned' && newStatus === 'active') {
-        // When activating, keep the same counts (or they could be initialized from the issues array)
-        // For now, we'll keep them as is
-    }
-    // For completed status, no change needed
+    const completedIssues = params.completedIssues ?? 0
+    const testedIssues = params.testedIssues ?? 0
+    const totalIssues = params.totalIssues ?? 0
 
     return {
         status: newStatus,
         completedIssues,
+        testedIssues,
         totalIssues
     }
 }

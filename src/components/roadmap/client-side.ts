@@ -27,3 +27,16 @@ export async function updatePatches(versionId: string, patches: Patch[]): Promis
     }
 }
 
+/**
+ * Mark a patch as tested
+ */
+export async function markPatchTested(versionId: string, patchId: string, tested: boolean): Promise<boolean> {
+    try {
+        const result = await actions.testPatch({ versionId, patchId, tested });
+        return result.data?.success || false;
+    } catch (error) {
+        console.error('Error marking patch as tested:', error);
+        return false;
+    }
+}
+

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, memo, useRef } from 'react'
+import React, { useState, useMemo, useEffect, memo, useRef, useCallback } from 'react'
 import PageLikePanel from '@/components/panel/PageLikePanel'
 import Button from '../custom-ui/Button'
 import Tooltip from '../custom-ui/Tooltip'
@@ -20,10 +20,20 @@ import { actions } from 'astro:actions'
 import { DndProvider, useDrag } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { getDemo } from '@/demo-runtime-cookies/client-side'
+import { type DemoRoleChangeEvent, DEMO_EVENT_TYPES } from '@/demo-runtime-cookies'
 import { emitIssueUpdate } from '@/components/issue/client-side'
-import { updatePatches } from './client-side'
+import { updatePatches, markPatchTested } from './client-side'
 import { PATCH_EVENT_TYPES, PATCH_KEYWORD } from '@/types/patch'
 import { cn, truncateStr } from '@/lib/utils'
+
+type VersionStatus = 'complete' | 'testing' | 'release' | 'archived'
+
+const normalizeStatus = (incoming: string): VersionStatus => {
+  if (incoming === 'completed') return 'archived'
+  if (incoming === 'active' || incoming === 'planned') return 'complete'
+  if (incoming === 'testing' || incoming === 'release' || incoming === 'archived') return incoming
+  return 'complete'
+}
 
 const ProjectVersionPanel: React.FC<Version> = ({
   tag,
@@ -34,13 +44,15 @@ const ProjectVersionPanel: React.FC<Version> = ({
   galaxy,
   _id: versionId
 }) => {
-  const [status, setStatus] = useState<'completed' | 'active' | 'planned'>(initialStatus)
+  const [status, setStatus] = useState<VersionStatus>(normalizeStatus(initialStatus))
   const [loading, setLoading] = useState<boolean>(false)
   const [patchesList, setPatchesList] = useState<Patch[]>(patches)
   const [revertingIssueId, setRevertingIssueId] = useState<string | null>(null)
   const [notificationMessage, setNotificationMessage] = useState<string | null>(null)
   const [maintainerUser, setMaintainerUser] = useState<User | null>(null)
   const [isLoadingMaintainer, setIsLoadingMaintainer] = useState<boolean>(false)
+  const [currentUser, setCurrentUser] = useState<User | null>(null)
+  const [demoRole, setDemoRole] = useState<string | null>(null)
   const [totalSunshines, setTotalSunshines] = useState<number>(0)
   const [isLoadingSunshines, setIsLoadingSunshines] = useState<boolean>(false)
   const [isDraggingFromThisPanel, setIsDraggingFromThisPanel] = useState<boolean>(false)
@@ -98,6 +110,51 @@ const ProjectVersionPanel: React.FC<Version> = ({
     fetchSunshines()
   }, [patchesList])
 
+  // Resolve current demo user & role
+  const updateCurrentUser = useCallback(() => {
+    const demo = getDemo()
+    if (!demo) return
+    if (demo.role) {
+      setDemoRole(demo.role)
+    }
+    const selected = demo.users?.find(u => u.role === demo.role) || demo.users?.[0]
+    if (selected?._id) {
+      actions.getUserById({ userId: selected._id.toString() })
+        .then((result: { data?: { success?: boolean; data?: User; error?: string } }) => {
+          if (result.data?.success && result.data.data) {
+            setCurrentUser(result.data.data)
+          }
+        })
+        .catch((error: unknown) => {
+          console.error('Error fetching current user:', error)
+        })
+    } else {
+      setCurrentUser(null)
+    }
+  }, [])
+
+  useEffect(() => {
+    updateCurrentUser()
+  }, [updateCurrentUser])
+
+  // Listen for role change events
+  useEffect(() => {
+    const handleRoleChange = (event: Event) => {
+      const customEvent = event as CustomEvent<DemoRoleChangeEvent>
+      const newRole = customEvent.detail.role
+      if (newRole) {
+        setDemoRole(newRole)
+        updateCurrentUser()
+      }
+    }
+
+    window.addEventListener(DEMO_EVENT_TYPES.ROLE_CHANGED, handleRoleChange as EventListener)
+
+    return () => {
+      window.removeEventListener(DEMO_EVENT_TYPES.ROLE_CHANGED, handleRoleChange as EventListener)
+    }
+  }, [updateCurrentUser])
+
   // Listen for PATCH_UPDATE and PATCH_REMOVED events
   useEffect(() => {
     if (!versionId) return;
@@ -143,24 +200,21 @@ const ProjectVersionPanel: React.FC<Version> = ({
   }, [versionId])
 
   // Calculate completedIssues and totalIssues dynamically from patches
-  const completedIssues = useMemo(() => {
-    return patchesList.filter(patch => patch.completed).length
-  }, [patchesList])
-
-  const totalIssues = useMemo(() => {
-    return patchesList.length
-  }, [patchesList])
+  const completedIssues = useMemo(() => patchesList.filter(patch => patch.completed).length, [patchesList])
+  const testedIssues = useMemo(() => patchesList.filter(patch => patch.tested).length, [patchesList])
+  const totalIssues = useMemo(() => patchesList.length, [patchesList])
 
   // Calculate stars from sunshines (divide by 180)
   const stars = useMemo(() => {
     return totalSunshines > 0 ? totalSunshines / 180 : 0
   }, [totalSunshines])
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status: VersionStatus) => {
     switch (status) {
-      case 'completed': return 'bg-green-100/10 dark:bg-green-900/20 border-green-300 dark:border-green-500/30'
-      case 'active': return 'bg-blue-100/10 dark:bg-blue-900/20 border-blue-300 dark:border-blue-500/30'
-      case 'planned': return 'bg-purple-100/10 dark:bg-purple-900/20 border-purple-300 dark:border-purple-500/30'
+      case 'complete': return 'bg-blue-100/10 dark:bg-blue-900/20 border-blue-300 dark:border-blue-500/30'
+      case 'testing': return 'bg-amber-100/10 dark:bg-amber-900/20 border-amber-300 dark:border-amber-500/30'
+      case 'release': return 'bg-teal-100/10 dark:bg-teal-900/20 border-teal-300 dark:border-teal-500/30'
+      case 'archived': return 'bg-green-100/10 dark:bg-green-900/20 border-green-300 dark:border-green-500/30'
       default: return 'bg-slate-100/10 dark:bg-slate-900/20 border-slate-300 dark:border-slate-500/30'
     }
   }
@@ -176,37 +230,108 @@ const ProjectVersionPanel: React.FC<Version> = ({
     }
   }, [maintainerUser])
 
-  const getStatusText = (status: string) => {
+  const currentUserId = currentUser?._id?.toString()
+  const maintainerId = typeof maintainer === 'string' ? maintainer : maintainerUser?._id?.toString()
+  const isMaintainer = useMemo(
+    () => demoRole === 'maintainer' || (currentUserId && maintainerId && currentUserId === maintainerId),
+    [demoRole, currentUserId, maintainerId]
+  )
+
+  const getStatusText = (status: VersionStatus, readyForRelease: boolean) => {
     switch (status) {
-      case 'completed': return 'Archived'
-      case 'active': return 'Mark as released'
-      case 'planned': return 'Check'
+      case 'complete': return 'Move to testing'
+      case 'testing': return readyForRelease ? 'Ready to release' : 'Testing in progress'
+      case 'release': return 'Release'
+      case 'archived': return 'Archived'
       default: return 'Check'
     }
   }
 
-  const handleStatusUpdate = async () => {
-    if (loading || status === 'completed' || !versionId) return
+  const hasPatches = totalIssues > 0
+  const allCompleted = hasPatches ? completedIssues === totalIssues : false
+  const allTested = hasPatches ? testedIssues === totalIssues : false
+  const readyForTesting = allCompleted
+  const readyForRelease = allTested
+  const progressLabel = status === 'complete' ? 'Completed' : 'Tested'
+  const progressValue = status === 'complete' ? completedIssues : testedIssues
 
+  const maintainerTooltip = maintainerUser ? (
+    <div className="text-sm flex items-center gap-2">
+      <span>Maintainer</span>
+      <MenuAvatar user={maintainerUser} />
+      <span>is reviewing the patches.</span>
+    </div>
+  ) : 'Maintainer controls this action.'
+
+  const statusButtonTooltip: React.ReactNode | undefined = (() => {
+    if (status === 'archived') return 'Version is archived'
+    if (status === 'complete') {
+      if (!hasPatches) return 'No patches found. Add patches first'
+      if (!readyForTesting) return 'All patches must be completed before testing'
+      if (!isMaintainer) return maintainerTooltip
+    }
+    if (status === 'testing') {
+      if (!isMaintainer) return maintainerTooltip
+      if (!readyForRelease) return 'Mark every patch as tested to proceed'
+    }
+    if (status === 'release' && !isMaintainer) return maintainerTooltip
+    return undefined
+  })()
+
+  const isStatusButtonDisabled =
+    loading ||
+    status === 'archived' ||
+    (status === 'complete' && (!isMaintainer || !readyForTesting)) ||
+    (status === 'testing' && (!isMaintainer || !readyForRelease)) ||
+    (status === 'release' && !isMaintainer)
+
+  const persistStatus = useCallback(async (nextStatus: VersionStatus) => {
+    if (!versionId) return false
     setLoading(true)
     try {
-      const result = await actions.updateVersionStatus({
-        versionId,
-        status: status === 'active' ? 'completed' : status === 'planned' ? 'active' : status,
-      })
-
+      const result = await actions.updateVersionStatus({ versionId, status: nextStatus })
       if (result.data?.success) {
-        const newStatus = status === 'active' ? 'completed' : status === 'planned' ? 'active' : status
-        setStatus(newStatus)
-      } else {
-        console.error('Error updating status:', result.data?.error)
+        setStatus(nextStatus)
+        return true
       }
+      console.error('Error updating status:', result.data?.error)
+      return false
     } catch (error) {
       console.error('Error calling API:', error)
+      return false
     } finally {
       setLoading(false)
     }
+  }, [versionId])
+
+  const handleStatusUpdate = async () => {
+    if (loading || !versionId) return
+    if (status === 'archived') return
+
+    if (status === 'complete') {
+      if (!isMaintainer || !readyForTesting) return
+      await persistStatus('testing')
+      return
+    }
+
+    if (status === 'testing') {
+      if (!isMaintainer || !readyForRelease) return
+      await persistStatus('release')
+      return
+    }
+
+    if (status === 'release') {
+      if (!isMaintainer) return
+      alert('Release ready! We will notify contributors that this version is live.')
+      return
+    }
   }
+
+  useEffect(() => {
+    if (status === 'testing' && readyForRelease && !loading && isMaintainer) {
+      persistStatus('release')
+    }
+  }, [status, readyForRelease, loading, isMaintainer, persistStatus])
 
   const handleRevertPatch = async (issueId: string) => {
     if (revertingIssueId) return
@@ -288,6 +413,7 @@ const ProjectVersionPanel: React.FC<Version> = ({
         id: item.id,
         title: item.title,
         completed: completed,
+        tested: false,
         sunshines: item.sunshines,
       };
       updatedPatches.push(newPatch);
@@ -545,8 +671,8 @@ const ProjectVersionPanel: React.FC<Version> = ({
       >
         <Tooltip content={getTooltipContent()}>
           <Checkbox
-            checked={patchCompleted || status === 'completed'}
-            disabled={isCheckboxDisabled || status === 'completed' || isToggling}
+            checked={patchCompleted}
+            disabled={isCheckboxDisabled || status !== 'complete' || isToggling}
             onCheckedChange={togglePatchCompletion}
             className="w-4 h-4 rounded-sm border-2 border-slate-400 dark:border-slate-600 bg-white dark:bg-slate-600 data-[state=checked]:bg-slate-600 dark:data-[state=checked]:bg-slate-400 data-[state=checked]:border-slate-600 dark:data-[state=checked]:border-slate-400 flex items-center justify-center"
           >
@@ -571,33 +697,190 @@ const ProjectVersionPanel: React.FC<Version> = ({
   });
   MinimalDraggablePatch.displayName = 'MinimalDraggablePatch';
 
+  const MinimalTestablePatch: React.FC<{ patch: Patch }> = memo(({ patch }) => {
+    const [isTested, setIsTested] = useState<boolean>(!!patch.tested)
+    const [issue, setIssue] = useState<Issue | null>(null)
+    const [authorUser, setAuthorUser] = useState<User | null>(null)
+    const [isLoadingIssue, setIsLoadingIssue] = useState<boolean>(false)
+    const [isToggling, setIsToggling] = useState<boolean>(false)
+
+    useEffect(() => {
+      setIsLoadingIssue(true)
+      actions.getIssueById({ issueId: patch.id })
+        .then((result: { data?: { success?: boolean; data?: Issue; error?: string } }) => {
+          if (result.data?.success && result.data.data) {
+            setIssue(result.data.data)
+          }
+        })
+        .catch((error: unknown) => {
+          console.error('Error fetching issue:', error)
+        })
+        .finally(() => setIsLoadingIssue(false))
+    }, [patch.id])
+
+    useEffect(() => {
+      if (issue?.author && typeof issue.author === 'string') {
+        actions.getUserById({ userId: issue.author })
+          .then((result: { data?: { success?: boolean; data?: User; error?: string } }) => {
+            if (result.data?.success && result.data.data) {
+              setAuthorUser(result.data.data)
+            }
+          })
+          .catch((error: unknown) => console.error('Error fetching author:', error))
+      }
+    }, [issue?.author])
+
+    const isAuthor = currentUserId && issue?.author && currentUserId === issue.author
+
+    const toggleTested = async () => {
+      if (isToggling || status !== 'testing' || !isAuthor || !versionId) return
+      setIsToggling(true)
+      const next = !isTested
+      try {
+        const ok = await markPatchTested(versionId, patch.id, next)
+        if (ok) {
+          setIsTested(next)
+          setPatchesList(prev =>
+            prev.map(p => p.id === patch.id ? { ...p, tested: next } : p)
+          )
+        }
+      } catch (error) {
+        console.error('Error marking tested:', error)
+      } finally {
+        setIsToggling(false)
+      }
+    }
+
+    const getTooltipContent = () => {
+      if (isLoadingIssue) return <div className="text-sm">Loading...</div>
+      if (!issue) return <div className="text-sm">Issue not found</div>
+      if (!isAuthor) {
+        return (
+          <div className="text-sm flex items-center gap-2">
+            <span>Only author</span>
+            {authorUser && <MenuAvatar user={authorUser} />}
+            <span>can mark tested</span>
+          </div>
+        )
+      }
+      if (isAuthor && !isTested) return <div className="text-sm">Confirm this patch is tested</div>
+      if (isAuthor && isTested) return <div className="text-sm">Unmark if testing failed</div>
+      return <div className="text-sm">Testing status</div>
+    }
+
+    return (
+      <div
+        className={cn(
+          'border-1 border-amber-300/80 dark:border-amber-400/70 bg-amber-50/50 dark:bg-amber-900/20',
+          'transition-colors p-2 border-dashed rounded-md',
+          'flex items-center justify-between gap-2'
+        )}
+      >
+        <Tooltip content={getTooltipContent()}>
+          <Checkbox
+            checked={isTested}
+            disabled={!isAuthor || isToggling || status !== 'testing'}
+            onCheckedChange={toggleTested}
+            className="w-4 h-4 rounded-sm border-2 border-slate-400 dark:border-slate-600 bg-white dark:bg-slate-600 data-[state=checked]:bg-teal-600 dark:data-[state=checked]:bg-teal-500 data-[state=checked]:border-teal-600 dark:data-[state=checked]:border-teal-400 flex items-center justify-center"
+          >
+            <CheckboxIndicator className="w-3 h-3 text-white dark:text-slate-700" />
+          </Checkbox>
+        </Tooltip>
+        <span className="text-sm text-slate-700 dark:text-slate-300 flex-1 truncate">
+          {truncateStr(patch.title)}
+        </span>
+        <div className="flex items-center gap-1 text-amber-600 dark:text-amber-400">
+          {getIcon({ iconType: 'sunshine', className: 'w-4 h-4', fill: 'currentColor' })}
+          <span className="text-xs font-semibold">
+            <NumberFlow
+              value={patch.sunshines || 0}
+              locales="en-US"
+              format={{ useGrouping: false }}
+            />
+          </span>
+        </div>
+      </div>
+    )
+  })
+  MinimalTestablePatch.displayName = 'MinimalTestablePatch'
+
+  const MinimalStaticPatch: React.FC<{ patch: Patch }> = memo(({ patch }) => {
+    const badgeText = patch.tested ? 'Tested' : patch.completed ? 'Completed' : 'Pending'
+    const badgeColor = patch.tested
+      ? 'bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-200'
+      : patch.completed
+        ? 'bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-200'
+        : 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-200'
+
+    return (
+      <div
+        className={cn(
+          'cursor-not-allowed border border-dashed rounded-md p-2',
+          'bg-slate-50/50 dark:bg-slate-900/30 border-slate-200 dark:border-slate-600/70',
+          'flex items-center justify-between gap-2'
+        )}
+      >
+        <span className="text-xs font-medium uppercase tracking-wide">
+          <span className={cn('px-2 py-0.5 rounded-sm font-semibold', badgeColor)}>{badgeText}</span>
+        </span>
+        <span className="text-sm text-slate-700 dark:text-slate-300 flex-1 truncate">
+          {truncateStr(patch.title)}
+        </span>
+        <div className="flex items-center gap-1 text-amber-600 dark:text-amber-400">
+          {getIcon({ iconType: 'sunshine', className: 'w-4 h-4', fill: 'currentColor' })}
+          <span className="text-xs font-semibold">
+            <NumberFlow
+              value={patch.sunshines || 0}
+              locales="en-US"
+              format={{ useGrouping: false }}
+            />
+          </span>
+        </div>
+      </div>
+    )
+  })
+  MinimalStaticPatch.displayName = 'MinimalStaticPatch'
+
   return (
     <PageLikePanel
       interactive={false}
       title={tag}
       rightHeader={
-        status !== 'completed' &&
-        <Button variant='secondary' disabled={loading} onClick={handleStatusUpdate}>
-          {loading ? (
-            <div className="flex items-center gap-2">
-              <LoadingSpinner />
-            </div>
-          ) : (
-            getStatusText(status)
-          )}
-        </Button>
+        status !== 'archived' && (() => {
+          const button = (
+            <Button
+              variant={status === 'release' && !isStatusButtonDisabled ? 'primary' : 'secondary'}
+              disabled={isStatusButtonDisabled}
+              onClick={handleStatusUpdate}
+            >
+              {loading ? (
+                <div className="flex items-center gap-2">
+                  <LoadingSpinner />
+                </div>
+              ) : (
+                getStatusText(status, readyForRelease)
+              )}
+            </Button>
+          )
+
+          return statusButtonTooltip ? (
+            <Tooltip content={statusButtonTooltip}>
+              {button}
+            </Tooltip>
+          ) : button
+        })()
       }
       className={`w-full ${getStatusColor(status)} mb-4`}
     >
-      {status !== 'completed' && (
+      {status !== 'archived' && (
         <div className="w-full p-2">
           {/* Slider Labels */}
           <div className="flex items-center justify-between">
             <div
               className="flex flex-row items-center gap-2">
-              <span className="text-slate-500 dark:text-slate-400 text-sm">Completed</span>
+              <span className="text-slate-500 dark:text-slate-400 text-sm">{progressLabel}</span>
               <NumberFlow
-                value={completedIssues}
+                value={progressValue}
                 locales="en-US"
                 format={{ useGrouping: false }}
                 className="font-semibold text-slate-700 dark:text-slate-400 text-sm mb-0.2"
@@ -618,7 +901,7 @@ const ProjectVersionPanel: React.FC<Version> = ({
           {/* Slider */}
           <div className="my-2">
             <RadixSlider.Root
-              value={[completedIssues]}
+              value={[progressValue]}
               onValueChange={() => { }}
               max={totalIssues}
               min={0}
@@ -630,7 +913,7 @@ const ProjectVersionPanel: React.FC<Version> = ({
               </RadixSlider.Track>
               <RadixSlider.Thumb className="relative block h-5 w-5 rounded-full bg-gray-100/50 dark:bg-slate-400/80 shadow-md ring-2 ring-slate-400/20 dark:ring-slate-500/30 hover:ring-slate-500/40 dark:hover:ring-slate-400/50 transition-all focus:outline-none focus:ring-2 focus:ring-slate-500 dark:focus:ring-slate-400">
                 <NumberFlow
-                  value={completedIssues}
+                  value={progressValue}
                   locales="en-US"
                   format={{ useGrouping: false }}
                   className="absolute left-1/2 -translate-x-1/2 text-xs text-slate-600 dark:text-slate-700 font-semibold"
@@ -642,35 +925,54 @@ const ProjectVersionPanel: React.FC<Version> = ({
       )}
 
       <div className="my-6">
-        <Tooltip content="Patches are the issues with the contributor and common agreement.">
-          <DndProvider key={versionId} backend={HTML5Backend}>
-            <DropTarget
-              id={`version-${versionId || 'unknown'}`}
-              accept={['patch', 'issue']}
-              onDrop={(item: { id: string; title: string; completed?: boolean, sunshines?: number }) => {
-                if (!versionId) return;
-                const completed = item.completed !== undefined ? item.completed : false;
-                changePatchList(item, versionId, completed);
-              }}
-              disabled={isDraggingFromThisPanel}
-            >
-              <h4 className="text-sm mb-2 font-medium text-slate-700 dark:text-slate-400 flex items-center gap-1.5 cursor-help">
-                {getIcon({ iconType: 'info', className: 'w-4 h-4 text-slate-500 dark:text-slate-400' })}
-                Patches
-              </h4>
-            </DropTarget>
-          </DndProvider>
-        </Tooltip>
-
-        <DndProvider key={versionId} backend={HTML5Backend}>
+        {status === 'complete' ? (
+          <>
+            <Tooltip content="Patches are the issues with the contributor and common agreement.">
+              <DndProvider key={versionId} backend={HTML5Backend}>
+                <DropTarget
+                  id={`version-${versionId || 'unknown'}`}
+                  accept={['patch', 'issue']}
+                  onDrop={(item: { id: string; title: string; completed?: boolean, sunshines?: number }) => {
+                    if (!versionId) return;
+                    const completed = item.completed !== undefined ? item.completed : false;
+                    changePatchList(item, versionId, completed);
+                  }}
+                  disabled={isDraggingFromThisPanel}
+                >
+                  <h4 className="text-sm mb-2 font-medium text-slate-700 dark:text-slate-400 flex items-center gap-1.5 cursor-help">
+                    {getIcon({ iconType: 'info', className: 'w-4 h-4 text-slate-500 dark:text-slate-400' })}
+                    Patches
+                  </h4>
+                </DropTarget>
+              </DndProvider>
+            </Tooltip>
+            <DndProvider key={`${versionId}-draggable`} backend={HTML5Backend}>
+              <ul className="space-y-2 min-h-[100px] mb-2">
+                {patchesList.map((patch) => (
+                  <li key={patch.id} >
+                    <MinimalDraggablePatch patch={patch} />
+                  </li>
+                ))}
+              </ul>
+            </DndProvider>
+          </>
+        ) : status === 'testing' ? (
           <ul className="space-y-2 min-h-[100px] mb-2">
             {patchesList.map((patch) => (
-              <li key={patch.id} >
-                <MinimalDraggablePatch patch={patch} />
+              <li key={patch.id}>
+                <MinimalTestablePatch patch={patch} />
               </li>
             ))}
           </ul>
-        </DndProvider>
+        ) : (
+          <ul className="space-y-2 min-h-[100px] mb-2">
+            {patchesList.map((patch) => (
+              <li key={patch.id}>
+                <MinimalStaticPatch patch={patch} />
+              </li>
+            ))}
+          </ul>
+        )}
 
 
         {notificationMessage && (
@@ -699,9 +1001,9 @@ const ProjectVersionPanel: React.FC<Version> = ({
           )}
         </PanelStat>
         <PanelStat
-          iconType={status === 'completed' ? 'star' : 'star'}
+          iconType={status === 'archived' ? 'star' : 'star'}
           hint="Stars calculated from sunshines (sunshines / 180)"
-          fill={status === 'completed' ? true : false}
+          fill={status === 'archived'}
         >
           {isLoadingSunshines ? (
             <LoadingSpinner />
@@ -718,11 +1020,11 @@ const ProjectVersionPanel: React.FC<Version> = ({
           )}
         </PanelStat>
         <PanelStat
-          iconType={status === 'completed' ? 'star' : 'project'}
+          iconType={status === 'archived' ? 'star' : 'project'}
           hint="Version status"
-          fill={status === 'completed' ? true : false}
+          fill={status === 'archived'}
         >
-          {status === 'completed' ? 'Archived' : status}
+          {status === 'archived' ? 'Archived' : status}
         </PanelStat>
       </PanelFooter>
 

@@ -1,6 +1,7 @@
 export interface Patch {
   id: string
   completed: boolean
+  tested?: boolean
   title: string
   sunshines?: number
 }
@@ -10,7 +11,7 @@ export interface Version {
   galaxy: string
   tag: string
   createdTime: number
-  status: 'completed' | 'active' | 'planned'
+  status: 'complete' | 'testing' | 'release' | 'archived'
   patches: Patch[]
   maintainer: string
 }

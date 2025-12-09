@@ -1,6 +1,6 @@
 import { defineAction } from 'astro:actions'
 import { z } from 'astro:schema'
-import { getVersionsByGalaxy, getVersionById, updateVersionStatus, revertPatch, createVersion, updatePatches, removePatch, completePatch } from '@/scripts/roadmap'
+import { getVersionsByGalaxy, getVersionById, updateVersionStatus, revertPatch, createVersion, updatePatches, removePatch, completePatch, testPatch } from '@/scripts/roadmap'
 import type { Version, Patch } from '@/types/roadmap'
 
 export const server = {
@@ -53,7 +53,7 @@ export const server = {
     updateVersionStatus: defineAction({
         input: z.object({
             versionId: z.string(),
-            status: z.enum(['completed', 'active', 'planned']),
+            status: z.enum(['complete', 'testing', 'release', 'archived']),
         }),
         handler: async ({ versionId, status }): Promise<{ success: boolean; error?: string }> => {
             try {
@@ -144,7 +144,7 @@ export const server = {
                     galaxy: galaxyId,
                     tag: tag.trim(),
                     createdTime: Math.floor(Date.now() / 1000),
-                    status: 'planned',
+                    status: 'complete',
                     patches: [],
                     maintainer: maintainerUser._id.toString(),
                 };
@@ -180,6 +180,7 @@ export const server = {
             patches: z.array(z.object({
                 id: z.string(),
                 completed: z.boolean(),
+                tested: z.boolean().optional(),
                 title: z.string(),
             })),
         }),
@@ -253,6 +254,33 @@ export const server = {
                 return {
                     success: false,
                     error: 'An error occurred while updating patch completion status',
+                };
+            }
+        },
+    }),
+    testPatch: defineAction({
+        input: z.object({
+            versionId: z.string(),
+            patchId: z.string(),
+            tested: z.boolean(),
+        }),
+        handler: async ({ versionId, patchId, tested }): Promise<{ success: boolean; error?: string }> => {
+            try {
+                const updated = await testPatch(versionId, patchId, tested);
+                if (!updated) {
+                    return {
+                        success: false,
+                        error: 'Failed to update patch tested status',
+                    };
+                }
+                return {
+                    success: true,
+                };
+            } catch (error) {
+                console.error('Error updating patch tested status:', error);
+                return {
+                    success: false,
+                    error: 'An error occurred while updating patch tested status',
                 };
             }
         },
