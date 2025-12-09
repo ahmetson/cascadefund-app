@@ -10,6 +10,8 @@ import { getIcon } from '../icon'
 import type { ActionProps } from '@/types/eventTypes'
 import { getIssues } from './client-side'
 import { PATCH_KEYWORD } from '@/types/patch'
+import { actions } from 'astro:actions'
+import type { Version } from '@/types/roadmap'
 
 interface Props {
   tabType: IssueTabKey
@@ -25,6 +27,7 @@ const IssueListPanel: React.FC<Props> = ({ tabType, draggable = false, filterabl
   const [isLoading, setIsLoading] = useState(true);
   const activeTabRef = useRef(false);
   const hasReceivedEventRef = useRef(false);
+  const [versionDataCache, setVersionDataCache] = useState<Map<string, Version>>(new Map());
 
   // Fetch issues based on tabType
   const fetchIssues = useCallback(async () => {
@@ -224,17 +227,96 @@ const IssueListPanel: React.FC<Props> = ({ tabType, draggable = false, filterabl
     console.log('Filter changed:', { filterId, sortId })
   }
 
+  // Fetch version data for issues with version- prefix in listHistory
+  useEffect(() => {
+    const fetchVersionData = async () => {
+      const versionIds = new Set<string>();
+
+      // Collect all unique version IDs from issues
+      issues.forEach(issue => {
+        const listHistory = issue.listHistory || [];
+        const versionPrefix = listHistory.find((key: string) => key.startsWith('version-'));
+        if (versionPrefix) {
+          const versionId = versionPrefix.replace('version-', '');
+          if (versionId && !versionDataCache.has(versionId)) {
+            versionIds.add(versionId);
+          }
+        }
+      });
+
+      // Fetch version data for all unique version IDs
+      if (versionIds.size > 0) {
+        const fetchPromises = Array.from(versionIds).map(async (versionId) => {
+          try {
+            const result = await actions.getVersionById({ versionId });
+            if (result.data?.success && result.data.version) {
+              return { versionId, version: result.data.version };
+            }
+          } catch (error) {
+            console.error(`Error fetching version ${versionId}:`, error);
+          }
+          return null;
+        });
+
+        const results = await Promise.all(fetchPromises);
+        setVersionDataCache(prevCache => {
+          const newCache = new Map(prevCache);
+          results.forEach(result => {
+            if (result) {
+              newCache.set(result.versionId, result.version);
+            }
+          });
+          return newCache;
+        });
+      }
+    };
+
+    if (issues.length > 0) {
+      fetchVersionData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [issues]);
+
   const decoratedIssues = useMemo(() => {
     return issues.map(issue => {
+      const listHistory = issue.listHistory || [];
+      const versionPrefix = listHistory.find((key: string) => key.startsWith('version-'));
+
+      if (versionPrefix) {
+        const versionId = versionPrefix.replace('version-', '');
+        const version = versionDataCache.get(versionId);
+
+        if (version) {
+          // Find patch in version to get completed and tested status
+          const patch = version.patches.find(p => p.id === issue._id);
+          const patchCompleted = patch?.completed || false;
+          const patchTested = patch?.tested || false;
+
+          return {
+            ...issue,
+            draggable: false, // Version-prefixed issues are non-draggable
+            patchable: false, // Hide patchable badge
+            versionTag: version.tag,
+            versionStatus: version.status,
+            patchCompleted,
+            patchTested,
+          };
+        }
+      }
+
       return {
         ...issue,
         draggable: draggable,
         patchable: isPatchable(issue),
       };
     });
-  }, [draggable, issues]);
+  }, [draggable, issues, versionDataCache]);
 
-  const ItemComponent: React.FC<Issue & { actions?: ActionProps[]; patchable?: boolean; draggable?: boolean }> = (itemProps) => {
+  const ItemComponent: React.FC<Issue & { actions?: ActionProps[]; patchable?: boolean; draggable?: boolean; versionTag?: string; versionStatus?: 'complete' | 'testing' | 'release' | 'archived'; patchCompleted?: boolean; patchTested?: boolean }> = (itemProps) => {
+    // Version-prefixed issues should never be draggable
+    if (itemProps.versionTag) {
+      return <IssueLink {...itemProps} />
+    }
     if (itemProps.patchable || draggable) {
       return <DraggableIssueLink {...itemProps} patchable={itemProps.patchable} draggable={true} />
     }

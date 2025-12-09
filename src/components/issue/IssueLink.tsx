@@ -21,6 +21,10 @@ interface IssueLinkProps extends Issue {
   actions?: ActionProps[];
   draggable?: boolean;
   patchable?: boolean;
+  versionTag?: string;
+  versionStatus?: 'complete' | 'testing' | 'release' | 'archived';
+  patchCompleted?: boolean;
+  patchTested?: boolean;
 }
 
 const IssueLinkPanel4: React.FC<IssueLinkProps> = (issue) => {
@@ -32,7 +36,8 @@ const IssueLinkPanel4: React.FC<IssueLinkProps> = (issue) => {
 
   // Determine if issue is shining (has sunshines > 0)
   const isShining = issue.sunshines > 0;
-  const isPatchable = Boolean(issue.patchable);
+  const isPatchable = Boolean(issue.patchable) && !issue.versionTag; // Hide patchable if version info is present
+  const hasVersionInfo = Boolean(issue.versionTag);
 
   // Get primary tag (first tag)
   const primaryTag = issue.tags && issue.tags.length > 0 ? issue.tags[0] : undefined;
@@ -158,7 +163,35 @@ const IssueLinkPanel4: React.FC<IssueLinkProps> = (issue) => {
             <Badge variant={isShining ? 'success' : 'gray'} static={true}>
               {isShining ? 'Shining' : 'Public Backlog'}
             </Badge>
-            {isPatchable && (
+            {hasVersionInfo ? (
+              <Tooltip
+                content={
+                  <div className="text-sm flex flex-col gap-2 p-2 max-w-xs">
+                    <div>
+                      Issue is patched. Patch completed {String(issue.patchCompleted)}, patch reviewed: '{issue.patchTested ? 'tested' : 'not tested'}'. Its on the roadmap. In the <span className="font-semibold">{issue.versionTag}</span> version. Version next status: <span className="font-semibold">{issue.versionStatus}</span>
+                    </div>
+                  </div>
+                }
+              >
+                <div className="flex items-center gap-2">
+                  <Badge variant='info' static={true}>
+                    {issue.versionTag}
+                  </Badge>
+                  <Badge
+                    variant={
+                      issue.versionStatus === 'complete' ? 'blue' :
+                        issue.versionStatus === 'testing' ? 'warning' :
+                          issue.versionStatus === 'release' ? 'teal' :
+                            issue.versionStatus === 'archived' ? 'green' :
+                              'gray'
+                    }
+                    static={true}
+                  >
+                    {issue.versionStatus}
+                  </Badge>
+                </div>
+              </Tooltip>
+            ) : isPatchable && (
               <Tooltip
                 content={
                   <div className="text-sm max-w-xs leading-snug">
