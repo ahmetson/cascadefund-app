@@ -48,6 +48,10 @@ if (!project) {
     starCount={galaxy.stars}
   />
   <RoadmapTabs slot="center" galaxyId={galaxyIdParam} client:load />
-  <CreateVersionCTA slot="center" galaxyId={galaxyIdParam} client:load />
+  <CreateVersionCTA
+    slot="center"
+    galaxyId={galaxyIdParam}
+    client:only="react"
+  />
   <PatcherPanel slot="right" client:only="react" galaxyId={galaxyIdParam} />
 </Layout>
