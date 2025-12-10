@@ -116,7 +116,7 @@ const SpaceContent: React.FC<SpaceProps> = ({ users: initialUsers, className = '
   const [{ isOver, canDrop, isDraggingAny }, drop] = useDrop({
     accept: 'user-star',
     drop: (item: UserStarData, monitor) => {
-      const container = document.querySelector('[data-galaxy-content]')
+      const container = document.querySelector('#galaxy-space')
       if (!container) return null
 
       const containerRect = container.getBoundingClientRect()

@@ -163,7 +163,7 @@ const PlaceCtaPanel: React.FC<PlaceCtaPanelProps> = ({ userData }) => {
                                 value={1}
                                 locales="en-US"
                                 className="text-4xl font-bold text-slate-500 dark:text-yellow-500/70 -mt-2"
-                                format={{ style: 'decimal', maximumFractionDigits: 0 }}
+                                format={{ style: 'decimal', maximumFractionDigits: 6, minimumFractionDigits: 2 }}
                             />
                         </div>
 

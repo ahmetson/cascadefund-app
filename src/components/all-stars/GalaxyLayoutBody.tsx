@@ -53,7 +53,7 @@ const GalaxyZoomWrapper: React.FC<GalaxyZoomWrapperProps> = ({
 
   // Set up smooth transition for content container on mount
   useEffect(() => {
-    const contentContainer = document.querySelector('[data-galaxy-content]');
+    const contentContainer = document.querySelector('#galaxy-space');
     if (contentContainer) {
       const contentEl = contentContainer as HTMLElement;
       contentEl.style.transition = 'transform 0.4s ease-out';
@@ -112,7 +112,7 @@ const GalaxyZoomWrapper: React.FC<GalaxyZoomWrapperProps> = ({
     }
 
     // Apply transform to content container (transition is set on mount)
-    const contentContainer = document.querySelector('[data-galaxy-content]');
+    const contentContainer = document.querySelector('#galaxy-space');
     if (contentContainer) {
       const contentEl = contentContainer as HTMLElement;
       contentEl.style.transform = `scale(${contentScale})`;

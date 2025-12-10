@@ -2,13 +2,13 @@ import { defineAction } from 'astro:actions'
 import { z } from 'astro:schema'
 import { getAllStarStats, checkSolarForgeByIssue, createSolarForge, updateIssueStars } from '@/server-side/all-stars'
 import { getIssueById } from '@/server-side/issue'
-import { getUserById, updateUserStars } from '@/server-side/user'
+import { updateUserStars } from '@/server-side/user'
 import { getVersionById } from '@/server-side/roadmap'
 import type { AllStarStats, SolarForgeByIssueResult, SolarForgeByVersionResult, SolarUser } from '@/types/all-stars'
 import { solarForge } from '@/types/all-stars'
 
 // Shared function for solar forging an issue (used by both action and solarForgeByVersion)
-async function forgeIssueInternal(issueId: string): Promise<SolarForgeByIssueResult> {
+async function solarForgeByIssue(issueId: string): Promise<SolarForgeByIssueResult> {
     try {
         // Check if already solar forged
         const alreadyForged = await checkSolarForgeByIssue(issueId)
@@ -138,133 +138,133 @@ export const server = {
             }
         },
     }),
-    solarForgeByIssue: defineAction({
-        accept: 'json',
-        input: z.object({
-            issueId: z.string(),
-        }),
-        handler: async ({ issueId }): Promise<SolarForgeByIssueResult> => {
-            try {
-                const alreadyForged = await checkSolarForgeByIssue(issueId)
-                if (alreadyForged) {
-                    return {
-                        users: [],
-                        solarForgeId: '',
-                        error: 'duplicate',
-                    }
-                }
+    // solarForgeByIssue: defineAction({
+    //     accept: 'json',
+    //     input: z.object({
+    //         issueId: z.string(),
+    //     }),
+    //     handler: async ({ issueId }): Promise<SolarForgeByIssueResult> => {
+    //         try {
+    //             const alreadyForged = await checkSolarForgeByIssue(issueId)
+    //             if (alreadyForged) {
+    //                 return {
+    //                     users: [],
+    //                     solarForgeId: '',
+    //                     error: 'duplicate',
+    //                 }
+    //             }
 
-                // Get issue
-                const issue = await getIssueById(issueId)
-                if (!issue) {
-                    return {
-                        users: [],
-                        solarForgeId: '',
-                        error: 'Issue not found',
-                    }
-                }
+    //             // Get issue
+    //             const issue = await getIssueById(issueId)
+    //             if (!issue) {
+    //                 return {
+    //                     users: [],
+    //                     solarForgeId: '',
+    //                     error: 'Issue not found',
+    //                 }
+    //             }
 
-                // Check if issue has sunshines
-                if (!issue.sunshines || issue.sunshines <= 0) {
-                    return {
-                        users: [],
-                        solarForgeId: '',
-                        error: 'Issue has no sunshines',
-                    }
-                }
+    //             // Check if issue has sunshines
+    //             if (!issue.sunshines || issue.sunshines <= 0) {
+    //                 return {
+    //                     users: [],
+    //                     solarForgeId: '',
+    //                     error: 'Issue has no sunshines',
+    //                 }
+    //             }
 
-                // Calculate stars
-                const totalStars = solarForge(issue.sunshines)
-                const starsPerRole = totalStars / 3
+    //             // Calculate stars
+    //             const totalStars = solarForge(issue.sunshines)
+    //             const starsPerRole = totalStars / 3
 
-                // Get stakeholders: author, contributor, maintainer
-                const stakeholders: Array<{ userId: string; role: string }> = []
-                if (issue.author) {
-                    stakeholders.push({ userId: issue.author, role: 'author' })
-                }
-                if (issue.contributor) {
-                    stakeholders.push({ userId: issue.contributor, role: 'contributor' })
-                }
-                if (issue.maintainer) {
-                    stakeholders.push({ userId: issue.maintainer, role: 'maintainer' })
-                }
+    //             // Get stakeholders: author, contributor, maintainer
+    //             const stakeholders: Array<{ userId: string; role: string }> = []
+    //             if (issue.author) {
+    //                 stakeholders.push({ userId: issue.author, role: 'author' })
+    //             }
+    //             if (issue.contributor) {
+    //                 stakeholders.push({ userId: issue.contributor, role: 'contributor' })
+    //             }
+    //             if (issue.maintainer) {
+    //                 stakeholders.push({ userId: issue.maintainer, role: 'maintainer' })
+    //             }
 
-                // Reduce duplicates: group by userId, collect roles
-                const userMap = new Map<string, { roles: string[]; stars: number }>()
-                for (const stakeholder of stakeholders) {
-                    const existing = userMap.get(stakeholder.userId)
-                    if (existing) {
-                        existing.roles.push(stakeholder.role)
-                        existing.stars += starsPerRole
-                    } else {
-                        userMap.set(stakeholder.userId, {
-                            roles: [stakeholder.role],
-                            stars: starsPerRole,
-                        })
-                    }
-                }
+    //             // Reduce duplicates: group by userId, collect roles
+    //             const userMap = new Map<string, { roles: string[]; stars: number }>()
+    //             for (const stakeholder of stakeholders) {
+    //                 const existing = userMap.get(stakeholder.userId)
+    //                 if (existing) {
+    //                     existing.roles.push(stakeholder.role)
+    //                     existing.stars += starsPerRole
+    //                 } else {
+    //                     userMap.set(stakeholder.userId, {
+    //                         roles: [stakeholder.role],
+    //                         stars: starsPerRole,
+    //                     })
+    //                 }
+    //             }
 
-                // Update issue: reset sunshines to 0, increment stars
-                const issueUpdated = await updateIssueStars(issueId, totalStars, issue.sunshines)
-                if (!issueUpdated) {
-                    return {
-                        users: [],
-                        solarForgeId: '',
-                        error: 'Failed to update issue',
-                    }
-                }
+    //             // Update issue: reset sunshines to 0, increment stars
+    //             const issueUpdated = await updateIssueStars(issueId, totalStars, issue.sunshines)
+    //             if (!issueUpdated) {
+    //                 return {
+    //                     users: [],
+    //                     solarForgeId: '',
+    //                     error: 'Failed to update issue',
+    //                 }
+    //             }
 
-                // Update users: increment stars for each stakeholder
-                const solarUsers: SolarUser[] = []
-                const userIds: string[] = []
-                for (const [userId, data] of userMap.entries()) {
-                    const userUpdated = await updateUserStars(userId, data.stars)
-                    if (userUpdated) {
-                        solarUsers.push({
-                            id: userId,
-                            roles: data.roles,
-                            stars: data.stars,
-                        })
-                        userIds.push(userId)
-                    }
-                }
+    //             // Update users: increment stars for each stakeholder
+    //             const solarUsers: SolarUser[] = []
+    //             const userIds: string[] = []
+    //             for (const [userId, data] of userMap.entries()) {
+    //                 const userUpdated = await updateUserStars(userId, data.stars)
+    //                 if (userUpdated) {
+    //                     solarUsers.push({
+    //                         id: userId,
+    //                         roles: data.roles,
+    //                         stars: data.stars,
+    //                     })
+    //                     userIds.push(userId)
+    //                 }
+    //             }
 
-                // Create solar forge tracker entry
-                const solarForgeId = await createSolarForge({
-                    solarForgeType: 'issue',
-                    issueId: issueId,
-                    users: userIds,
-                    sunshines: issue.sunshines,
-                    createdTime: Math.floor(Date.now() / 1000),
-                })
+    //             // Create solar forge tracker entry
+    //             const solarForgeId = await createSolarForge({
+    //                 solarForgeType: 'issue',
+    //                 issueId: issueId,
+    //                 users: userIds,
+    //                 sunshines: issue.sunshines,
+    //                 createdTime: Math.floor(Date.now() / 1000),
+    //             })
 
-                // Broadcast ISSUE_UPDATE event (client-side will handle this)
-                // Note: Events are typically broadcast on client-side, but we can emit here for server-side awareness
-                // The client-side will fetch updated issue and broadcast
+    //             // Broadcast ISSUE_UPDATE event (client-side will handle this)
+    //             // Note: Events are typically broadcast on client-side, but we can emit here for server-side awareness
+    //             // The client-side will fetch updated issue and broadcast
 
-                // Broadcast USER_UPDATE events for each updated user
-                for (const userId of userIds) {
-                    const user = await getUserById(userId)
-                    if (user) {
-                        // Note: Events are typically handled client-side
-                        // The client will listen and update accordingly
-                    }
-                }
+    //             // Broadcast USER_UPDATE events for each updated user
+    //             for (const userId of userIds) {
+    //                 const user = await getUserById(userId)
+    //                 if (user) {
+    //                     // Note: Events are typically handled client-side
+    //                     // The client will listen and update accordingly
+    //                 }
+    //             }
 
-                return {
-                    users: solarUsers,
-                    solarForgeId,
-                }
-            } catch (error) {
-                console.error('Error in solarForgeByIssue:', error)
-                return {
-                    users: [],
-                    solarForgeId: '',
-                    error: 'An error occurred while solar forging issue',
-                }
-            }
-        },
-    }),
+    //             return {
+    //                 users: solarUsers,
+    //                 solarForgeId,
+    //             }
+    //         } catch (error) {
+    //             console.error('Error in solarForgeByIssue:', error)
+    //             return {
+    //                 users: [],
+    //                 solarForgeId: '',
+    //                 error: 'An error occurred while solar forging issue',
+    //             }
+    //         }
+    //     },
+    // }),
     solarForgeByVersion: defineAction({
         accept: 'json',
         input: z.object({
@@ -308,7 +308,7 @@ export const server = {
                     }
 
                     // Call solarForgeByIssue internal function (this will handle duplicate check internally)
-                    const result = await forgeIssueInternal(issueId)
+                    const result = await solarForgeByIssue(issueId)
                     if (result.error && result.error !== 'duplicate') {
                         // Skip issues with errors (except duplicates which are expected)
                         continue

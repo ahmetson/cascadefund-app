@@ -33,53 +33,53 @@ export async function getAllStarStats(): Promise<AllStarStats> {
     }
 }
 
-/**
- * Solar forge by issue: convert sunshines to stars and distribute to stakeholders
- */
-export async function solarForgeByIssue(issueId: string): Promise<SolarForgeByIssueResult> {
-    try {
-        const result = await actions.solarForgeByIssue({ issueId });
+// /**
+//  * Solar forge by issue: convert sunshines to stars and distribute to stakeholders
+//  */
+// export async function solarForgeByIssue(issueId: string): Promise<SolarForgeByIssueResult> {
+//     try {
+//         const result = await actions.solarForgeByIssue({ issueId });
 
-        if (!result.data) {
-            return {
-                users: [],
-                solarForgeId: '',
-                error: result.error?.message || 'An error occurred while solar forging issue',
-            };
-        }
+//         if (!result.data) {
+//             return {
+//                 users: [],
+//                 solarForgeId: '',
+//                 error: result.error?.message || 'An error occurred while solar forging issue',
+//             };
+//         }
 
-        // Broadcast ISSUE_UPDATE event with updated issue
-        if (!result.data.error || result.data.error === 'duplicate') {
-            const issue = await getIssueById(issueId);
-            if (issue) {
-                window.dispatchEvent(new CustomEvent(ISSUE_EVENT_TYPES.ISSUE_UPDATE, {
-                    detail: issue,
-                }));
-            }
-        }
+//         // Broadcast ISSUE_UPDATE event with updated issue
+//         if (!result.data.error || result.data.error === 'duplicate') {
+//             const issue = await getIssueById(issueId);
+//             if (issue) {
+//                 window.dispatchEvent(new CustomEvent(ISSUE_EVENT_TYPES.ISSUE_UPDATE, {
+//                     detail: issue,
+//                 }));
+//             }
+//         }
 
-        // Broadcast USER_UPDATE events for each updated user
-        if (result.data.users && result.data.users.length > 0) {
-            for (const solarUser of result.data.users) {
-                const user = await getUserById(solarUser.id);
-                if (user) {
-                    window.dispatchEvent(new CustomEvent(USER_EVENT_TYPES.USER_UPDATE, {
-                        detail: { user },
-                    }));
-                }
-            }
-        }
+//         // Broadcast USER_UPDATE events for each updated user
+//         if (result.data.users && result.data.users.length > 0) {
+//             for (const solarUser of result.data.users) {
+//                 const user = await getUserById(solarUser.id);
+//                 if (user) {
+//                     window.dispatchEvent(new CustomEvent(USER_EVENT_TYPES.USER_UPDATE, {
+//                         detail: { user },
+//                     }));
+//                 }
+//             }
+//         }
 
-        return result.data;
-    } catch (error) {
-        console.error('Error in solarForgeByIssue:', error);
-        return {
-            users: [],
-            solarForgeId: '',
-            error: 'An error occurred while solar forging issue',
-        };
-    }
-}
+//         return result.data;
+//     } catch (error) {
+//         console.error('Error in solarForgeByIssue:', error);
+//         return {
+//             users: [],
+//             solarForgeId: '',
+//             error: 'An error occurred while solar forging issue',
+//         };
+//     }
+// }
 
 /**
  * Solar forge by version: process all issues in a version and aggregate results

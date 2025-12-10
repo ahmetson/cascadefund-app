@@ -151,7 +151,7 @@ const UserStar: React.FC<UserStarProps> = ({
     if (!draggable || !isDragging) return
     e.preventDefault()
 
-    const container = document.querySelector('[data-galaxy-content]')
+    const container = document.querySelector('#galaxy-space')
     if (!container) return
 
     const containerRect = container.getBoundingClientRect()
@@ -178,7 +178,7 @@ const UserStar: React.FC<UserStarProps> = ({
     if (!draggable) return
     setIsDragging(false)
 
-    const container = document.querySelector('[data-galaxy-content]')
+    const container = document.querySelector('#galaxy-space')
     if (!container) return
 
     const containerRect = container.getBoundingClientRect()

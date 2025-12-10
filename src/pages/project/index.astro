@@ -21,12 +21,12 @@ const galaxyIdParam = Astro.url.searchParams.get("galaxy");
 
 // Validate galaxy ID
 if (!galaxyIdParam) {
-  return Astro.redirect("/project/404");
+  return Astro.redirect("/project/404?method=getGalaxyIdParam");
 }
 
 // Fetch galaxy from database
 const galaxy = await getGalaxyById(galaxyIdParam);
-if (!galaxy || !galaxy.projectLink) {
+if (!galaxy) {
   return Astro.redirect("/project/404?method=getGalaxyById");
 }
 

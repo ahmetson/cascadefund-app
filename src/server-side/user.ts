@@ -1,18 +1,9 @@
 import { ObjectId } from 'mongodb'
 import { getCollection } from './db'
-import type { Roles, User } from '@/types/user'
+import type { User } from '@/types/user'
 
-export interface UserModel {
+export interface UserModel extends Omit<User, '_id'> {
     _id?: ObjectId
-    email?: string
-    src?: string
-    alt?: string
-    uri?: string
-    nickname?: string
-    sunshines?: number
-    stars?: number
-    role?: Roles
-    balance?: number
 }
 
 // Serialization functions
