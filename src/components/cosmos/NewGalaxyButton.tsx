@@ -3,7 +3,7 @@ import Button from '@/components/custom-ui/Button';
 import Tooltip from '@/components/custom-ui/Tooltip';
 import PageLikePanel from '@/components/panel/PageLikePanel';
 import SocialLink from '@/components/utilitified_decorations/SocialLink';
-import { socialLinks } from '@/server-side/data';
+import { socialLinks } from '@/types/ara';
 
 const NewGalaxyButton: React.FC = () => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);

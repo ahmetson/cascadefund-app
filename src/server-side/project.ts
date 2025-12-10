@@ -1,11 +1,7 @@
 import { ObjectId } from 'mongodb';
 import { getCollection, create } from './db'
-import type { Project, SocialLink, ForkLine, ProjectInfo } from '@/types/project'
+import type { Project, SocialLink } from '@/types/project'
 
-// Re-export types for backward compatibility
-export type { Project, SocialLink, ForkLine, ProjectInfo } from '@/types/project'
-
-// Internal model types (not exported)
 interface ForkLineModel {
     from: ObjectId; // Source project ID
     via: ObjectId[]; // Array of issue IDs

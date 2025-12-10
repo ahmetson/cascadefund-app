@@ -1,11 +1,5 @@
 import { MongoClient, Db, Collection, Filter, OptionalUnlessRequiredId } from 'mongodb'
 
-interface WishlistModel {
-    _id?: any
-    email: string
-    time: number
-}
-
 let client: MongoClient | null = null
 let db: Db | null = null
 let isConnected = false

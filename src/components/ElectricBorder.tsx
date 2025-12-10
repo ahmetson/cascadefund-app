@@ -1,4 +1,4 @@
-import { hexToRgba } from '@/server-side';
+import { hexToRgba } from '@/lib/utils';
 import React, { CSSProperties, PropsWithChildren, useEffect, useId, useLayoutEffect, useRef } from 'react';
 
 type ElectricBorderProps = PropsWithChildren<{

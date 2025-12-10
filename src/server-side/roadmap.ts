@@ -2,9 +2,6 @@ import { ObjectId } from 'mongodb';
 import { getCollection, create } from './db';
 import type { Patch, Version } from '@/types/roadmap'
 
-// Re-export types for backward compatibility
-export { type Patch, type Version } from '@/types/roadmap'
-
 // Server-side PatchModel
 interface PatchModel {
     id: ObjectId; // Reference to IssueModel

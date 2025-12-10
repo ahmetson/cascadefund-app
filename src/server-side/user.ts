@@ -2,10 +2,6 @@ import { ObjectId } from 'mongodb'
 import { getCollection } from './db'
 import type { Roles, User } from '@/types/user'
 
-// Re-export types for backward compatibility
-export type { Roles, User } from '@/types/user'
-
-// Internal model type (not exported)
 interface UserModel {
     _id?: ObjectId
     email?: string

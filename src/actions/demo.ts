@@ -71,7 +71,7 @@ async function generateDemoUsers(email: string): Promise<User[]> {
 
 export const server = {
     start: defineAction({
-        accept: 'form',
+        accept: 'json',
         input: z.object({
             email: z.string().email(),
         }),

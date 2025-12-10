@@ -3,10 +3,6 @@ import { getCollection } from './db'
 import { getAllGalaxies } from './galaxy'
 import type { AllStarStats, SolarForgeModel } from '@/types/all-stars'
 
-// Re-export type for backward compatibility
-export type { AllStarStats } from '@/types/all-stars'
-
-// Internal model type (not exported)
 interface UserModel {
     _id?: any
     email?: string

@@ -1,7 +1,7 @@
 import { actions } from 'astro:actions';
-import { clearCookie, getCookie, setCookie, emitEvent, callAction } from '@/server-side/astro-runtime-cookies'
 import type { Roles, User } from '../types/user'
 import { DEMO_COOKIE_NAMES, DEMO_EVENT_TYPES } from '../types/demo'
+
 
 // (Client Side) Check if demo cookies exist
 export const demoExists = (): boolean => {
@@ -22,11 +22,13 @@ export const startDemo = async (email: string): Promise<{ success: boolean; erro
         setDemoCookies(email.trim(), result.users, defaultRole)
 
         // Emit USER_CREATED event
-        emitEvent(DEMO_EVENT_TYPES.USER_CREATED, {
-            email: email.trim(),
-            users: result.users,
-            role: defaultRole,
-        })
+        window.dispatchEvent(new CustomEvent(DEMO_EVENT_TYPES.USER_CREATED, {
+            detail: {
+                email: email.trim(),
+                users: result.users,
+                role: defaultRole,
+            },
+        }))
     }
 
     return result
@@ -37,7 +39,9 @@ export const clearDemo = () => {
     clearDemoCookies()
 
     // Emit USER_DELETED event
-    emitEvent(DEMO_EVENT_TYPES.USER_DELETED, {})
+    window.dispatchEvent(new CustomEvent(DEMO_EVENT_TYPES.USER_DELETED, {
+        detail: {},
+    }))
 };
 
 // (Client Side) Change role and emit ROLE_CHANGED event
@@ -47,7 +51,9 @@ export const changeRole = (role: Roles) => {
         setDemoCookies(email, users, role)
 
         // Emit ROLE_CHANGED event
-        emitEvent(DEMO_EVENT_TYPES.ROLE_CHANGED, { role })
+        window.dispatchEvent(new CustomEvent(DEMO_EVENT_TYPES.ROLE_CHANGED, {
+            detail: { role },
+        }))
     }
 };
 
@@ -154,18 +160,57 @@ function setDemoCookies(
 
 // Call the start action
 async function callStartAction(email: string): Promise<{ success: boolean; users?: User[]; error?: string }> {
-    const result = await callAction(actions.start, { email: email.trim() })
+    try {
+        const result = await actions.start({ email: email.trim() })
 
-    if (result.success) {
+        if (result.data) {
+            return {
+                success: true as const,
+                users: result.data.users,
+            }
+        }
+
         return {
-            success: true as const,
-            users: result.data?.users,
+            success: false,
+            error: result.error?.message || 'Failed to start demo',
+        }
+    } catch (error) {
+        console.error('Error calling start action:', error)
+        return {
+            success: false,
+            error: 'An error occurred while starting demo',
         }
     }
+}
 
-    return {
-        success: false,
-        error: result.error,
+
+/**************************************************************
+ * 
+ * Cookie management functions
+ * 
+ **************************************************************/
+
+// Cookie management functions
+function getCookie(name: string): string | null {
+    if (typeof document === 'undefined') return null
+    const value = `; ${document.cookie}`
+    const parts = value.split(`; ${name}=`)
+    if (parts.length === 2) {
+        return decodeURIComponent(parts.pop()?.split(';').shift() || '')
     }
+    return null
+}
+
+function setCookie(name: string, value: string, days: number = 30): void {
+    if (typeof document === 'undefined') return
+    const expirationDate = new Date()
+    expirationDate.setDate(expirationDate.getDate() + days)
+    const expires = expirationDate.toUTCString()
+    document.cookie = `${name}=${value}; expires=${expires}; path=/`
+}
+
+function clearCookie(name: string): void {
+    if (typeof document === 'undefined') return
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`
 }
 

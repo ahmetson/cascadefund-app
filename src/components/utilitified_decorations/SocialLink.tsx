@@ -1,7 +1,7 @@
 import React from 'react'
 import { FaGithub, FaTwitter, FaTelegram } from 'react-icons/fa'
 import { getIcon } from '../icon'
-import { SocialLink as SocialLinkType, SocialLinkType as LinkType } from '@/server-side/data'
+import { SocialLink as SocialLinkType, SocialLinkType as LinkType } from '@/types/ara'
 import Link from '../custom-ui/Link'
 
 interface SocialLinkProps {

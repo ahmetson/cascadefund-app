@@ -6,9 +6,6 @@ import { getUserById, updateUserStars } from '@/server-side/user'
 import { getVersionById } from '@/server-side/roadmap'
 import type { AllStarStats, SolarForgeByIssueResult, SolarForgeByVersionResult, SolarUser } from '@/types/all-stars'
 import { solarForge } from '@/types/all-stars'
-import { ISSUE_EVENT_TYPES } from '@/types/issue'
-import { USER_EVENT_TYPES } from '@/types/user'
-import { emitEvent } from '@/server-side/astro-runtime-cookies'
 
 // Shared function for solar forging an issue (used by both action and solarForgeByVersion)
 async function forgeIssueInternal(issueId: string): Promise<SolarForgeByIssueResult> {

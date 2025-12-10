@@ -3,10 +3,6 @@ import { getCollection, create } from './db';
 import type { IssueTag, IssueStatType, Issue, IssueStat, IssueUser } from '@/types/issue'
 import { PATCH_KEYWORD } from '@/types/patch'
 
-// Re-export types for backward compatibility
-export { IssueTag, type IssueStatType, type Issue, type IssueStat, type IssueUser } from '@/types/issue'
-
-// Server-side IssueStat (can use React.ReactNode for internal use)
 interface IssueStatServer {
     type: IssueStatType;
     hint: React.ReactNode;
