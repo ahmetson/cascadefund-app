@@ -22,7 +22,7 @@ import { getDemo } from '@/client-side/demo'
 import { type DemoRoleChangeEvent, DEMO_EVENT_TYPES } from '@/demo-runtime-cookies'
 import { getIssueById, updateIssue } from '@/client-side/issue'
 import { getUserById } from '@/client-side/user'
-import { updatePatches, markPatchTested, removePatch, updateVersionStatus, revertPatch, completePatch } from '@/client-side/roadmap'
+import { updatePatches, markPatchTested, removePatch, updateVersionStatus, revertPatch, completePatch, releaseVersion } from '@/client-side/roadmap'
 import { PATCH_EVENT_TYPES, PATCH_KEYWORD } from '@/types/patch'
 import { cn, truncateStr } from '@/lib/utils'
 
@@ -321,8 +321,12 @@ const ProjectVersionPanel: React.FC<Version> = ({
     }
 
     if (status === 'release') {
-      if (!isMaintainer) return
-      alert('Release ready! We will notify contributors that this version is live.')
+      if (!isMaintainer || !versionId) return
+      await releaseVersion({
+        versionId,
+        tag,
+        galaxyId: galaxy,
+      })
       return
     }
   }

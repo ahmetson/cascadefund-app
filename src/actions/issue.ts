@@ -5,6 +5,7 @@ import { getUserById, updateUserSunshines, getUserByIds } from '@/scripts/user'
 import { getGalaxyById, updateGalaxySunshines } from '@/scripts/galaxy'
 import { getIssuesByGalaxy, getShiningIssues, getPublicBacklogIssues, createIssue, updateIssueSunshines, getIssueById, setIssueContributor, unsetIssueContributor, updateIssue, patchIssue, unpatchIssue, IssueTag } from '@/scripts/issue'
 import type { Issue, IssueUser, IssueStat, IssueStatType } from '@/types/issue'
+import { getVersionById } from '@/scripts/roadmap';
 
 // Helper function to serialize issue
 function serializeIssue(issue: any): Issue {
@@ -603,6 +604,64 @@ export const server = {
                 return {
                     success: false,
                     error: 'An error occurred while unpatching issue',
+                };
+            }
+        },
+    }),
+    closeIssuesByVersion: defineAction({
+        accept: 'json',
+        input: z.object({
+            versionId: z.string(),
+            email: z.string().email(),
+        }),
+        handler: async ({ versionId, email }): Promise<{ success: boolean; error?: string }> => {
+            try {
+                const demo = await getDemoByEmail(email);
+                if (!demo) {
+                    return {
+                        success: false,
+                        error: 'Demo not found',
+                    };
+                }
+
+                const version = await getVersionById(versionId);
+                if (!version) {
+                    return {
+                        success: false,
+                        error: 'Version not found',
+                    };
+                }
+
+                const issueIds = version.patches.map(patch => patch.id);
+                if (issueIds.length === 0) {
+                    return {
+                        success: true,
+                    };
+                }
+
+                // Update each issue: add 'closed' to listHistory
+                for (const issueId of issueIds) {
+                    const issue = await getIssueById(issueId);
+                    if (!issue) {
+                        continue;
+                    }
+
+                    const currentListHistory = issue.listHistory || [];
+                    // Only add 'closed' if it's not already there
+                    if (!currentListHistory.includes('closed')) {
+                        const updatedListHistory = [...currentListHistory, 'closed'];
+                        await updateIssue(issueId, { listHistory: updatedListHistory });
+                    }
+                }
+
+                return {
+                    success: true,
+                };
+            } catch (error) {
+                console.error('Error closing issues by version:', error);
+                return {
+                    success: false,
+                    error: 'An error occurred while closing issues',
                 };
             }
         },

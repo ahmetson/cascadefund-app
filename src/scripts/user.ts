@@ -199,3 +199,43 @@ export async function updateUserSunshines(userId: string | ObjectId, amount: num
     }
 }
 
+/**
+ * Update user stars by incrementing the amount
+ */
+export async function updateUserStars(userId: string | ObjectId, amount: number): Promise<boolean> {
+    try {
+        const collection = await getCollection<UserModel>('users')
+        const objectId = typeof userId === 'string' ? new ObjectId(userId) : userId
+
+        // First check if user exists
+        const user = await collection.findOne({ _id: objectId })
+        if (!user) {
+            console.error('User not found for stars update:', objectId.toString())
+            return false
+        }
+
+        // If stars field doesn't exist, set it first, then increment
+        if (user.stars === undefined || user.stars === null) {
+            const setResult = await collection.updateOne(
+                { _id: objectId },
+                { $set: { stars: 0 } }
+            )
+            if (setResult.matchedCount === 0) {
+                return false
+            }
+        }
+
+        // Now increment stars
+        const result = await collection.updateOne(
+            { _id: objectId },
+            { $inc: { stars: amount } }
+        )
+
+        // Return true if document was matched (the operation succeeded)
+        return result.matchedCount > 0
+    } catch (error) {
+        console.error('Error updating user stars:', error)
+        return false
+    }
+}
+

@@ -16,3 +16,13 @@ export interface Version {
   maintainer: string
 }
 
+export const ROADMAP_EVENT_TYPES = {
+  VERSION_RELEASED: 'version-released',
+} as const
+
+export interface VersionReleasedEventDetail {
+  versionId: string
+  tag: string
+  galaxyId: string
+}
+

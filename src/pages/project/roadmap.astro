@@ -8,6 +8,7 @@ import { getProjectById } from "@/scripts/project";
 import RoadmapTabs from "@/components/roadmap/RoadmapTabs";
 import CreateVersionCTA from "@/components/roadmap/CreateVersionCTA";
 import PatcherPanel from "@/components/roadmap/PatcherPanel";
+import VersionSolarForge from "@/components/roadmap/VersionSolarForge";
 
 // Get galaxy ID from query parameter
 const galaxyIdParam = Astro.url.searchParams.get("galaxy");
@@ -54,4 +55,5 @@ if (!project) {
     client:only="react"
   />
   <PatcherPanel slot="right" client:only="react" galaxyId={galaxyIdParam} />
+  <VersionSolarForge slot="center" client:only="react" />
 </Layout>

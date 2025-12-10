@@ -36,6 +36,7 @@ interface IssueModel {
     };
     createdTime?: Date;
     sunshines: number; // Cached sum of users sunshines
+    stars?: number; // Stars earned from solar forge
     users: IssueUserServer[]; // Array of users with their contributions
     author?: ObjectId; // Reference to UserModel who created the issue
     contributor?: ObjectId; // Reference to UserModel assigned as contributor
@@ -99,6 +100,7 @@ function issueModelToIssue(model: IssueModel | null): Issue | null {
         ) as { [key in IssueStatType]?: IssueStat } : undefined,
         createdTime: model.createdTime ? Math.floor(model.createdTime.getTime() / 1000) : undefined,
         sunshines: model.sunshines,
+        stars: model.stars,
         users: model.users.map(issueUserServerToIssueUser),
         author: model.author?.toString(),
         contributor: model.contributor?.toString(),
@@ -123,6 +125,7 @@ function issueToIssueModel(issue: Issue): IssueModel {
         ) as { [key in IssueStatType]?: IssueStatServer } : undefined,
         createdTime: issue.createdTime ? new Date(issue.createdTime * 1000) : undefined,
         sunshines: issue.sunshines,
+        stars: issue.stars,
         users: issue.users.map(issueUserToIssueUserServer),
         author: issue.author ? new ObjectId(issue.author) : undefined,
         contributor: issue.contributor ? new ObjectId(issue.contributor) : undefined,

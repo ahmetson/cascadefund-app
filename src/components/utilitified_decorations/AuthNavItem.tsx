@@ -6,6 +6,8 @@ import { useDemoStart } from '@/hooks/use-demo-start'
 import DemoCongratulationsDialog from '@/components/project/DemoCongratulationsDialog'
 import { cn } from '@/lib/utils'
 import { type DemoUserCreatedEvent, type DemoRoleChangeEvent, DEMO_EVENT_TYPES } from '@/demo-runtime-cookies'
+import { USER_EVENT_TYPES, type UserUpdateEventDetail } from '@/types/user'
+import { getUserById } from '@/client-side/user'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,7 +20,7 @@ import {
 } from '@/components/animate-ui/components/radix/dropdown-menu'
 import { ChevronDownIcon } from 'lucide-react'
 import type { Roles, User } from '@/types/user'
-import { startDemo, clearDemo, changeRole, getDemo } from '@/client-side/demo'
+import { startDemo, clearDemo, changeRole, getDemo, updateDemoUsers } from '@/client-side/demo'
 
 interface Props {
   className?: string
@@ -89,14 +91,53 @@ const AuthNavItem: React.FC<Props> = ({ className }) => {
       }
     }
 
+    const handleUserUpdate = async (event: Event) => {
+      const customEvent = event as CustomEvent<UserUpdateEventDetail>
+      const updatedUser = customEvent.detail.user
+
+      // Check if updated user is in demo cache
+      const currentDemo = getDemo()
+      if (currentDemo.users && updatedUser._id) {
+        const userIndex = currentDemo.users.findIndex((u) => u._id === updatedUser._id)
+        if (userIndex >= 0) {
+          // Fetch updated user data to ensure we have the latest
+          const freshUser = await getUserById(updatedUser._id)
+          if (freshUser) {
+            // Update users array in demo cache
+            const updatedUsers = [...currentDemo.users]
+            updatedUsers[userIndex] = freshUser
+
+            // Update demo cookies
+            updateDemoUsers(updatedUsers)
+
+            // Update local state
+            setUsers(updatedUsers)
+
+            // Update current demo user if it's the one that was updated
+            if (currentDemo.role === updatedUsers[userIndex].role) {
+              setDemoUser(freshUser)
+            } else {
+              // Update demo user if it matches the updated user
+              const currentUser = updatedUsers.find((u) => u.role === currentDemo.role)
+              if (currentUser) {
+                setDemoUser(currentUser)
+              }
+            }
+          }
+        }
+      }
+    }
+
     window.addEventListener(DEMO_EVENT_TYPES.USER_CREATED, handleDemoUserCreated as EventListener)
     window.addEventListener(DEMO_EVENT_TYPES.USER_DELETED, handleDemoUserDeleted)
     window.addEventListener(DEMO_EVENT_TYPES.ROLE_CHANGED, handleDemoRoleChange as EventListener)
+    window.addEventListener(USER_EVENT_TYPES.USER_UPDATE, handleUserUpdate as EventListener)
 
     return () => {
       window.removeEventListener(DEMO_EVENT_TYPES.USER_CREATED, handleDemoUserCreated as EventListener)
       window.removeEventListener(DEMO_EVENT_TYPES.USER_DELETED, handleDemoUserDeleted)
       window.removeEventListener(DEMO_EVENT_TYPES.ROLE_CHANGED, handleDemoRoleChange as EventListener)
+      window.removeEventListener(USER_EVENT_TYPES.USER_UPDATE, handleUserUpdate as EventListener)
     }
   }, [])
 

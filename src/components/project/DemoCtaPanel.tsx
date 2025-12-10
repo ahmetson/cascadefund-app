@@ -203,8 +203,6 @@ const DemoCtaPanel: React.FC<DemoCtaPanelProps> = ({ projectName, galaxyId }) =>
                 isOpen={showDialog}
                 users={demoUsers}
                 onClose={() => setShowDialog(false)}
-                projectName={projectName}
-                galaxyId={galaxyId}
             />
         </motion.div>
     );

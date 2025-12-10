@@ -1,6 +1,8 @@
 import { actions } from 'astro:actions';
-import type { Version, Patch } from '@/types/roadmap';
+import type { Version, Patch, VersionReleasedEventDetail } from '@/types/roadmap';
+import { ROADMAP_EVENT_TYPES } from '@/types/roadmap';
 import { PATCH_EVENT_TYPES } from '@/types/patch';
+import { getDemo } from './demo';
 
 /**
  * Get versions by galaxy ID (read-only, no event)
@@ -182,6 +184,55 @@ export async function revertPatch(params: {
         return false;
     } catch (error) {
         console.error('Error reverting patch:', error);
+        return false;
+    }
+}
+
+/**
+ * Release version: close issues, update status to archived, and broadcast VERSION_RELEASED event
+ */
+export async function releaseVersion(params: {
+    versionId: string;
+    tag: string;
+    galaxyId: string;
+}): Promise<boolean> {
+    try {
+        const demo = getDemo();
+        if (!demo.email) {
+            console.error('No demo email found');
+            return false;
+        }
+
+        const closeResult = await actions.closeIssuesByVersion({
+            versionId: params.versionId,
+            email: demo.email,
+        });
+        if (!closeResult.data?.success) {
+            console.error('Failed to close issues');
+            return false;
+        }
+
+        const statusResult = await updateVersionStatus({
+            versionId: params.versionId,
+            status: 'archived',
+        });
+        if (!statusResult) {
+            console.error('Failed to update version status');
+            return false;
+        }
+
+        const eventDetail: VersionReleasedEventDetail = {
+            versionId: params.versionId,
+            tag: params.tag,
+            galaxyId: params.galaxyId,
+        };
+        window.dispatchEvent(new CustomEvent(ROADMAP_EVENT_TYPES.VERSION_RELEASED, {
+            detail: eventDetail,
+        }));
+
+        return true;
+    } catch (error) {
+        console.error('Error releasing version:', error);
         return false;
     }
 }

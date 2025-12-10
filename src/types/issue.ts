@@ -38,6 +38,7 @@ export interface Issue {
     };
     createdTime?: number; // Unix timestamp
     sunshines: number;
+    stars?: number; // Stars earned from solar forge
     users: IssueUser[];
     author?: string; // ID of the user who created the issue
     contributor?: string; // ID of the user assigned as contributor

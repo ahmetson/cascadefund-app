@@ -2,6 +2,7 @@ import React from 'react'
 import PageLikePanel from '@/components/panel/PageLikePanel'
 import Link from '@/components/custom-ui/Link'
 import Button from '@/components/custom-ui/Button'
+import { getIcon } from '@/components/icon'
 import { cn } from '@/lib/utils'
 import type { User } from '@/types/user'
 
@@ -9,21 +10,16 @@ interface DemoCongratulationsDialogProps {
   isOpen: boolean
   users: User[]
   onClose: () => void
-  projectName: string
-  galaxyId: string
 }
 
 const DemoCongratulationsDialog: React.FC<DemoCongratulationsDialogProps> = ({
   isOpen,
   users,
   onClose,
-  projectName,
-  galaxyId,
 }) => {
   if (!isOpen) return null
 
-  // If galaxyId is not provided, we can't create a valid link, so use a default
-  const linkUri = `/project?galaxy=${galaxyId}`
+  const linkUri = '/all-stars'
 
   return (
     <>
@@ -77,10 +73,10 @@ const DemoCongratulationsDialog: React.FC<DemoCongratulationsDialogProps> = ({
                 🎉 Welcome to your demo experience!
               </p>
               <p className="text-base">
-                You have received a <span className="font-semibold text-blue-600 dark:text-blue-400">$50 demo coupon</span> for the <span className="font-semibold">{projectName}</span> project.
+                You have received a <span className="font-semibold text-blue-600 dark:text-blue-400">$50 demo coupon</span> to explore the All Stars universe of open-source projects.
               </p>
               <p className="text-base">
-                To get started, navigate to the project and purchase starshines to begin contributing.
+                Browse the universe and choose a project to contribute to.
               </p>
             </div>
 
@@ -88,7 +84,11 @@ const DemoCongratulationsDialog: React.FC<DemoCongratulationsDialogProps> = ({
             <div className="flex justify-center">
               <Link uri={linkUri}>
                 <Button variant="primary" size="lg">
-                  '{projectName}' galaxy
+                  <div className="flex items-center gap-2">
+                    <span>Browse</span>
+                    {getIcon({ iconType: 'ara', className: 'w-5 h-5' })}
+                    <span>All Stars</span>
+                  </div>
                 </Button>
               </Link>
             </div>

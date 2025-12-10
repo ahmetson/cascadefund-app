@@ -13,3 +13,11 @@ export interface User {
     balance?: number
 }
 
+export const USER_EVENT_TYPES = {
+    USER_UPDATE: 'user-update',
+} as const
+
+export interface UserUpdateEventDetail {
+    user: User
+}
+

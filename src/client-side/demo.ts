@@ -51,6 +51,14 @@ export const changeRole = (role: Roles) => {
     }
 };
 
+// (Client Side) Update demo users in cache
+export const updateDemoUsers = (updatedUsers: User[]) => {
+    const { email, role } = getDemoCookies()
+    if (email && role) {
+        setDemoCookies(email, updatedUsers, role)
+    }
+};
+
 // (Server Side Action) Get demo step
 export const getDemoStep = async (email: string): Promise<number | null> => {
     try {
