@@ -2,8 +2,8 @@
 import Layout from "@/layouts/PanelViewLayout.astro";
 import { MenuName } from "@/components/navbar/WorkNavbar.astro";
 import { ObjectId } from "mongodb";
-import { getGalaxyById } from "@/scripts/galaxy";
-import { getProjectById } from "@/scripts/project";
+import { getGalaxyById } from "@/server-side/galaxy";
+import { getProjectById } from "@/server-side/project";
 import MenuPanel from "@/components/menu/MenuPanel";
 import QuestPanel from "@/components/quest/QuestPanel";
 import Hyperspeed from "@/components/Hyperspeed";

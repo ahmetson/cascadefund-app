@@ -3,8 +3,8 @@ import Layout from "@/layouts/PanelViewLayout.astro";
 import MenuPanel from "@/components/menu/MenuPanel";
 import { MenuName } from "@/components/navbar/WorkNavbar.astro";
 import { ObjectId } from "mongodb";
-import { getGalaxyById } from "@/scripts/galaxy";
-import { getProjectById } from "@/scripts/project";
+import { getGalaxyById } from "@/server-side/galaxy";
+import { getProjectById } from "@/server-side/project";
 import ShareTools from "@/components/maintainer/ShareToolsPanel";
 
 // Get galaxy ID from query parameter
@@ -41,7 +41,8 @@ if (!project) {
     activeMenuItem="share-btn"
     slot="left"
     galaxy={galaxy}
-    projectIcon={project.socialLinks?.find((link) => link.type === "project")?.uri}
+    projectIcon={project.socialLinks?.find((link) => link.type === "project")
+      ?.uri}
     projectName={galaxy.name}
     starCount={galaxy.stars}
   />

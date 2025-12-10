@@ -1,6 +1,6 @@
 import { defineAction } from 'astro:actions'
 import { z } from 'astro:schema'
-import { getUserById } from '@/scripts/user'
+import { getUserById } from '@/server-side/user'
 import type { User } from '@/types/user'
 
 export const server = {

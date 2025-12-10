@@ -1,6 +1,6 @@
 import React from 'react'
 import { useHotkeys } from 'react-hotkeys-hook';
-import { capitalizeFirstLetter } from '@/scripts'
+import { capitalizeFirstLetter } from '@/server-side'
 import { cn } from '@/lib/utils';
 
 interface Props {

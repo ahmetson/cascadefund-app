@@ -1,11 +1,11 @@
 import { defineAction } from 'astro:actions'
 import { z } from 'astro:schema'
-import { getDemoByEmail } from '@/scripts/demo'
-import { getUserById, updateUserSunshines, getUserByIds } from '@/scripts/user'
-import { getGalaxyById, updateGalaxySunshines } from '@/scripts/galaxy'
-import { getIssuesByGalaxy, getShiningIssues, getPublicBacklogIssues, createIssue, updateIssueSunshines, getIssueById, setIssueContributor, unsetIssueContributor, updateIssue, patchIssue, unpatchIssue, IssueTag } from '@/scripts/issue'
+import { getDemoByEmail } from '@/server-side/demo'
+import { getUserById, updateUserSunshines, getUserByIds } from '@/server-side/user'
+import { getGalaxyById, updateGalaxySunshines } from '@/server-side/galaxy'
+import { getIssuesByGalaxy, getShiningIssues, getPublicBacklogIssues, createIssue, updateIssueSunshines, getIssueById, setIssueContributor, unsetIssueContributor, updateIssue, patchIssue, unpatchIssue, IssueTag } from '@/server-side/issue'
 import type { Issue, IssueUser, IssueStat, IssueStatType } from '@/types/issue'
-import { getVersionById } from '@/scripts/roadmap';
+import { getVersionById } from '@/server-side/roadmap';
 
 // Helper function to serialize issue
 function serializeIssue(issue: any): Issue {

@@ -12,9 +12,9 @@ import ProjectGoalPanel from "@/components/project/ProjectGoalPanel";
 import BackButton from "@/components/custom-ui/BackButton";
 import AllStarsContest from "@/components/cosmos/AllStarsContest";
 import { mockUserStars } from "@/data/mock-data";
-import { getGalaxyById } from "@/scripts/galaxy";
-import { getProjectById } from "@/scripts/project";
-import { getUserById } from "@/scripts/user";
+import { getGalaxyById } from "@/server-side/galaxy";
+import { getProjectById } from "@/server-side/project";
+import { getUserById } from "@/server-side/user";
 
 // Get galaxy ID from query parameter
 const galaxyIdParam = Astro.url.searchParams.get("galaxy");

@@ -1,14 +1,14 @@
 import { defineAction } from 'astro:actions'
 import { z } from 'astro:schema'
-import { getAllStarStats, checkSolarForgeByIssue, createSolarForge, updateIssueStars } from '@/scripts/all-stars'
-import { getIssueById } from '@/scripts/issue'
-import { getUserById, updateUserStars } from '@/scripts/user'
-import { getVersionById } from '@/scripts/roadmap'
+import { getAllStarStats, checkSolarForgeByIssue, createSolarForge, updateIssueStars } from '@/server-side/all-stars'
+import { getIssueById } from '@/server-side/issue'
+import { getUserById, updateUserStars } from '@/server-side/user'
+import { getVersionById } from '@/server-side/roadmap'
 import type { AllStarStats, SolarForgeByIssueResult, SolarForgeByVersionResult, SolarUser } from '@/types/all-stars'
 import { solarForge } from '@/types/all-stars'
 import { ISSUE_EVENT_TYPES } from '@/types/issue'
 import { USER_EVENT_TYPES } from '@/types/user'
-import { emitEvent } from '@/scripts/astro-runtime-cookies'
+import { emitEvent } from '@/server-side/astro-runtime-cookies'
 
 // Shared function for solar forging an issue (used by both action and solarForgeByVersion)
 async function forgeIssueInternal(issueId: string): Promise<SolarForgeByIssueResult> {

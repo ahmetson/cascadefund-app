@@ -1,6 +1,6 @@
 import { defineAction } from 'astro:actions'
 import { z } from 'astro:schema'
-import { getGalaxyById, getGalaxyByName } from '@/scripts/galaxy'
+import { getGalaxyById, getGalaxyByName } from '@/server-side/galaxy'
 import type { Galaxy } from '@/types/galaxy'
 
 export const server = {

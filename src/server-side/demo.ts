@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb'
-import { getCollection, create } from '@/scripts/db'
+import { getCollection, create } from '@/server-side/db'
 import { DemoModel } from '../types/demo'
 
 

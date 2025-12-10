@@ -11,8 +11,8 @@ import BackButton from "@/components/custom-ui/BackButton";
 import NewGalaxyButton from "@/components/cosmos/NewGalaxyButton";
 import DemoCtaPanel from "@/components/project/DemoCtaPanel";
 import { mockContestData } from "@/data/mock-data";
-import { getAllGalaxies, getGalaxyById } from "@/scripts/galaxy";
-import { setup } from "@/demo-runtime-cookies/setup";
+import { getAllGalaxies, getGalaxyById } from "@/server-side/galaxy";
+import { setup } from "@/setup/setup";
 
 // Setup demo galaxies (creates first 5 if they don't exist)
 await setup();
