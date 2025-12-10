@@ -10,7 +10,7 @@ import type { User, Roles } from '@/types/user'
 /**
  * Generate a random user with profile picture from DiceBear
  */
-function generateRandomUser(role: Roles, index: number): User {
+function generateRandomUser(role: Roles, index: number, email: string): User {
     const randomSeed = `${role}-${index}-${Date.now()}-${Math.random()}`
     const avatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${randomSeed}&size=256`
 
@@ -37,8 +37,9 @@ function generateRandomUser(role: Roles, index: number): User {
     return {
         src: avatarUrl,
         alt: `${role} avatar`,
-        uri: '/profile?nickname=' + randomName.replace(' ', '-').toLowerCase(),
+        uri: '/user?email=' + email,
         nickname: randomName.replace(' ', '-').toLowerCase(),
+        email: email,
         sunshines,
         stars: Math.round(stars * 100) / 100,
         role: role as Roles,
@@ -56,10 +57,10 @@ async function generateDemoUsers(email: string): Promise<User[]> {
         nickname: emailToNickname(email),
         src: `https://api.dicebear.com/9.x/avataaars/svg?seed=${email}&size=256`,
         alt: 'Donator avatar',
-        uri: '/profile?email=' + emailToNickname(email),
+        uri: '/user?email=' + emailToNickname(email),
     } as User,
-    generateRandomUser('maintainer', 1) as User,
-    generateRandomUser('contributor', 2) as User
+    generateRandomUser('maintainer', 1, email + '.m') as User,
+    generateRandomUser('contributor', 2, email + '.c') as User
     ]
     const createdIds = await createUsers(users)
     return createdIds.map((id, index) => ({

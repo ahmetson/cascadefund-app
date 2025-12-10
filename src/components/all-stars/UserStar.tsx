@@ -13,6 +13,7 @@ interface UserStarProps {
   imgClassName?: string
   uri?: string
   nickname: string
+  email?: string
   sunshines?: number
   stars?: number
   role?: string
@@ -41,8 +42,9 @@ const UserStar: React.FC<UserStarProps> = ({
   alt,
   className,
   imgClassName,
-  uri = '/data/profile',
+  uri = '/user',
   nickname,
+  email,
   sunshines,
   stars,
   role,
@@ -62,7 +64,7 @@ const UserStar: React.FC<UserStarProps> = ({
 }) => {
   const defaultSrc = 'https://api.backdropbuild.com/storage/v1/object/public/avatars/9nFM8HasgS.jpeg'
   const defaultAlt = 'Avatar'
-  const profileUri = nickname ? `${uri}?nickname=${nickname}` : uri
+  const profileUri = `${uri}?email=${email}`
 
   // Drag state
   const [isDragging, setIsDragging] = useState(false)

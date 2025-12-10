@@ -39,7 +39,7 @@ if (!project) {
 // Fetch maintainer user for author info
 const maintainer = await getUserById(galaxy.maintainer);
 const authorUri =
-  maintainer?.uri || `/profile?email=${maintainer?.email || "unknown"}`;
+  maintainer?.uri || `/user?email=${maintainer?.email || "unknown"}`;
 const authorName =
   maintainer?.nickname || maintainer?.email?.split("@")[0] || "Unknown";
 

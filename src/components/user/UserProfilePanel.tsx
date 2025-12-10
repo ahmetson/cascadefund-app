@@ -9,6 +9,8 @@ import type { Galaxy } from '@/types/galaxy'
 import NumberFlow from '@number-flow/react'
 import { cn } from '@/lib/utils'
 
+
+
 interface UserProfilePanelProps {
     user: User
     galaxies: Galaxy[]
