@@ -1,24 +1,13 @@
 import React, { useState } from 'react'
 import PageLikePanel from '@/components/panel/PageLikePanel'
 import InfoPanel from '@/components/panel/InfoPanel'
-import { IconType, getIcon } from '@/components/icon'
+import { getIcon } from '@/components/icon'
 import { ActionProps } from '@/types/eventTypes'
+import { Galaxy } from '@/types/galaxy'
 
-// Helper function to map emoji icons to IconType values
-const mapEmojiToIconType = (emoji: string): IconType => {
-  const emojiMap: Record<string, IconType> = {
-    '🎯': 'project',
-    '📋': 'new-file',
-    '📄': 'new-file',
-    '👥': 'contributor',
-    '💰': 'money'
-  }
-  return emojiMap[emoji] || 'info'
-}
-
-const ShareTools: React.FC = () => {
+const ShareTools: React.FC<{ galaxy: Galaxy }> = ({ galaxy }) => {
   const [copied, setCopied] = useState(false)
-  const badgeCode = '[Ara](https://app.ara.foundation/badge/)'
+  const badgeCode = `[${galaxy.name + ' galaxy'}](https://app.ara.foundation/project?galaxy=${galaxy._id})`
 
   const handleCopy = async () => {
     try {
@@ -50,22 +39,11 @@ const ShareTools: React.FC = () => {
   }
 
   return (
-    <PageLikePanel interactive={false} title="Share Tools" className="">
+    <PageLikePanel interactive={false} title={
+      <span className="font-bold text-xl text-slate-900 dark:text-slate-100">Invite to Your Galaxy</span>
+    } titleCenter={true} className="">
       <InfoPanel
-        icon={mapEmojiToIconType('🎯')}
-        title="Increase Reach with a README Badge"
-        className="mb-4 dark:bg-transparent bg-transparent"
-      >
-        <p className='text-gray-600 dark:text-gray-500 text-md'>
-          This share link and copy button let you quickly add an Ara badge to your README.
-          The badge helps visitors interact with you, and donate directly to your project,
-          while you focus on your project.
-        </p>
-      </InfoPanel>
-
-      <InfoPanel
-        icon={mapEmojiToIconType('📄')}
-        title="Share Button for README"
+        icon="copy"
         className="mb-4 dark:bg-transparent bg-transparent"
         actions={[
           {
@@ -89,13 +67,16 @@ const ShareTools: React.FC = () => {
           } as ActionProps
         ]}
       >
-        <p className="mb-3">
-          Copy the markdown into your README to start collaboration and receive donations for project. Place it anywhere in your Readme, I recommend putting it on the top.</p>
-        <div className="text-lg text-slate-700 dark:text-slate-300/80 bg-slate-100 dark:bg-slate-800 p-3 rounded border border-slate-200 dark:border-slate-700 font-mono break-all">
+        <ul className="text-gray-600 dark:text-gray-400 text-sm mb-3 space-y-2 list-disc list-inside">
+          <li>Share the link to the galaxy page for your users</li>
+          <li>For any questions ask them to join the galaxy</li>
+          <li>Ara's design increases the chance users to donate more. Unlike other sponsorship/donation platforms, in Ara users can be community owners as the reward, <strong>only, after your approval</strong></li>
+        </ul>
+        <div className="text-sm text-slate-700 dark:text-slate-300/80 bg-slate-100 dark:bg-slate-800 p-3 rounded border border-slate-200 dark:border-slate-700 font-mono break-all">
           {badgeCode}
         </div>
       </InfoPanel>
-    </PageLikePanel >
+    </PageLikePanel>
   )
 }
 
