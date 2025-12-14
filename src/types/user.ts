@@ -11,6 +11,7 @@ export interface User {
     stars?: number
     role?: Roles
     balance?: number
+    demoPrivateKey?: string
 }
 
 export const USER_EVENT_TYPES = {

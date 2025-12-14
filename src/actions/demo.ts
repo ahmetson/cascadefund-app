@@ -1,6 +1,7 @@
 import { defineAction } from 'astro:actions'
 import { z } from 'astro:schema'
 import { ObjectId } from 'mongodb'
+import { Wallet } from 'ethers'
 import { getDemoByEmail, createDemo, updateDemoStep } from '@/server-side/demo'
 import { emailToNickname, createUsers, getUserByIds, getUserById, updateUserSunshines } from '@/server-side/user'
 import { getGalaxyById, updateGalaxySunshines } from '@/server-side/galaxy'
@@ -51,6 +52,11 @@ function generateRandomUser(role: Roles, index: number, email: string): User {
  * Create three demo users with different roles
  */
 async function generateDemoUsers(email: string): Promise<User[]> {
+    // Generate private keys for each user
+    const wallet1 = Wallet.createRandom()
+    const wallet2 = Wallet.createRandom()
+    const wallet3 = Wallet.createRandom()
+
     const users = [{
         email,
         role: 'user',
@@ -58,9 +64,16 @@ async function generateDemoUsers(email: string): Promise<User[]> {
         src: `https://api.dicebear.com/9.x/avataaars/svg?seed=${email}&size=256`,
         alt: 'Donator avatar',
         uri: '/user?email=' + emailToNickname(email),
+        demoPrivateKey: wallet1.privateKey,
     } as User,
-    generateRandomUser('maintainer', 1, email + '.m') as User,
-    generateRandomUser('contributor', 2, email + '.c') as User
+    {
+        ...generateRandomUser('maintainer', 1, email + '.m'),
+        demoPrivateKey: wallet2.privateKey,
+    } as User,
+    {
+        ...generateRandomUser('contributor', 2, email + '.c'),
+        demoPrivateKey: wallet3.privateKey,
+    } as User
     ]
     const createdIds = await createUsers(users)
     return createdIds.map((id, index) => ({

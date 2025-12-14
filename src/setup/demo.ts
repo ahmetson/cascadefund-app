@@ -1,12 +1,15 @@
 import { Collection, ObjectId } from 'mongodb'
+import { Wallet } from 'ethers'
 import { getCollection } from '../server-side/db'
-import { getOrCreateUserByEmail, getUserByEmail } from '../server-side/user'
-import { createGalaxy } from '../server-side/galaxy'
-import { getOrCreateProject } from '../server-side/project'
+import { getOrCreateUserByEmail, getUserByEmail, getUserById } from '../server-side/user'
+import { createGalaxy, getAllGalaxies, getGalaxyById } from '../server-side/galaxy'
+import { getOrCreateProject, getProjectById } from '../server-side/project'
 import { createIssue } from '../server-side/issue'
 import type { Galaxy } from '../types/galaxy'
 import type { Project } from '../types/project'
 import { Issue, IssueTag } from '../types/issue'
+import { send } from '../../packages/blockchain-gateway/client-side/client'
+import type { RequestAddGalaxy, ReplyGalaxyCreation, ReplyError } from '../../packages/blockchain-gateway/server-side/server.types'
 
 // Internal model types for direct MongoDB operations
 interface GalaxyModel {
@@ -217,10 +220,44 @@ const initialGalaxies: Omit<Galaxy, '_id' | 'maintainer' | 'projectLink'>[] = [
 // }
 
 /**
+ * Ensure all users have private keys
+ */
+async function ensureUsersHavePrivateKeys(): Promise<void> {
+    try {
+        const collection = await getCollection<any>('users')
+        const users = await collection.find({}).toArray()
+        let updatedCount = 0
+
+        for (const user of users) {
+            if (!user.demoPrivateKey) {
+                const wallet = Wallet.createRandom()
+                await collection.updateOne(
+                    { _id: user._id },
+                    { $set: { demoPrivateKey: wallet.privateKey } }
+                )
+                updatedCount++
+            }
+        }
+
+        if (updatedCount > 0) {
+            console.log(`✅ Generated private keys for ${updatedCount} users`)
+        } else {
+            console.log(`✅ All users already have private keys`)
+        }
+    } catch (error) {
+        console.error('Error ensuring users have private keys:', error)
+        throw error
+    }
+}
+
+/**
  * Setup demo galaxies - creates projects first, then links galaxies
  */
 export async function setup(): Promise<void> {
     try {
+        // Step 0: Ensure all users have private keys (must be done before creating galaxies)
+        await ensureUsersHavePrivateKeys()
+
         // Get or create one maintainer of the projects.
         const maintainerId = await getOrCreateUserByEmail('milayter@gmail.com')
         console.log(`✅ Maintainer user ID: ${maintainerId}`)
@@ -300,10 +337,116 @@ export async function setup(): Promise<void> {
             }
         }
 
-        // // Step 3: Create demo issues for each galaxy
+        // Step 3: Check and create galaxies on blockchain if needed
+        await ensureGalaxiesOnBlockchain(collection)
+
+        // // Step 4: Create demo issues for each galaxy
         // await setupIssues(projectIds, existingCount, collection)
     } catch (error) {
         console.error('Error setting up demo galaxies:', error)
+        throw error
+    }
+}
+
+/**
+ * Ensure all galaxies exist on the blockchain
+ */
+async function ensureGalaxiesOnBlockchain(collection: Collection<GalaxyModel>): Promise<void> {
+    try {
+        const galaxies = await getAllGalaxies()
+        const maintainerUser = await getUserByEmail('milayter@gmail.com')
+
+        if (!maintainerUser || !maintainerUser._id || !maintainerUser.demoPrivateKey) {
+            console.error('Maintainer user not found or missing private key, skipping blockchain setup')
+            return
+        }
+
+        // Get maintainer wallet to derive address
+        const maintainerWallet = new Wallet(maintainerUser.demoPrivateKey)
+        const maintainerAddress = maintainerWallet.address
+
+        let createdCount = 0
+        for (const galaxy of galaxies) {
+            // Skip if already has blockchainId
+            if (galaxy.blockchainId) {
+                continue
+            }
+
+            // Get project to extract GitHub URL
+            const project = await getProjectById(galaxy.projectLink)
+            if (!project) {
+                console.warn(`Project not found for galaxy ${galaxy.name}, skipping blockchain creation`)
+                continue
+            }
+
+            // Find GitHub link
+            const githubLink = project.socialLinks?.find(link => link.type === 'github')
+            const repoUrl = githubLink?.uri || `https://github.com/example/${galaxy.name.toLowerCase().replace(/\s+/g, '-')}`
+
+            // Construct issues URL
+            const issuesUrl = `https://app.ara.foundation/project/issues?galaxy=${galaxy._id}`
+
+            // Generate random Ethereum account (20 bytes) and convert to 32-byte hex string
+            const randomWallet = Wallet.createRandom()
+            const address20Bytes = randomWallet.address // 0x + 40 hex chars = 20 bytes
+            // Convert to 32-byte hex string (64 hex chars + 0x prefix)
+            const galaxyId32Bytes = `0x${address20Bytes.slice(2).padStart(64, '0')}`
+
+            // Prepare addGalaxy request
+            const request: RequestAddGalaxy = {
+                cmd: "addGalaxy",
+                params: {
+                    owner: maintainerAddress,
+                    repoUrl: repoUrl,
+                    issuesUrl: issuesUrl,
+                    name: galaxy.name,
+                    id: galaxyId32Bytes, // string, not number
+                    minX: galaxy.x,
+                    maxX: galaxy.x + 100, // Add appropriate range
+                    minY: galaxy.y,
+                    maxY: galaxy.y + 100, // Add appropriate range
+                }
+            }
+
+            try {
+                // Call blockchain gateway
+                const reply = await send(request)
+
+                if ('error' in reply) {
+                    const errorReply = reply as ReplyError
+                    console.error(`Error creating galaxy ${galaxy.name} on blockchain:`, errorReply.error)
+                    continue
+                }
+
+                const successReply = reply as ReplyGalaxyCreation
+                // Update galaxy in database with blockchainId and blockchainTx
+                const galaxyObjectId = galaxy._id ? new ObjectId(galaxy._id) : null
+                if (galaxyObjectId) {
+                    await collection.updateOne(
+                        { _id: galaxyObjectId },
+                        {
+                            $set: {
+                                blockchainId: galaxyId32Bytes,
+                                blockchainTx: successReply.params.txHash
+                            }
+                        }
+                    )
+                    console.log(`✅ Created galaxy ${galaxy.name} on blockchain: ${galaxyId32Bytes}, tx: ${successReply.params.txHash}`)
+                    createdCount++
+                }
+            } catch (error) {
+                console.error(`Error calling blockchain gateway for galaxy ${galaxy.name}:`, error)
+                // Continue with other galaxies
+            }
+        }
+
+        if (createdCount > 0) {
+            console.log(`✅ Created ${createdCount} galaxies on blockchain`)
+        } else {
+            console.log(`✅ All galaxies already exist on blockchain`)
+        }
+    } catch (error) {
+        console.error('Error ensuring galaxies on blockchain:', error)
         throw error
     }
 }

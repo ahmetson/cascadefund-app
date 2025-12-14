@@ -1,4 +1,5 @@
 import { ObjectId } from 'mongodb'
+import { Wallet } from 'ethers'
 import { getCollection } from './db'
 import type { User } from '@/types/user'
 
@@ -20,6 +21,7 @@ function userModelToUser(model: UserModel | null): User | null {
         stars: model.stars,
         role: model.role,
         balance: model.balance,
+        demoPrivateKey: model.demoPrivateKey,
     }
 }
 
@@ -35,6 +37,7 @@ function userToUserModel(user: User): UserModel {
         stars: user.stars,
         role: user.role,
         balance: user.balance,
+        demoPrivateKey: user.demoPrivateKey,
     }
 }
 
@@ -129,14 +132,26 @@ export async function getOrCreateUserByEmail(email: string): Promise<string> {
         // Try to get existing user
         const existingUser = await getUserByEmail(email)
         if (existingUser && existingUser._id) {
+            // Generate private key if user doesn't have one
+            if (!existingUser.demoPrivateKey) {
+                const wallet = Wallet.createRandom()
+                const collection = await getCollection<UserModel>('users')
+                const objectId = new ObjectId(existingUser._id)
+                await collection.updateOne(
+                    { _id: objectId },
+                    { $set: { demoPrivateKey: wallet.privateKey } }
+                )
+            }
             return existingUser._id
         }
 
         // Create new user if doesn't exist
+        const wallet = Wallet.createRandom()
         const newUser: User = {
             email,
             role: 'maintainer',
             nickname: emailToNickname(email),
+            demoPrivateKey: wallet.privateKey,
         }
         const insertedId = await createUser(newUser)
         return insertedId

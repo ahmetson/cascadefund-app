@@ -19,6 +19,8 @@ interface GalaxyModel {
     x: number;
     y: number;
     tags?: string[];
+    blockchainId?: string;
+    blockchainTx?: string;
 }
 
 // Serialization functions
@@ -37,6 +39,8 @@ function galaxyModelToGalaxy(model: GalaxyModel | null): Galaxy | null {
         x: model.x,
         y: model.y,
         tags: model.tags,
+        blockchainId: model.blockchainId,
+        blockchainTx: model.blockchainTx,
     }
 }
 
@@ -54,6 +58,8 @@ function galaxyToGalaxyModel(galaxy: Galaxy): GalaxyModel {
         x: galaxy.x,
         y: galaxy.y,
         tags: galaxy.tags,
+        blockchainId: galaxy.blockchainId,
+        blockchainTx: galaxy.blockchainTx,
     }
 }
 
