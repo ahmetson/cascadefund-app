@@ -2,7 +2,7 @@ import { ObjectId } from 'mongodb'
 import { getCollection } from './db'
 import { getAllGalaxies } from './galaxy'
 import { getIssueById } from './issue'
-import type { AllStarStats, SolarForgeModel, UserStar } from '@/types/all-stars'
+import type { AllStarStats, SolarForgeModel, UserStar, SpaceTracer } from '@/types/all-stars'
 import type { UserModel } from './user'
 
 /**
@@ -150,6 +150,35 @@ export async function updateUserStarPosition(params: { galaxyId: string; userId:
         { $set: { x, y, updatedTime: Math.floor(Date.now() / 1000) } }
     )
     return result.matchedCount > 0
+}
+
+interface SpaceTracerModel extends Omit<SpaceTracer, '_id'> {
+    _id?: ObjectId
+}
+
+async function getSpaceTracerCollection() {
+    return getCollection<SpaceTracerModel>('space-tracer')
+}
+
+export async function createSpaceTracer(params: { galaxyId: string; userId: string; x: number; y: number; txId: string }): Promise<string> {
+    try {
+        const { galaxyId, userId, x, y, txId } = params
+        const collection = await getSpaceTracerCollection()
+        const now = Math.floor(Date.now() / 1000)
+        const spaceTracer: SpaceTracerModel = {
+            galaxyId,
+            userId,
+            x,
+            y,
+            txId,
+            createdTime: now,
+        }
+        const result = await collection.insertOne(spaceTracer as any)
+        return result.insertedId.toString()
+    } catch (error) {
+        console.error('Error creating space tracer:', error)
+        throw error
+    }
 }
 
 /**

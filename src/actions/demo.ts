@@ -239,7 +239,6 @@ export const server = {
                 // Calculate total sunshines
                 const currentSunshines = user.sunshines || 0
                 const totalSunshines = currentSunshines + sunshinesAmount
-
                 return {
                     success: true,
                     sunshines: sunshinesAmount,

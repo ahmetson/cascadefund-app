@@ -232,8 +232,8 @@ const Panel: React.FC<Props> = ({
   const titleC = <div className='text-sm font-medium text-slate-500 dark:text-slate-400'>{title}</div>
   const galaxyId = galaxy?._id?.toString();
 
-  // Get project icon from galaxy's project if available, otherwise use provided projectIcon or default to cascadefund logo
-  const finalProjectIcon = projectIcon || (galaxy ? undefined : undefined); // Will use cascadefund logo if not provided
+  // Get project icon from galaxy's project if available, otherwise use provided projectIcon or default to ara logo
+  const finalProjectIcon = projectIcon || (galaxy ? undefined : undefined); // Will use ara logo if not provided
   const finalProjectName = projectName || galaxy?.name || 'Ara';
   const finalStarCount = starCount !== undefined ? starCount : (galaxy?.stars || 0);
 

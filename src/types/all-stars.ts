@@ -74,6 +74,16 @@ export interface SolarForgeByVersionResult {
     totalStars: number;
 }
 
+export interface SpaceTracer {
+    _id?: string;
+    galaxyId: string;
+    userId: string;
+    x: number;
+    y: number;
+    txId: string;
+    createdTime?: number;
+}
+
 /**
  * Convert sunshines to stars using the formula: stars = sunshines / 180
  * @param sunshines - The amount of sunshines to convert
