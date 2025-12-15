@@ -74,16 +74,13 @@ const {
     >
       <GradientBackground
         className="fixed h-screen w-screen z-0 pointer-events-none"
-        client:load
       />
       <GridBackgrounded />
       <GravityStarsBackground
         className="fixed h-screen w-screen z-1 pointer-events-none"
-        client:load
       />
       <div class="fixed h-screen w-screen z-2">
         <Galaxy
-          client:only="react"
           mouseInteraction={false}
           speed={0.25}
           rotationSpeed={0.015}
