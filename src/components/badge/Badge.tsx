@@ -9,22 +9,49 @@ export interface BadgeProps {
 }
 
 const Badge: React.FC<BadgeProps> = ({ children, variant = 'gray', active = false, static: disableAnimation = true, className = '' }) => {
-  const baseClasses = 'inline-flex items-center px-3 py-1 rounded-full text-xs font-medium'
+  // Text/label-like styling - no shadows, subtle backgrounds, border-based design
+  const baseClasses = 'inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-normal border'
 
   const variantClasses = {
-    gray: active ? 'bg-slate-700 text-white shadow-lg dark:shadow-none ' : 'bg-slate-200 dark:bg-slate-600 text-slate-800 dark:text-slate-200 shadow-sm dark:shadow-none',
-    blue: active ? 'bg-blue-600 text-white shadow-lg dark:shadow-none ' : 'bg-blue-200 dark:bg-blue-600 text-blue-800 dark:text-blue-200 shadow-sm dark:shadow-none',
-    green: active ? 'bg-green-600 text-white shadow-lg dark:shadow-none ' : 'bg-green-100 dark:bg-green-600 text-green-800 dark:text-green-200 shadow-sm dark:shadow-none',
-    red: active ? 'bg-red-600 text-white shadow-lg dark:shadow-none' : 'bg-red-100 dark:bg-red-600 text-red-800 dark:text-red-200 shadow-sm dark:shadow-none',
-    yellow: active ? 'bg-yellow-600 text-white shadow-lg dark:shadow-none ' : 'bg-yellow-100 dark:bg-yellow-600 text-yellow-800 dark:text-yellow-200 shadow-sm dark:shadow-none',
-    purple: active ? 'bg-purple-600 text-white shadow-lg dark:shadow-none ' : 'bg-purple-100 dark:bg-purple-600 text-purple-800 dark:text-purple-200 shadow-sm dark:shadow-none ',
-    orange: active ? 'bg-orange-600 text-white shadow-lg dark:shadow-none ' : 'bg-orange-100 dark:bg-orange-600 text-orange-800 dark:text-orange-200 shadow-sm dark:shadow-none',
-    success: active ? 'bg-green-600 text-white shadow-lg dark:shadow-none ' : 'bg-green-100 dark:bg-green-600 text-green-800 dark:text-green-100 shadow-sm dark:shadow-none ',
-    warning: active ? 'bg-yellow-600 text-white shadow-lg dark:shadow-none ' : 'bg-yellow-100 dark:bg-yellow-600 text-yellow-800 dark:text-yellow-200 shadow-sm dark:shadow-none ',
-    danger: active ? 'bg-red-600 text-white shadow-lg dark:shadow-none ' : 'bg-red-100 dark:bg-red-600 text-red-800 dark:text-red-200 shadow-sm dark:shadow-none ',
-    info: active ? 'bg-blue-600 text-white shadow-lg dark:shadow-none ' : 'bg-blue-100 dark:bg-blue-600 text-blue-800 dark:text-blue-200 shadow-sm dark:shadow-none ',
-    teal: active ? 'bg-teal-600 text-white shadow-lg dark:shadow-none ' : 'bg-teal-100 dark:bg-teal-600 text-teal-800 dark:text-teal-200 shadow-sm dark:shadow-none ',
-    default: active ? 'bg-gray-600 text-white shadow-lg dark:shadow-none ' : 'bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200 shadow-sm dark:shadow-none ',
+    gray: active
+      ? 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-600'
+      : 'bg-transparent dark:bg-transparent text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700',
+    blue: active
+      ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800'
+      : 'bg-transparent dark:bg-transparent text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800',
+    green: active
+      ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 border-green-200 dark:border-green-800'
+      : 'bg-transparent dark:bg-transparent text-green-600 dark:text-green-400 border-green-200 dark:border-green-800',
+    red: active
+      ? 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800'
+      : 'bg-transparent dark:bg-transparent text-red-600 dark:text-red-400 border-red-200 dark:border-red-800',
+    yellow: active
+      ? 'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-300 border-yellow-200 dark:border-yellow-800'
+      : 'bg-transparent dark:bg-transparent text-yellow-600 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800',
+    purple: active
+      ? 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800'
+      : 'bg-transparent dark:bg-transparent text-purple-600 dark:text-purple-400 border-purple-200 dark:border-purple-800',
+    orange: active
+      ? 'bg-orange-50 dark:bg-orange-900/20 text-orange-700 dark:text-orange-300 border-orange-200 dark:border-orange-800'
+      : 'bg-transparent dark:bg-transparent text-orange-600 dark:text-orange-400 border-orange-200 dark:border-orange-800',
+    success: active
+      ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 border-green-200 dark:border-green-800'
+      : 'bg-transparent dark:bg-transparent text-green-600 dark:text-green-400 border-green-200 dark:border-green-800',
+    warning: active
+      ? 'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-300 border-yellow-200 dark:border-yellow-800'
+      : 'bg-transparent dark:bg-transparent text-yellow-600 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800',
+    danger: active
+      ? 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800'
+      : 'bg-transparent dark:bg-transparent text-red-600 dark:text-red-400 border-red-200 dark:border-red-800',
+    info: active
+      ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800'
+      : 'bg-transparent dark:bg-transparent text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800',
+    teal: active
+      ? 'bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-300 border-teal-200 dark:border-teal-800'
+      : 'bg-transparent dark:bg-transparent text-teal-600 dark:text-teal-400 border-teal-200 dark:border-teal-800',
+    default: active
+      ? 'bg-gray-50 dark:bg-gray-900/20 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-800'
+      : 'bg-transparent dark:bg-transparent text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-800',
   }
 
   // Animation classes
@@ -37,11 +64,11 @@ const Badge: React.FC<BadgeProps> = ({ children, variant = 'gray', active = fals
       {
         disableAnimation ? null :
           (
-            <span className={`${animationClasses} inset-0 rounded-full text-xs w-100/50 ${variantClasses[variant]} absolute`}>
+            <span className={`${animationClasses} inset-0 rounded-md text-xs w-100/50 ${variantClasses[variant]} absolute`}>
             </span>)
       }
       <span
-        className={`${baseClasses} ${variantClasses[variant]} relative flex items-center ${disableAnimation ? 'shadow-none!' : ''}`}
+        className={`${baseClasses} ${variantClasses[variant]} relative flex items-center`}
       >
         {children}</span>
     </span >
