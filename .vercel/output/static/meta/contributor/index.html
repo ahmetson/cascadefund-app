@@ -1,0 +1,753 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="icon" type="image/png" href="/ara_logo.png"><meta name="generator" content="Astro v5.15.3"><title>Ara</title><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.COPH5o9P.js"></script><link rel="stylesheet" href="/_astro/index.BvFYnIBs.css">
+<link rel="stylesheet" href="/_astro/contributor.dncwLV2h.css">
+<style>.hyperlink #logoImg[data-astro-cid-nlmvrfkw]{display:block}.hyperlink #hoveredLogoImg[data-astro-cid-nlmvrfkw]{display:none}.hyperlink #logoSubtitle[data-astro-cid-nlmvrfkw]{display:block;transition:font-size .1s ease-out}.hyperlink:hover #logoSubtitle[data-astro-cid-nlmvrfkw]{opacity:.4;font-size:.65rem}.hyperlink:hover #logoImg[data-astro-cid-nlmvrfkw]{display:none}.hyperlink:hover #hoveredLogoImg[data-astro-cid-nlmvrfkw]{display:block}
+</style></head> <body class="min-h-screen bg-gray-200 dark:bg-gray-700"> <header class="h-14 -pt-2 bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700  fixed top-0 right-0 left-0 z-10"> <div class="navbar bg-base-100 dark:bg-gray-800 shadow-sm px-4 h-14"> <div class="navbar-start"> <div class="dropdown"> <div tabindex="0" role="button" class="btn btn-ghost lg:hidden"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16"></path> </svg> </div> <nav tabindex="-1" class="flex  flex-col  lg:hidden menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-95 ml-4 pl-6 shadow"> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="ZIO5Br" prefix="r73" component-url="/_astro/Tooltip.DNM_wDyQ.js" component-export="default" renderer-url="/_astro/client.DA4tNCJ2.js" props="{&quot;content&quot;:[0,&quot;Contributing to Open Source? We made a special landing page for you&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;Tooltip&quot;,&quot;value&quot;:true}" await-children><div data-slot="tooltip-trigger" data-side="top" data-align="center" data-state="closed" class=""><astro-slot> <a target="_self" href="/meta/contributor" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors undefined">Contributors</a> </astro-slot></div><!--astro:end--></astro-island> <astro-island uid="Z7Qa60" prefix="r74" component-url="/_astro/Tooltip.DNM_wDyQ.js" component-export="default" renderer-url="/_astro/client.DA4tNCJ2.js" props="{&quot;content&quot;:[0,&quot;You want to help open-source, but something makes it not motivating? We made a special landing page for you&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;Tooltip&quot;,&quot;value&quot;:true}" await-children><div data-slot="tooltip-trigger" data-side="top" data-align="center" data-state="closed" class=""><astro-slot> <div class="flex items-center w-full"> <a target="_self" href="/meta/influencer" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors undefined">"Maybe" a donator?</a> </div> </astro-slot></div><!--astro:end--></astro-island> <a target="_self" href="/meta/work" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors undefined">How it works?</a> <!-- {
+    isItemShown(ItemName.Check) && (
+      <Tooltip
+        content={
+          "According to hyperpayment protocol, part of all project donations goes to the libraries/assets used in the project. Check if your 'asset' recieved an indirect donation"
+        }
+        client:load
+      >
+        <div class="flex items-center w-full">
+          <Link uri="/maintainer/check">Check Balance</Link>
+        </div>
+      </Tooltip>
+    )
+  } --> </nav> </div> <a target="_self" href="/" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors  flex flex-start h-14 items-center "> <div class="w-8 h-8 bg-transparent rounded flex items-center justify-center relative undefined" data-astro-cid-nlmvrfkw> <img src="/ara_logo.png" id="logoImg" alt="Ara Logo" class="w-full h-full absolute inset-0" loading="eager" fetchpriority="high" decoding="async" data-astro-cid-nlmvrfkw> <img src="/ara_logo_hover.png" id="hoveredLogoImg" alt="Ara Logo" class="w-full h-full absolute inset-0" loading="lazy" decoding="async" data-astro-cid-nlmvrfkw> </div> </a>  </div> <div class="navbar-center hidden lg:flex lg:min-w-[50vw]"> <nav class="flex  items-center justify-between w-full text-sm center h-14 px-1 space-x-6 h-14"> <astro-island uid="ZIO5Br" prefix="r75" component-url="/_astro/Tooltip.DNM_wDyQ.js" component-export="default" renderer-url="/_astro/client.DA4tNCJ2.js" props="{&quot;content&quot;:[0,&quot;Contributing to Open Source? We made a special landing page for you&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;Tooltip&quot;,&quot;value&quot;:true}" await-children><div data-slot="tooltip-trigger" data-side="top" data-align="center" data-state="closed" class=""><astro-slot> <a target="_self" href="/meta/contributor" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors undefined">Contributors</a> </astro-slot></div><!--astro:end--></astro-island> <astro-island uid="Z7Qa60" prefix="r76" component-url="/_astro/Tooltip.DNM_wDyQ.js" component-export="default" renderer-url="/_astro/client.DA4tNCJ2.js" props="{&quot;content&quot;:[0,&quot;You want to help open-source, but something makes it not motivating? We made a special landing page for you&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;Tooltip&quot;,&quot;value&quot;:true}" await-children><div data-slot="tooltip-trigger" data-side="top" data-align="center" data-state="closed" class=""><astro-slot> <div class="flex items-center w-full"> <a target="_self" href="/meta/influencer" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors undefined">"Maybe" a donator?</a> </div> </astro-slot></div><!--astro:end--></astro-island> <a target="_self" href="/meta/work" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors undefined">How it works?</a> <!-- {
+    isItemShown(ItemName.Check) && (
+      <Tooltip
+        content={
+          "According to hyperpayment protocol, part of all project donations goes to the libraries/assets used in the project. Check if your 'asset' recieved an indirect donation"
+        }
+        client:load
+      >
+        <div class="flex items-center w-full">
+          <Link uri="/maintainer/check">Check Balance</Link>
+        </div>
+      </Tooltip>
+    )
+  } --> </nav> </div> <div class="navbar-end"></div> </div> </header>  <section class="py-14 h-[80vh] bg-gradient-to-br from-blue-500 via-blue-800 to-purple-500 text-white dark:text-gray-900 dark:from-blue-800 dark:via-blue-500 dark:to-purple-800" data-astro-cid-blzvvx3q>   <div class="relative inset-0 opacity-100 z-2 px-4 sm:px-6 lg:px-8 text-center text-slate-100 dark:text-slate-300" data-astro-cid-blzvvx3q>  <h1 class="text-4xl md:text-5xl font-bold mb-6 text-slate-100 dark:text-slate-300 " data-astro-cid-blzvvx3q> Turn your contributions into quests. Grow your skills. Get maintainer&#39;s support, become part of greater project. </h1>    <p class="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
+We're building the Contributor experience on Ara — a new way to
+      join open source projects, level up through quests, and get mentorship and
+      recognition.
+</p> <div class="relative overflow-hidden bg-transparent"><div class="relative z-0 hover:z-0"><div class="rounded-xs shadow-md relative overflow-hidden border-1 border-slate-200 dark:border-slate-500/10 dark:bg-slate-900 p-4 transition-all duration-300 hover:shadow-lg space-y-4 z-10 bg-white/10 backdrop-blur-sm border-none text-white"><div class="relative z-10"><div class="mb-4 text-center"><h2 class="font-georgia flex items-center justify-center gap-1 text-2xl text-slate-700 dark:text-slate-300/75"><span>The Contributor feature is still in development.</span></h2></div><div class="font-noto-sans space-y-3 text-sm text-slate-600 dark:text-slate-400 overflow-y-auto"> <div class="flex items-start space-x-3"> <p class="text-blue-100">
+Upvote the "contributor page" issue on our roadmap to prioritize — to
+          upvote, you need to be Ara's user.
+<a href="#" class="text-blue-300 underline ml-1">Check how Ara works!</a> </p> </div> <div class="flex items-start space-x-3"> <div class="w-5 h-5 bg-green-400 rounded-full mt-1 flex-shrink-0"></div> <p class="text-blue-100">
+Sign up for our newsletter to get notified the moment it goes live.
+</p> </div> <div class="mt-6 flex flex-col sm:flex-row items-center justify-between"> <div class="relative overflow-hidden bg-transparent"><div class="relative z-0 hover:z-0"><button data-slot="ripple-button" class="inline-flex items-center justify-center gap-2 whitespace-nowrap disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*=&#x27;size-&#x27;])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-9 has-[&gt;svg]:px-3 hyperlink bg-indigo-600 text-white hover:bg-indigo-700 dark:bg-indigo-500 dark:text-white dark:hover:bg-indigo-600 shadow-sm hover:shadow-md px-4 pr-3 py-2 text-sm rounded-xs font-medium transition-colors duration-200 mb-4 sm:mb-0" tabindex="0" style="position:relative;overflow:hidden"> Notify Me </button></div><style>
+        @keyframes beamTop {
+          0% {
+            transform: translateX(-100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateX(100vw);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamRight {
+          0% {
+            transform: translateY(-100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateY(100vh);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamBottom {
+          0% {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateX(-100vw);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamLeft {
+          0% {
+            transform: translateY(100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateY(-100vh);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutup {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(0, -32px) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutdown {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(0, 32px) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutleft {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(-32px, 0) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutright {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(32px, 0) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes moveLight {
+          0% {
+            top: 0;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+          25% {
+            top: 0;
+            left: 100%;
+            transform: translate(-4px, -4px);
+          }
+          50% {
+            top: 100%;
+            left: 100%;
+            transform: translate(-4px, -4px);
+          }
+          75% {
+            top: 100%;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+          100% {
+            top: 0;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+        }
+      </style></div> <p class="text-sm text-blue-200">
+Note: We will send you exactly one email when the Contributor page is
+          ready. Nothing else. No spam.
+</p> </div> </div></div></div></div><style>
+        @keyframes beamTop {
+          0% {
+            transform: translateX(-100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateX(100vw);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamRight {
+          0% {
+            transform: translateY(-100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateY(100vh);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamBottom {
+          0% {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateX(-100vw);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamLeft {
+          0% {
+            transform: translateY(100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateY(-100vh);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutup {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(0, -32px) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutdown {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(0, 32px) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutleft {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(-32px, 0) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutright {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(32px, 0) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes moveLight {
+          0% {
+            top: 0;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+          25% {
+            top: 0;
+            left: 100%;
+            transform: translate(-4px, -4px);
+          }
+          50% {
+            top: 100%;
+            left: 100%;
+            transform: translate(-4px, -4px);
+          }
+          75% {
+            top: 100%;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+          100% {
+            top: 0;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+        }
+      </style></div>   <div class="flex flex-col sm:flex-row gap-8 mt-8 justify-center" data-astro-cid-blzvvx3q> <a target="_self" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors  text-white hover:text-gray-200">Learn More<svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></a> </div> </div> </section>  <section class="py-14 undefined bg-gray-100 dark:text-gray-900 dark:from-gray-900 dark:via-blue-500 dark:to-gray-900" data-astro-cid-blzvvx3q>   <div class="relative inset-0 opacity-100 z-2 px-4 sm:px-6 lg:px-8 text-center text-slate-100 dark:text-slate-300" data-astro-cid-blzvvx3q>  <h1 class="text-4xl md:text-5xl font-bold mb-6 text-slate-100 dark:text-slate-300 " data-astro-cid-blzvvx3q> Contributor&#39;s Challenges </h1>   <div class="grid md:grid-cols-2 gap-8 items-center"> <div class="order-2 md:order-1"> <img src="https://dummyimage.com/400x300/f5f5f5/333333?text=Developer+Illustration" alt="Developer illustration" class="w-full h-auto rounded-lg" referrerpolicy="no-referrer"> </div> <div class="order-1 md:order-2">  <p class="text-xl text-gray-600 mb-2">
+Open source is powerful, but being a contributor isn't always easy.
+</p>  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 order-1 md:order-2 space-y-6"><div class="rounded-xs relative overflow-hidden border-2 dark:border-slate-700/10 border-blur-xs undefined p-4 shadow-none bg-white dark:bg-blue-500/10 backdrop-blur-xs border-none text-gray-600 dark:text-gray-500"><div class="relative z-10"><div class="mb-4"><h2 class="font-georgia flex items-center gap-2 h-5 text-slate-600 dark:text-slate-400 "><svg class="w-4 h-4 " fill="none" stroke="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" fill="#6B7280"></path></svg><span>🚀 Hard to start</span></h2></div><div class="font-noto-sans text-gray-600 dark:text-gray-500 ">Huge issue lists, unclear onboarding.</div></div></div><div class="rounded-xs relative overflow-hidden border-2 dark:border-slate-700/10 border-blur-xs undefined p-4 shadow-none bg-white dark:bg-blue-500/10 backdrop-blur-xs border-none text-gray-600 dark:text-gray-500"><div class="relative z-10"><div class="mb-4"><h2 class="font-georgia flex items-center gap-2 h-5 text-slate-600 dark:text-slate-400 "><svg class="w-4 h-4 " fill="none" stroke="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" fill="#6B7280"></path></svg><span>😰 Intimidating</span></h2></div><div class="font-noto-sans text-gray-600 dark:text-gray-500 ">Fear of making mistakes, harsh feedback.</div></div></div><div class="rounded-xs relative overflow-hidden border-2 dark:border-slate-700/10 border-blur-xs undefined p-4 shadow-none bg-white dark:bg-blue-500/10 backdrop-blur-xs border-none text-gray-600 dark:text-gray-500"><div class="relative z-10"><div class="mb-4"><h2 class="font-georgia flex items-center gap-2 h-5 text-slate-600 dark:text-slate-400 "><svg class="w-4 h-4 " fill="none" stroke="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" fill="#6B7280"></path></svg><span>👤 Low recognition</span></h2></div><div class="font-noto-sans text-gray-600 dark:text-gray-500 ">Efforts often go unnoticed, especially non-code work.</div></div></div><div class="rounded-xs relative overflow-hidden border-2 dark:border-slate-700/10 border-blur-xs undefined p-4 shadow-none bg-white dark:bg-blue-500/10 backdrop-blur-xs border-none text-gray-600 dark:text-gray-500"><div class="relative z-10"><div class="mb-4"><h2 class="font-georgia flex items-center gap-2 h-5 text-slate-600 dark:text-slate-400 "><svg class="w-4 h-4 " fill="none" stroke="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" fill="#6B7280"></path></svg><span>🤝 No mentorship</span></h2></div><div class="font-noto-sans text-gray-600 dark:text-gray-500 ">Hard to understand large codebases alone.</div></div></div><div class="rounded-xs relative overflow-hidden border-2 dark:border-slate-700/10 border-blur-xs undefined p-4 shadow-none bg-white dark:bg-blue-500/10 backdrop-blur-xs border-none text-gray-600 dark:text-gray-500"><div class="relative z-10"><div class="mb-4"><h2 class="font-georgia flex items-center gap-2 h-5 text-slate-600 dark:text-slate-400 "><svg class="w-4 h-4 " fill="none" stroke="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" fill="#6B7280"></path></svg><span>💀 Dead issues</span></h2></div><div class="font-noto-sans text-gray-600 dark:text-gray-500 ">PRs get ignored, contributors get demotivated.</div></div></div><div class="rounded-xs relative overflow-hidden border-2 dark:border-slate-700/10 border-blur-xs undefined p-4 shadow-none bg-white dark:bg-blue-500/10 backdrop-blur-xs border-none text-gray-600 dark:text-gray-500"><div class="relative z-10"><div class="mb-4"><h2 class="font-georgia flex items-center gap-2 h-5 text-slate-600 dark:text-slate-400 "><svg class="w-4 h-4 " fill="none" stroke="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" fill="#6B7280"></path></svg><span>☠️ Toxicity</span></h2></div><div class="font-noto-sans text-gray-600 dark:text-gray-500 ">Not all communities are welcoming.</div></div></div></div> </div> </div>   </div> </section>  <section class="py-14 undefined bg-gray-100 dark:text-gray-900 dark:from-gray-900 dark:via-blue-500 dark:to-gray-900" data-astro-cid-blzvvx3q>   <div class="relative inset-0 opacity-100 z-2 px-4 sm:px-6 lg:px-8 text-center text-slate-100 dark:text-slate-300" data-astro-cid-blzvvx3q>  <h1 class="text-4xl md:text-5xl font-bold mb-6 text-slate-100 dark:text-slate-300 " data-astro-cid-blzvvx3q> How Ara Works for Contributors </h1>    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">  <div class="rounded-xs relative overflow-hidden border-2 dark:border-slate-700/10 border-blur-xs undefined p-4 shadow-none bg-white dark:bg-blue-500/10 backdrop-blur-xs border-none text-gray-600 dark:text-gray-500"><div class="relative z-10"><div class="undefined"><h2 class="font-georgia flex items-center gap-2 h-5 text-slate-600 dark:text-slate-400 "><svg class="w-4 h-4  text-purple-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg><span>Discovery designed for contributors</span></h2></div></div></div><div class="rounded-xs relative overflow-hidden border-2 dark:border-slate-700/10 border-blur-xs undefined p-4 shadow-none bg-white dark:bg-blue-500/10 backdrop-blur-xs border-none text-gray-600 dark:text-gray-500"><div class="relative z-10"><div class="undefined"><h2 class="font-georgia flex items-center gap-2 h-5 text-slate-600 dark:text-slate-400 "><svg class="w-4 h-4  text-purple-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg><span>Smooth onboarding</span></h2></div></div></div><div class="rounded-xs relative overflow-hidden border-2 dark:border-slate-700/10 border-blur-xs undefined p-4 shadow-none bg-white dark:bg-blue-500/10 backdrop-blur-xs border-none text-gray-600 dark:text-gray-500"><div class="relative z-10"><div class="undefined"><h2 class="font-georgia flex items-center gap-2 h-5 text-slate-600 dark:text-slate-400 "><svg class="w-4 h-4  text-purple-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg><span>Get mentorship and guidance</span></h2></div></div></div><div class="rounded-xs relative overflow-hidden border-2 dark:border-slate-700/10 border-blur-xs undefined p-4 shadow-none bg-white dark:bg-blue-500/10 backdrop-blur-xs border-none text-gray-600 dark:text-gray-500"><div class="relative z-10"><div class="undefined"><h2 class="font-georgia flex items-center gap-2 h-5 text-slate-600 dark:text-slate-400 "><svg class="w-4 h-4  text-purple-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg><span>Fork that is discoverable</span></h2></div></div></div>  <div class="rounded-xs relative overflow-hidden border-2 dark:border-slate-700/10 border-blur-xs undefined p-4 shadow-none bg-white dark:bg-blue-500/10 backdrop-blur-xs border-none text-gray-600 dark:text-gray-500"><div class="relative z-10"><div class="mb-4"><h2 class="font-georgia flex items-center gap-2 h-5 text-slate-600 dark:text-slate-400 "><svg class="w-4 h-4  text-purple-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg><span>Reward</span></h2></div><div class="font-noto-sans text-gray-600 dark:text-gray-500 ">Get rewarded, potentially to become a maintainer, or start your own project with your contributors.</div></div></div></div>   </div> </section>  <section class="py-14 undefined network-bg text-white dark:text-gray-900 dark:from-gray-900 dark:via-blue-500 dark:to-gray-900 relative overflow-hidden " data-astro-cid-blzvvx3q>  <div class="absolute inset-0 opacity-20 z-0" data-astro-cid-blzvvx3q> <div class="absolute top-10 left-10 w-16 h-16 border border-yellow-400 dark:border-yellow-300 rounded-lg transform rotate-12" data-astro-cid-blzvvx3q></div> <div class="absolute top-20 right-20 w-12 h-12 border border-blue-400 dark:border-blue-300 rounded-full" data-astro-cid-blzvvx3q></div> <div class="absolute bottom-20 left-20 w-20 h-20 border border-green-400 dark:border-green-300 rounded-lg transform -rotate-12" data-astro-cid-blzvvx3q></div> <div class="absolute bottom-10 right-10 w-8 h-8 border border-purple-400 dark:border-purple-300 rounded-full" data-astro-cid-blzvvx3q></div> </div> <div class="relative inset-0 opacity-100 z-2 px-4 sm:px-6 lg:px-8 text-center text-slate-100 dark:text-slate-300" data-astro-cid-blzvvx3q> <div class="mb-8" data-astro-cid-blzvvx3q> <div class="inline-flex items-center justify-center w-16 h-16 bg-yellow-500 dark:bg-yellow-300 rounded-xs mb-6" data-astro-cid-blzvvx3q> <svg class="w-4 h-4 " fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"></path></svg> </div> </div> <h1 class="text-4xl md:text-5xl font-bold mb-6 text-slate-100 dark:text-slate-300 " data-astro-cid-blzvvx3q> The Contributor platform is still in development. </h1>    <div class="flex items-start space-x-4 text-left max-w-2xl mx-auto"> <div class="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center flex-shrink-0 mt-1"> <span class="relative "><span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-normal border bg-transparent dark:bg-transparent text-yellow-600 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800 relative flex items-center">!</span></span> </div> <div> <h3 class="font-semibold mb-2">
+Upvote the issue that will relaunch it
+</h3> <p class="text-yellow-100">
+But to upvote, you need to be a registered user of Ara. Check
+          how Ara works!.
+</p> </div> </div> <div class="flex items-start space-x-4 text-left max-w-2xl mx-auto"> <div class="w-8 h-8 bg-green-400 rounded-full flex items-center justify-center flex-shrink-0 mt-1"> [object Object] </div> <div> <h3 class="font-semibold mb-2">Sign up for our newsletter</h3> <p class="text-blue-100">to get notified the moment it goes live.</p> </div> </div> <div class="my-4 flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6"> <div class="relative overflow-hidden bg-transparent"><div class="relative z-0 hover:z-0"><button data-slot="ripple-button" class="inline-flex items-center justify-center gap-2 whitespace-nowrap disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*=&#x27;size-&#x27;])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs h-9 has-[&gt;svg]:px-3 hyperlink bg-slate-500 text-slate-100 hover:bg-slate-600 dark:bg-slate-600 dark:text-slate-200 dark:hover:bg-slate-500 px-6 pr-5 py-3 text-base rounded-xs font-medium transition-colors duration-200" tabindex="0" style="position:relative;overflow:hidden"> Notify Me </button></div><style>
+        @keyframes beamTop {
+          0% {
+            transform: translateX(-100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateX(100vw);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamRight {
+          0% {
+            transform: translateY(-100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateY(100vh);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamBottom {
+          0% {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateX(-100vw);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamLeft {
+          0% {
+            transform: translateY(100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateY(-100vh);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutup {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(0, -32px) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutdown {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(0, 32px) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutleft {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(-32px, 0) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutright {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(32px, 0) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes moveLight {
+          0% {
+            top: 0;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+          25% {
+            top: 0;
+            left: 100%;
+            transform: translate(-4px, -4px);
+          }
+          50% {
+            top: 100%;
+            left: 100%;
+            transform: translate(-4px, -4px);
+          }
+          75% {
+            top: 100%;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+          100% {
+            top: 0;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+        }
+      </style></div> <p class="text-sm text-blue-200 max-w-md">
+Note: We will send you exactly one email when the Contributor page is
+        ready. Nothing else. No spam.
+</p> </div>  <div class="flex flex-col sm:flex-row gap-8 mt-8 justify-center" data-astro-cid-blzvvx3q> <a target="_self" href="/login?role=contributor" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors undefined"> <div class="relative overflow-hidden bg-transparent"><div class="relative z-0 hover:z-0"><button data-slot="ripple-button" class="inline-flex items-center justify-center gap-2 whitespace-nowrap disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*=&#x27;size-&#x27;])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs h-9 has-[&gt;svg]:px-3 hyperlink border text-slate-700 border-slate-300 bg-slate-200 hover:bg-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600 px-6 pr-5 py-3 text-base rounded-xs font-medium transition-colors duration-200" tabindex="0" style="position:relative;overflow:hidden">Sign In as a Contributor</button></div><style>
+        @keyframes beamTop {
+          0% {
+            transform: translateX(-100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateX(100vw);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamRight {
+          0% {
+            transform: translateY(-100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateY(100vh);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamBottom {
+          0% {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateX(-100vw);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamLeft {
+          0% {
+            transform: translateY(100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateY(-100vh);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutup {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(0, -32px) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutdown {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(0, 32px) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutleft {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(-32px, 0) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutright {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(32px, 0) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes moveLight {
+          0% {
+            top: 0;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+          25% {
+            top: 0;
+            left: 100%;
+            transform: translate(-4px, -4px);
+          }
+          50% {
+            top: 100%;
+            left: 100%;
+            transform: translate(-4px, -4px);
+          }
+          75% {
+            top: 100%;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+          100% {
+            top: 0;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+        }
+      </style></div> </a><a target="_self" href="/data/projects" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors undefined"> <div class="relative overflow-hidden bg-transparent"><div class="relative z-0 hover:z-0"><button data-slot="ripple-button" class="inline-flex items-center justify-center gap-2 whitespace-nowrap disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*=&#x27;size-&#x27;])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs h-9 has-[&gt;svg]:px-3 hyperlink border text-slate-700 border-slate-300 bg-slate-200 hover:bg-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600 px-6 pr-5 py-3 text-base rounded-xs font-medium transition-colors duration-200" tabindex="0" style="position:relative;overflow:hidden">Browse Projects</button></div><style>
+        @keyframes beamTop {
+          0% {
+            transform: translateX(-100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateX(100vw);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamRight {
+          0% {
+            transform: translateY(-100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateY(100vh);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamBottom {
+          0% {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateX(-100vw);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamLeft {
+          0% {
+            transform: translateY(100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateY(-100vh);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutup {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(0, -32px) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutdown {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(0, 32px) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutleft {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(-32px, 0) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutright {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(32px, 0) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes moveLight {
+          0% {
+            top: 0;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+          25% {
+            top: 0;
+            left: 100%;
+            transform: translate(-4px, -4px);
+          }
+          50% {
+            top: 100%;
+            left: 100%;
+            transform: translate(-4px, -4px);
+          }
+          75% {
+            top: 100%;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+          100% {
+            top: 0;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+        }
+      </style></div> </a> </div> </div> </section>  <section class="py-14 py-16 bg-blue-gradient bg-gray-100 dark:text-gray-900 dark:from-gray-900 dark:via-blue-500 dark:to-gray-900" data-astro-cid-blzvvx3q>   <div class="relative inset-0 opacity-100 z-2 px-4 sm:px-6 lg:px-8 text-center text-slate-100 dark:text-slate-300" data-astro-cid-blzvvx3q>      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">    </div>   </div> </section>   <footer class="backdrop-blur-lg text-slate-500 dark:text-slate-500 flex justify-between p-2 items-center overflow-hidden "> <div class="flex space-x-4"> <a target="_self" href="/meta/work" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors  text-slate-600 dark:text-slate-400 transition-colors">How it Works?</a> <a target="_self" href="/meta/team" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors  text-slate-600 dark:text-slate-400 transition-colors">Team</a> <a target="_self" href="/meta/policy" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors  text-slate-600 dark:text-slate-400 transition-colors">Privacy Policy (fun-storylike-edition)</a> </div> <div class="">
+by <a target="_self" href="https://ara.foundation" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors  text-slate-600 dark:text-slate-400 transition-colors">Ara Foundation</a> </div> </footer> </body></html>

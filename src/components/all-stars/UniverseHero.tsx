@@ -5,6 +5,8 @@ import NumberFlow from '@number-flow/react';
 import Tooltip from '@/components/custom-ui/Tooltip';
 import { actions } from 'astro:actions';
 import { type AllStarStats } from '@/types/all-stars';
+import { demoExists } from '@/client-side/demo';
+import { DEMO_EVENT_TYPES } from '@/types/demo';
 
 /**
  * Custom hook to fetch and poll all star stats every 10 seconds
@@ -69,6 +71,26 @@ function useAllStarStats(): AllStarStats {
 const UniverseHero: React.FC = () => {
     const stats = useAllStarStats();
     const { totalGalaxies, totalStars, totalUsers, totalSunshines = 0 } = stats;
+    const [showDemoCta, setShowDemoCta] = useState(false);
+
+    // Check if demo exists and listen for demo creation events
+    useEffect(() => {
+        // Check initial state
+        if (demoExists()) {
+            setShowDemoCta(true);
+        }
+
+        // Listen for USER_CREATED event
+        const handleDemoUserCreated = () => {
+            setShowDemoCta(true);
+        };
+
+        window.addEventListener(DEMO_EVENT_TYPES.USER_CREATED, handleDemoUserCreated as EventListener);
+
+        return () => {
+            window.removeEventListener(DEMO_EVENT_TYPES.USER_CREATED, handleDemoUserCreated as EventListener);
+        };
+    }, []);
 
     // Calculate funds amount from sunshines
     const fundsAmount = totalSunshines / 1.80;
@@ -169,6 +191,17 @@ const UniverseHero: React.FC = () => {
                     Donate, collaborate, and become the owner of the project.
                 </p>
             </div>
+
+            {/* Demo CTA - shown when demo panel is hidden */}
+            {showDemoCta && (
+                <div className="w-full max-w-2xl mt-6">
+                    <div className="backdrop-blur-md bg-white/20 dark:bg-slate-900/20 border border-slate-200/40 dark:border-slate-700/40 rounded-lg p-6 text-center">
+                        <p className="text-base md:text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
+                            This is a Demo. Join our community to get early version. We will appreciate your feedback as well.
+                        </p>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

@@ -94,9 +94,10 @@ export const mockTransactions: Transaction[] = [
 
 export const mockUserStars: UserStarData[] = [
   {
+    email: 'milayter@gmail.com',
     x: 200,
     y: 150,
-    nickname: 'Ahmeton',
+    nickname: 'ahmeton',
     src: 'https://api.backdropbuild.com/storage/v1/object/public/avatars/9nFM8HasgS.jpeg',
     alt: 'Ahmeton Avatar',
     stars: 4.5,
@@ -109,6 +110,7 @@ export const mockUserStars: UserStarData[] = [
     uri: '/data/profile?nickname=Ahmeton'
   },
   {
+    email: 'sarahchen@gmail.com',
     x: 450,
     y: 300,
     nickname: 'Sarah Chen',
@@ -124,6 +126,7 @@ export const mockUserStars: UserStarData[] = [
     uri: '/data/profile?nickname=SarahChen'
   },
   {
+    email: 'marcusjohnson@gmail.com',
     x: 700,
     y: 200,
     nickname: 'Marcus Johnson',
@@ -139,6 +142,7 @@ export const mockUserStars: UserStarData[] = [
     uri: '/data/profile?nickname=MarcusJohnson'
   },
   {
+    email: 'emmawilson@gmail.com',
     x: 100,
     y: 400,
     nickname: 'Emma Wilson',

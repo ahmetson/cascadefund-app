@@ -1,0 +1,597 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="icon" type="image/png" href="/ara_logo.png"><meta name="generator" content="Astro v5.15.3"><title>Ara</title><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.COPH5o9P.js"></script><link rel="stylesheet" href="/_astro/index.BvFYnIBs.css">
+<link rel="stylesheet" href="/_astro/contributor.dncwLV2h.css">
+<style>.hyperlink #logoImg[data-astro-cid-nlmvrfkw]{display:block}.hyperlink #hoveredLogoImg[data-astro-cid-nlmvrfkw]{display:none}.hyperlink #logoSubtitle[data-astro-cid-nlmvrfkw]{display:block;transition:font-size .1s ease-out}.hyperlink:hover #logoSubtitle[data-astro-cid-nlmvrfkw]{opacity:.4;font-size:.65rem}.hyperlink:hover #logoImg[data-astro-cid-nlmvrfkw]{display:none}.hyperlink:hover #hoveredLogoImg[data-astro-cid-nlmvrfkw]{display:block}
+.cascade-blue[data-astro-cid-u3s5j7nu]{color:#4a90e2}.cascade-purple[data-astro-cid-u3s5j7nu]{color:#6b46c1}.cascade-dark[data-astro-cid-u3s5j7nu]{color:#1f2937}.bg-gradient-purple[data-astro-cid-u3s5j7nu]{background:linear-gradient(135deg,#667eea,#764ba2)}
+</style></head> <body class="min-h-screen bg-gray-200 dark:bg-gray-700"> <header class="h-14 -pt-2 bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700  fixed top-0 right-0 left-0 z-10"> <div class="navbar bg-base-100 dark:bg-gray-800 shadow-sm px-4 h-14"> <div class="navbar-start"> <div class="dropdown"> <div tabindex="0" role="button" class="btn btn-ghost lg:hidden"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16"></path> </svg> </div> <nav tabindex="-1" class="flex  flex-col  lg:hidden menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-95 ml-4 pl-6 shadow"> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="ZIO5Br" prefix="r45" component-url="/_astro/Tooltip.DNM_wDyQ.js" component-export="default" renderer-url="/_astro/client.DA4tNCJ2.js" props="{&quot;content&quot;:[0,&quot;Contributing to Open Source? We made a special landing page for you&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;Tooltip&quot;,&quot;value&quot;:true}" await-children><div data-slot="tooltip-trigger" data-side="top" data-align="center" data-state="closed" class=""><astro-slot> <a target="_self" href="/meta/contributor" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors undefined">Contributors</a> </astro-slot></div><!--astro:end--></astro-island> <astro-island uid="Z7Qa60" prefix="r46" component-url="/_astro/Tooltip.DNM_wDyQ.js" component-export="default" renderer-url="/_astro/client.DA4tNCJ2.js" props="{&quot;content&quot;:[0,&quot;You want to help open-source, but something makes it not motivating? We made a special landing page for you&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;Tooltip&quot;,&quot;value&quot;:true}" await-children><div data-slot="tooltip-trigger" data-side="top" data-align="center" data-state="closed" class=""><astro-slot> <div class="flex items-center w-full"> <a target="_self" href="/meta/influencer" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors undefined">"Maybe" a donator?</a> </div> </astro-slot></div><!--astro:end--></astro-island> <a target="_self" href="/meta/work" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors undefined">How it works?</a> <!-- {
+    isItemShown(ItemName.Check) && (
+      <Tooltip
+        content={
+          "According to hyperpayment protocol, part of all project donations goes to the libraries/assets used in the project. Check if your 'asset' recieved an indirect donation"
+        }
+        client:load
+      >
+        <div class="flex items-center w-full">
+          <Link uri="/maintainer/check">Check Balance</Link>
+        </div>
+      </Tooltip>
+    )
+  } --> </nav> </div> <a target="_self" href="/" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors  flex flex-start h-14 items-center "> <div class="w-8 h-8 bg-transparent rounded flex items-center justify-center relative undefined" data-astro-cid-nlmvrfkw> <img src="/ara_logo.png" id="logoImg" alt="Ara Logo" class="w-full h-full absolute inset-0" loading="eager" fetchpriority="high" decoding="async" data-astro-cid-nlmvrfkw> <img src="/ara_logo_hover.png" id="hoveredLogoImg" alt="Ara Logo" class="w-full h-full absolute inset-0" loading="lazy" decoding="async" data-astro-cid-nlmvrfkw> </div> </a>  </div> <div class="navbar-center hidden lg:flex lg:min-w-[50vw]"> <nav class="flex  items-center justify-between w-full text-sm center h-14 px-1 space-x-6 h-14"> <astro-island uid="ZIO5Br" prefix="r47" component-url="/_astro/Tooltip.DNM_wDyQ.js" component-export="default" renderer-url="/_astro/client.DA4tNCJ2.js" props="{&quot;content&quot;:[0,&quot;Contributing to Open Source? We made a special landing page for you&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;Tooltip&quot;,&quot;value&quot;:true}" await-children><div data-slot="tooltip-trigger" data-side="top" data-align="center" data-state="closed" class=""><astro-slot> <a target="_self" href="/meta/contributor" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors undefined">Contributors</a> </astro-slot></div><!--astro:end--></astro-island> <astro-island uid="Z7Qa60" prefix="r48" component-url="/_astro/Tooltip.DNM_wDyQ.js" component-export="default" renderer-url="/_astro/client.DA4tNCJ2.js" props="{&quot;content&quot;:[0,&quot;You want to help open-source, but something makes it not motivating? We made a special landing page for you&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;Tooltip&quot;,&quot;value&quot;:true}" await-children><div data-slot="tooltip-trigger" data-side="top" data-align="center" data-state="closed" class=""><astro-slot> <div class="flex items-center w-full"> <a target="_self" href="/meta/influencer" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors undefined">"Maybe" a donator?</a> </div> </astro-slot></div><!--astro:end--></astro-island> <a target="_self" href="/meta/work" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors undefined">How it works?</a> <!-- {
+    isItemShown(ItemName.Check) && (
+      <Tooltip
+        content={
+          "According to hyperpayment protocol, part of all project donations goes to the libraries/assets used in the project. Check if your 'asset' recieved an indirect donation"
+        }
+        client:load
+      >
+        <div class="flex items-center w-full">
+          <Link uri="/maintainer/check">Check Balance</Link>
+        </div>
+      </Tooltip>
+    )
+  } --> </nav> </div> <div class="navbar-end"></div> </div> </header>  <section class="py-14 h-[80vh] bg-gradient-to-br from-blue-500 via-blue-800 to-purple-500 text-white dark:text-gray-900 dark:from-blue-800 dark:via-blue-500 dark:to-purple-800" data-astro-cid-blzvvx3q>   <div class="relative inset-0 opacity-100 z-2 px-4 sm:px-6 lg:px-8 text-center text-slate-100 dark:text-slate-300" data-astro-cid-blzvvx3q>  <h1 class="text-4xl md:text-5xl font-bold mb-6 text-slate-100 dark:text-slate-300 " data-astro-cid-blzvvx3q> Ara Privacy Policy </h1> <p class="text-2xl md:text-3xl opacity-90 mb-6 mx-12 text-slate-150 dark:text-slate-350" data-astro-cid-blzvvx3q> (fun-storylike-edition) </p>   <p class="text-base opacity-80 max-w-2xl mx-auto leading-relaxed" data-astro-cid-u3s5j7nu>
+We believe privacy should be simple and transparent. So here's the deal,
+      no fine print, no trickery.
+</p> <p class="text-sm opacity-70 mt-8 text-right" data-astro-cid-u3s5j7nu>
+Written by Medet Ahmetson.<br data-astro-cid-u3s5j7nu> </p>    </div> </section>  <main class="grid grid-cols-1 lg:grid-cols-4  mx-auto "> <div class="lg:col-span-1 space-y-4 mr-4 "> <div class="rounded-xs shadow-md relative overflow-hidden border-1 border-slate-200 dark:border-slate-500/10 bg-white dark:bg-slate-900 p-4 space-y-4 z-10"><div class="relative z-10"><div class="mb-4 flex items-center justify-between"><h2 class="font-georgia flex items-center gap-1 h-5 text-slate-700 dark:text-slate-300/75"><span class="text-lg lg:text-xl"><div class="text-sm font-medium text-slate-500 dark:text-slate-400">Content Menu</div></span></h2></div><div class="font-noto-sans space-y-3 text-sm text-slate-600 dark:text-slate-400 overflow-y-auto"><div class="p-1 z-10 w-full overflow-hidden justify-between"><a target="_self" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors no-underline! flex items-center justify-between px-3 py-1 rounded-sm cursor-pointer transition-colors text-slate-600 dark:text-slate-400 hover:bg-slate-50/40 dark:hover:bg-slate-800/30 hover:text-slate-700 dark:hover:text-slate-300 "><div class="flex items-center justify-between w-full"><div class="flex items-center space-x-3"><svg class="w-4 h-4  text-purple-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg><span class="text-sm font-medium">GitHub and repos stuff</span></div><div class="flex items-center ml-1 -space-x-2"></div></div></a><a target="_self" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors no-underline! flex items-center justify-between px-3 py-1 rounded-sm cursor-pointer transition-colors text-slate-600 dark:text-slate-400 hover:bg-slate-50/40 dark:hover:bg-slate-800/30 hover:text-slate-700 dark:hover:text-slate-300 "><div class="flex items-center justify-between w-full"><div class="flex items-center space-x-3"><svg class="w-4 h-4  text-purple-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg><span class="text-sm font-medium">Analytics</span></div><div class="flex items-center ml-1 -space-x-2"></div></div></a><a target="_self" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors no-underline! flex items-center justify-between px-3 py-1 rounded-sm cursor-pointer transition-colors text-slate-600 dark:text-slate-400 hover:bg-slate-50/40 dark:hover:bg-slate-800/30 hover:text-slate-700 dark:hover:text-slate-300 "><div class="flex items-center justify-between w-full"><div class="flex items-center space-x-3"><svg class="w-4 h-4  text-purple-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg><span class="text-sm font-medium">Money</span></div><div class="flex items-center ml-1 -space-x-2"></div></div></a><a target="_self" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors no-underline! flex items-center justify-between px-3 py-1 rounded-sm cursor-pointer transition-colors text-slate-600 dark:text-slate-400 hover:bg-slate-50/40 dark:hover:bg-slate-800/30 hover:text-slate-700 dark:hover:text-slate-300 "><div class="flex items-center justify-between w-full"><div class="flex items-center space-x-3"><svg class="w-4 h-4  text-purple-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg><span class="text-sm font-medium">Email</span></div><div class="flex items-center ml-1 -space-x-2"></div></div></a>,
+</div></div></div></div> </div> <div class="lg:col-span-2 space-y-4 mx-4 "> <div class="bg-white rounded-lg shadow-sm p-8 space-y-12" data-astro-cid-u3s5j7nu> <section><div class="flex items-center space-x-2 mb-6"><h2 class="text-2xl font-bold text-green-600">1. GitHub and Repos stuff</h2></div><div class="space-y-4"><div class="flex items-start space-x-4"><div class="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0"><span class="text-white text-sm font-bold">G</span></div><p class="text-gray-700 leading-relaxed flex-1">You log in with GitHub → we grab your login info and repos.</p></div><div class="flex items-start space-x-4"><div class="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center flex-shrink-0"><span class="text-white text-sm font-bold">R</span></div><p class="text-gray-700 leading-relaxed flex-1">We keep them so Ara can show your projects and contributions.</p></div><div class="flex items-start space-x-4"><div class="w-8 h-8 rounded-full bg-green-600 flex items-center justify-center flex-shrink-0"><span class="text-white text-sm font-bold">E</span></div><p class="text-gray-700 leading-relaxed flex-1">Your projects are visible on the platform because we want everything out in the open.</p></div><div class="flex items-start space-x-4"><div class="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center flex-shrink-0"><span class="text-white text-sm font-bold">P</span></div><p class="text-gray-700 leading-relaxed flex-1">In the future, we might use this data to recommend cool tasks and people to you.</p></div></div><div class="flex items-center justify-center mt-6 space-x-2"><span class="text-red-500 text-lg">♥</span><span class="text-gray-600 font-medium">That&#x27;s it.</span></div></section> <section><div class="flex items-center space-x-2 mb-6"><h2 class="text-2xl font-bold text-orange-600">2. Analytics</h2></div><p class="text-gray-600 mb-6 italic">a.k.a. &quot;how we make Ara less clunky&quot;</p><div class="space-y-4"><div class="flex items-start space-x-4"><div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0"><span class="text-white text-sm font-bold">A</span></div><p class="text-gray-700 leading-relaxed flex-1">We use Google Analytics to see what pages people visit, how long they stay, and where they click.</p></div><div class="flex items-start space-x-4"><div class="w-8 h-8 rounded-full bg-orange-600 flex items-center justify-center flex-shrink-0"><span class="text-white text-sm font-bold">X</span></div><p class="text-gray-700 leading-relaxed flex-1">This helps us improve the design and user experience.</p></div><div class="flex items-start space-x-4"><div class="w-8 h-8 rounded-full bg-green-600 flex items-center justify-center flex-shrink-0"><span class="text-white text-sm font-bold">E</span></div><p class="text-gray-700 leading-relaxed flex-1">We don&#x27;t use it to stalk you, sell you stuff, or anything creepy. Promise.</p></div></div></section> <section><div class="flex items-center space-x-2 mb-6"><h2 class="text-2xl font-bold text-blue-600">3. Money Things</h2><span class="text-xl">💰</span></div><div class="space-y-4"><div class="flex items-start space-x-4"><div class="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0"><span class="text-white text-sm font-bold">G</span></div><p class="text-gray-700 leading-relaxed flex-1">You log in with GitHub → we grab your login info and repos.</p></div><div class="flex items-start space-x-4"><div class="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center flex-shrink-0"><span class="text-white text-sm font-bold">R</span></div><p class="text-gray-700 leading-relaxed flex-1">We keep them so Ara can show your projects and contributions.</p></div><div class="flex items-start space-x-4"><div class="w-8 h-8 rounded-full bg-green-600 flex items-center justify-center flex-shrink-0"><span class="text-white text-sm font-bold">E</span></div><p class="text-gray-700 leading-relaxed flex-1">Your projects are visible on the platform because we want everything out in the open.</p></div><div class="flex items-start space-x-4"><div class="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center flex-shrink-0"><span class="text-white text-sm font-bold">P</span></div><p class="text-gray-700 leading-relaxed flex-1">In the future, we might use this data to recommend cool tasks and people to you.</p></div></div></section> <section><div class="flex items-center space-x-2 mb-6"><h2 class="text-2xl font-bold text-purple-600">4. Emails</h2><span class="text-xl">📧</span></div><div class="space-y-4"><div class="flex items-start space-x-4"><div class="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center flex-shrink-0"><span class="text-white text-sm font-bold">H</span></div><p class="text-gray-700 leading-relaxed flex-1">We collect your email when you sign up or subscribe.</p></div><div class="flex items-start space-x-4"><div class="w-8 h-8 rounded-full bg-orange-600 flex items-center justify-center flex-shrink-0"><span class="text-white text-sm font-bold">X</span></div><p class="text-gray-700 leading-relaxed flex-1">We&#x27;ll only use it for the newsletters you specifically asked for.</p></div><div class="flex items-start space-x-4"><div class="w-8 h-8 rounded-full bg-green-600 flex items-center justify-center flex-shrink-0"><span class="text-white text-sm font-bold">E</span></div><p class="text-gray-700 leading-relaxed flex-1">No spam, no &quot;special offers,&quot; no selling your email to shady marketers.</p></div></div></section> </div> </div> <div class="lg:col-span-1 space-y-4 ml-4 "> <div class="relative overflow-hidden bg-transparent"><div class="relative z-0 hover:z-0"><div class="relative overflow-hidden border-1 border-slate-200 dark:border-slate-500/10 dark:bg-slate-900 transition-all duration-300 hover:shadow-lg space-y-4 z-10 bg-white rounded-lg shadow-sm p-6"><div class="relative z-10"><div class="mb-4 flex items-center justify-between"><h2 class="font-georgia flex items-center gap-1 h-5 text-slate-700 dark:text-slate-300/75"><span class="text-lg lg:text-xl">Your Superpowers <span class="text-yellow-500">▲</span></span></h2></div><div class="font-noto-sans space-y-3 text-sm text-slate-600 dark:text-slate-400 overflow-y-auto"><p class="text-sm text-gray-600 mb-6">You&#x27;re in control of your data. At any point you can:</p><div class="space-y-3 grid grid-cols-1"><div class="relative overflow-hidden bg-transparent"><div class="relative z-0 hover:z-0"><button data-slot="ripple-button" class="inline-flex items-center justify-center gap-2 whitespace-nowrap disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*=&#x27;size-&#x27;])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs h-9 has-[&gt;svg]:px-3 hyperlink border text-slate-700 border-slate-300 bg-slate-200 hover:bg-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600 px-3 pr-2 py-1 text-sm rounded-xs font-medium transition-colors duration-200" tabindex="0" style="position:relative;overflow:hidden"><span class="flex items-center space-x-2"><span class="w-4 h-4 bg-white rounded-full flex items-center justify-center"><span class="text-blue-500 text-xs">?</span></span><span>Ask us what we know about you</span></span></button></div><style>
+        @keyframes beamTop {
+          0% {
+            transform: translateX(-100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateX(100vw);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamRight {
+          0% {
+            transform: translateY(-100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateY(100vh);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamBottom {
+          0% {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateX(-100vw);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamLeft {
+          0% {
+            transform: translateY(100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateY(-100vh);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutup {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(0, -32px) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutdown {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(0, 32px) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutleft {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(-32px, 0) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutright {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(32px, 0) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes moveLight {
+          0% {
+            top: 0;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+          25% {
+            top: 0;
+            left: 100%;
+            transform: translate(-4px, -4px);
+          }
+          50% {
+            top: 100%;
+            left: 100%;
+            transform: translate(-4px, -4px);
+          }
+          75% {
+            top: 100%;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+          100% {
+            top: 0;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+        }
+      </style></div><div class="relative overflow-hidden bg-transparent"><div class="relative z-0 hover:z-0"><button data-slot="ripple-button" class="inline-flex items-center justify-center gap-2 whitespace-nowrap disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*=&#x27;size-&#x27;])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs h-9 has-[&gt;svg]:px-3 hyperlink border text-slate-700 border-slate-300 bg-slate-200 hover:bg-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600 px-3 pr-2 py-1 text-sm rounded-xs font-medium transition-colors duration-200" tabindex="0" style="position:relative;overflow:hidden"><span class="flex items-center space-x-2"><span class="w-4 h-4 bg-white rounded-full flex items-center justify-center"><span class="text-green-500 text-xs">↓</span></span><span>Get a copy of your data</span></span></button></div><style>
+        @keyframes beamTop {
+          0% {
+            transform: translateX(-100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateX(100vw);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamRight {
+          0% {
+            transform: translateY(-100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateY(100vh);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamBottom {
+          0% {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateX(-100vw);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamLeft {
+          0% {
+            transform: translateY(100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateY(-100vh);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutup {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(0, -32px) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutdown {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(0, 32px) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutleft {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(-32px, 0) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutright {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(32px, 0) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes moveLight {
+          0% {
+            top: 0;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+          25% {
+            top: 0;
+            left: 100%;
+            transform: translate(-4px, -4px);
+          }
+          50% {
+            top: 100%;
+            left: 100%;
+            transform: translate(-4px, -4px);
+          }
+          75% {
+            top: 100%;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+          100% {
+            top: 0;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+        }
+      </style></div><div class="relative overflow-hidden bg-transparent"><div class="relative z-0 hover:z-0"><button data-slot="ripple-button" class="inline-flex items-center justify-center gap-2 whitespace-nowrap disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*=&#x27;size-&#x27;])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs h-9 has-[&gt;svg]:px-3 hyperlink border text-slate-700 border-slate-300 bg-slate-200 hover:bg-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600 px-3 pr-2 py-1 text-sm rounded-xs font-medium transition-colors duration-200" tabindex="0" style="position:relative;overflow:hidden"><span class="flex items-center space-x-2"><span class="w-4 h-4 bg-white rounded-full flex items-center justify-center"><span class="text-red-500 text-xs">×</span></span><span>Tell us to delete your data</span></span></button></div><style>
+        @keyframes beamTop {
+          0% {
+            transform: translateX(-100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateX(100vw);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamRight {
+          0% {
+            transform: translateY(-100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateY(100vh);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamBottom {
+          0% {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateX(-100vw);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamLeft {
+          0% {
+            transform: translateY(100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateY(-100vh);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutup {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(0, -32px) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutdown {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(0, 32px) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutleft {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(-32px, 0) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutright {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(32px, 0) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes moveLight {
+          0% {
+            top: 0;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+          25% {
+            top: 0;
+            left: 100%;
+            transform: translate(-4px, -4px);
+          }
+          50% {
+            top: 100%;
+            left: 100%;
+            transform: translate(-4px, -4px);
+          }
+          75% {
+            top: 100%;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+          100% {
+            top: 0;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+        }
+      </style></div></div><p class="text-xs text-gray-500 mt-6 leading-relaxed">We&#x27;ll do it. No questions asked (well, maybe one to confirm it&#x27;s really you).</p></div></div></div></div><style>
+        @keyframes beamTop {
+          0% {
+            transform: translateX(-100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateX(100vw);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamRight {
+          0% {
+            transform: translateY(-100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateY(100vh);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamBottom {
+          0% {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateX(-100vw);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamLeft {
+          0% {
+            transform: translateY(100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateY(-100vh);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutup {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(0, -32px) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutdown {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(0, 32px) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutleft {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(-32px, 0) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutright {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(32px, 0) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes moveLight {
+          0% {
+            top: 0;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+          25% {
+            top: 0;
+            left: 100%;
+            transform: translate(-4px, -4px);
+          }
+          50% {
+            top: 100%;
+            left: 100%;
+            transform: translate(-4px, -4px);
+          }
+          75% {
+            top: 100%;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+          100% {
+            top: 0;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+        }
+      </style></div> </div> </main>  <footer class="backdrop-blur-lg text-slate-500 dark:text-slate-500 flex justify-between p-2 items-center overflow-hidden "> <div class="flex space-x-4"> <a target="_self" href="/meta/work" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors  text-slate-600 dark:text-slate-400 transition-colors">How it Works?</a> <a target="_self" href="/meta/team" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors  text-slate-600 dark:text-slate-400 transition-colors">Team</a> <a target="_self" href="/meta/policy" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors  text-slate-600 dark:text-slate-400 transition-colors">Privacy Policy (fun-storylike-edition)</a> </div> <div class="">
+by <a target="_self" href="https://ara.foundation" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors  text-slate-600 dark:text-slate-400 transition-colors">Ara Foundation</a> </div> </footer> </body></html> 

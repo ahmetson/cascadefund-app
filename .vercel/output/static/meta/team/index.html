@@ -1,0 +1,357 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="icon" type="image/png" href="/ara_logo.png"><meta name="generator" content="Astro v5.15.3"><title>Ara</title><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.COPH5o9P.js"></script><link rel="stylesheet" href="/_astro/index.BvFYnIBs.css">
+<link rel="stylesheet" href="/_astro/contributor.dncwLV2h.css">
+<style>.hyperlink #logoImg[data-astro-cid-nlmvrfkw]{display:block}.hyperlink #hoveredLogoImg[data-astro-cid-nlmvrfkw]{display:none}.hyperlink #logoSubtitle[data-astro-cid-nlmvrfkw]{display:block;transition:font-size .1s ease-out}.hyperlink:hover #logoSubtitle[data-astro-cid-nlmvrfkw]{opacity:.4;font-size:.65rem}.hyperlink:hover #logoImg[data-astro-cid-nlmvrfkw]{display:none}.hyperlink:hover #hoveredLogoImg[data-astro-cid-nlmvrfkw]{display:block}
+.bg-gradient-cascade[data-astro-cid-k46tgmgn]{background:linear-gradient(135deg,#667eea,#764ba2)}
+</style></head> <body class="min-h-screen bg-gray-200 dark:bg-gray-700"> <header class="h-14 -pt-2 bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700  fixed top-0 right-0 left-0 z-10"> <div class="navbar bg-base-100 dark:bg-gray-800 shadow-sm px-4 h-14"> <div class="navbar-start"> <div class="dropdown"> <div tabindex="0" role="button" class="btn btn-ghost lg:hidden"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16"></path> </svg> </div> <nav tabindex="-1" class="flex  flex-col  lg:hidden menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-95 ml-4 pl-6 shadow"> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="ZIO5Br" prefix="r37" component-url="/_astro/Tooltip.DNM_wDyQ.js" component-export="default" renderer-url="/_astro/client.DA4tNCJ2.js" props="{&quot;content&quot;:[0,&quot;Contributing to Open Source? We made a special landing page for you&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;Tooltip&quot;,&quot;value&quot;:true}" await-children><div data-slot="tooltip-trigger" data-side="top" data-align="center" data-state="closed" class=""><astro-slot> <a target="_self" href="/meta/contributor" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors undefined">Contributors</a> </astro-slot></div><!--astro:end--></astro-island> <astro-island uid="Z7Qa60" prefix="r38" component-url="/_astro/Tooltip.DNM_wDyQ.js" component-export="default" renderer-url="/_astro/client.DA4tNCJ2.js" props="{&quot;content&quot;:[0,&quot;You want to help open-source, but something makes it not motivating? We made a special landing page for you&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;Tooltip&quot;,&quot;value&quot;:true}" await-children><div data-slot="tooltip-trigger" data-side="top" data-align="center" data-state="closed" class=""><astro-slot> <div class="flex items-center w-full"> <a target="_self" href="/meta/influencer" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors undefined">"Maybe" a donator?</a> </div> </astro-slot></div><!--astro:end--></astro-island> <a target="_self" href="/meta/work" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors undefined">How it works?</a> <!-- {
+    isItemShown(ItemName.Check) && (
+      <Tooltip
+        content={
+          "According to hyperpayment protocol, part of all project donations goes to the libraries/assets used in the project. Check if your 'asset' recieved an indirect donation"
+        }
+        client:load
+      >
+        <div class="flex items-center w-full">
+          <Link uri="/maintainer/check">Check Balance</Link>
+        </div>
+      </Tooltip>
+    )
+  } --> </nav> </div> <a target="_self" href="/" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors  flex flex-start h-14 items-center "> <div class="w-8 h-8 bg-transparent rounded flex items-center justify-center relative undefined" data-astro-cid-nlmvrfkw> <img src="/ara_logo.png" id="logoImg" alt="Ara Logo" class="w-full h-full absolute inset-0" loading="eager" fetchpriority="high" decoding="async" data-astro-cid-nlmvrfkw> <img src="/ara_logo_hover.png" id="hoveredLogoImg" alt="Ara Logo" class="w-full h-full absolute inset-0" loading="lazy" decoding="async" data-astro-cid-nlmvrfkw> </div> </a>  </div> <div class="navbar-center hidden lg:flex lg:min-w-[50vw]"> <nav class="flex  items-center justify-between w-full text-sm center h-14 px-1 space-x-6 h-14"> <astro-island uid="ZIO5Br" prefix="r39" component-url="/_astro/Tooltip.DNM_wDyQ.js" component-export="default" renderer-url="/_astro/client.DA4tNCJ2.js" props="{&quot;content&quot;:[0,&quot;Contributing to Open Source? We made a special landing page for you&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;Tooltip&quot;,&quot;value&quot;:true}" await-children><div data-slot="tooltip-trigger" data-side="top" data-align="center" data-state="closed" class=""><astro-slot> <a target="_self" href="/meta/contributor" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors undefined">Contributors</a> </astro-slot></div><!--astro:end--></astro-island> <astro-island uid="Z7Qa60" prefix="r40" component-url="/_astro/Tooltip.DNM_wDyQ.js" component-export="default" renderer-url="/_astro/client.DA4tNCJ2.js" props="{&quot;content&quot;:[0,&quot;You want to help open-source, but something makes it not motivating? We made a special landing page for you&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;Tooltip&quot;,&quot;value&quot;:true}" await-children><div data-slot="tooltip-trigger" data-side="top" data-align="center" data-state="closed" class=""><astro-slot> <div class="flex items-center w-full"> <a target="_self" href="/meta/influencer" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors undefined">"Maybe" a donator?</a> </div> </astro-slot></div><!--astro:end--></astro-island> <a target="_self" href="/meta/work" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors undefined">How it works?</a> <!-- {
+    isItemShown(ItemName.Check) && (
+      <Tooltip
+        content={
+          "According to hyperpayment protocol, part of all project donations goes to the libraries/assets used in the project. Check if your 'asset' recieved an indirect donation"
+        }
+        client:load
+      >
+        <div class="flex items-center w-full">
+          <Link uri="/maintainer/check">Check Balance</Link>
+        </div>
+      </Tooltip>
+    )
+  } --> </nav> </div> <div class="navbar-end"></div> </div> </header>  <section class="py-14 h-[80vh] bg-gradient-to-br from-blue-500 via-blue-800 to-purple-500 text-white dark:text-gray-900 dark:from-blue-800 dark:via-blue-500 dark:to-purple-800" data-astro-cid-blzvvx3q>   <div class="relative inset-0 opacity-100 z-2 px-4 sm:px-6 lg:px-8 text-center text-slate-100 dark:text-slate-300" data-astro-cid-blzvvx3q>  <h1 class="text-4xl md:text-5xl font-bold mb-6 text-slate-100 dark:text-slate-300 " data-astro-cid-blzvvx3q> Meet the Team it&#39;s story and why Ara? </h1>    <p class="text-lg md:text-xl opacity-90 max-w-2xl mx-auto" data-astro-cid-k46tgmgn>
+Ara is built by two people who care about open source. No company walls,
+      no anonymous teams — just us, telling our story as it is.
+</p>    </div> </section>  <section class="py-14 undefined bg-gradient-to-bl from-purple-500 via-blue-800 to-gray-100 dark:text-gray-900 dark:from-purple-800 dark:via-blue-500 dark:to-gray-800 relative overflow-hidden " data-astro-cid-blzvvx3q> <div class="absolute inset-0 opacity-10 z-0" data-astro-cid-blzvvx3q> <div class="absolute top-10 left-10 w-4 h-4 bg-blue-400 dark:bg-blue-300 rounded-full" data-astro-cid-blzvvx3q></div> <div class="absolute top-20 right-20 w-6 h-6 bg-purple-400 dark:bg-purple-300 rounded-full" data-astro-cid-blzvvx3q></div> <div class="absolute bottom-20 left-20 w-5 h-5 bg-green-400 dark:bg-green-300 rounded-full" data-astro-cid-blzvvx3q></div> <div class="absolute bottom-10 right-10 w-3 h-3 bg-yellow-400 dark:bg-yellow-300 rounded-full" data-astro-cid-blzvvx3q></div> <div class="absolute top-1/2 left-1/4 w-8 h-8 bg-pink-400 dark:bg-pink-300 rounded-full" data-astro-cid-blzvvx3q></div> <div class="absolute top-1/3 right-1/3 w-7 h-7 bg-indigo-400 dark:bg-indigo-300 rounded-full" data-astro-cid-blzvvx3q></div> </div>  <div class="relative inset-0 opacity-100 z-2 px-4 sm:px-6 lg:px-8 text-center text-slate-100 dark:text-slate-300" data-astro-cid-blzvvx3q>  <h1 class="text-4xl md:text-5xl font-bold mb-6 text-slate-100 dark:text-slate-300 " data-astro-cid-blzvvx3q> First, Meet the Team at a Glance </h1>    <script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).only=e;window.dispatchEvent(new Event("astro:only"));})();</script><div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6"> <astro-island uid="ZudeSz" component-url="/_astro/ProfilePanel.D5jkHHbt.js" component-export="default" renderer-url="/_astro/client.DA4tNCJ2.js" props="{&quot;name&quot;:[0,&quot;Medet Ahmetson&quot;],&quot;description&quot;:[0,&quot;Startup kid who flipped into open source. Turned blockchain games into libraries for devs.&quot;],&quot;avatar&quot;:[0,&quot;https://dummyimage.com/80x80/4A90E2/ffffff?text=MA&quot;],&quot;socialLinks&quot;:[1,[[0,{&quot;type&quot;:[0,&quot;telegram&quot;],&quot;url&quot;:[0,&quot;#&quot;]}],[0,{&quot;type&quot;:[0,&quot;github&quot;],&quot;url&quot;:[0,&quot;#&quot;]}],[0,{&quot;type&quot;:[0,&quot;linkedin&quot;],&quot;url&quot;:[0,&quot;#&quot;]}]]],&quot;selfProfile&quot;:[0,false],&quot;ratings&quot;:[0,{&quot;influencer&quot;:[0,{&quot;ratingType&quot;:[0,&quot;influencer&quot;],&quot;lvl&quot;:[0,10],&quot;maxLvl&quot;:[0,10],&quot;top&quot;:[0,2]}],&quot;maintainer&quot;:[0,{&quot;ratingType&quot;:[0,&quot;maintainer&quot;],&quot;lvl&quot;:[0,10],&quot;maxLvl&quot;:[0,10],&quot;top&quot;:[0,1]}],&quot;contributor&quot;:[0,{&quot;ratingType&quot;:[0,&quot;contributor&quot;],&quot;lvl&quot;:[0,9],&quot;maxLvl&quot;:[0,10],&quot;top&quot;:[0,5]}],&quot;persona&quot;:[0,{&quot;ratingType&quot;:[0,&quot;persona&quot;],&quot;lvl&quot;:[0,8],&quot;maxLvl&quot;:[0,10],&quot;top&quot;:[0,12]}]}],&quot;topRating&quot;:[0,&quot;influencer&quot;],&quot;followers&quot;:[0,0],&quot;following&quot;:[0,false],&quot;myAccount&quot;:[0,false],&quot;totalVotingPower&quot;:[0,0],&quot;bonusPoints&quot;:[0,0],&quot;projectAmount&quot;:[0,0],&quot;slot&quot;:[0,&quot;grid&quot;],&quot;data-astro-cid-k46tgmgn&quot;:[0,true]}" ssr client="only" opts="{&quot;name&quot;:&quot;ProfilePanel&quot;,&quot;value&quot;:true}"></astro-island><astro-island uid="2kpJLo" component-url="/_astro/ProfilePanel.D5jkHHbt.js" component-export="default" renderer-url="/_astro/client.DA4tNCJ2.js" props="{&quot;name&quot;:[0,&quot;Sergey Pak&quot;],&quot;description&quot;:[0,&quot;Built CRMs before Medet was even born. Still shipping useful code decades later.&quot;],&quot;avatar&quot;:[0,&quot;https://dummyimage.com/80x80/6B46C1/ffffff?text=SP&quot;],&quot;socialLinks&quot;:[1,[[0,{&quot;type&quot;:[0,&quot;telegram&quot;],&quot;url&quot;:[0,&quot;#&quot;]}],[0,{&quot;type&quot;:[0,&quot;github&quot;],&quot;url&quot;:[0,&quot;#&quot;]}],[0,{&quot;type&quot;:[0,&quot;linkedin&quot;],&quot;url&quot;:[0,&quot;#&quot;]}]]],&quot;selfProfile&quot;:[0,false],&quot;ratings&quot;:[0,{&quot;influencer&quot;:[0,{&quot;ratingType&quot;:[0,&quot;influencer&quot;],&quot;lvl&quot;:[0,10],&quot;maxLvl&quot;:[0,10],&quot;top&quot;:[0,2]}],&quot;maintainer&quot;:[0,{&quot;ratingType&quot;:[0,&quot;maintainer&quot;],&quot;lvl&quot;:[0,10],&quot;maxLvl&quot;:[0,10],&quot;top&quot;:[0,1]}],&quot;contributor&quot;:[0,{&quot;ratingType&quot;:[0,&quot;contributor&quot;],&quot;lvl&quot;:[0,9],&quot;maxLvl&quot;:[0,10],&quot;top&quot;:[0,5]}],&quot;persona&quot;:[0,{&quot;ratingType&quot;:[0,&quot;persona&quot;],&quot;lvl&quot;:[0,8],&quot;maxLvl&quot;:[0,10],&quot;top&quot;:[0,12]}]}],&quot;topRating&quot;:[0,&quot;influencer&quot;],&quot;followers&quot;:[0,0],&quot;following&quot;:[0,false],&quot;myAccount&quot;:[0,false],&quot;totalVotingPower&quot;:[0,0],&quot;bonusPoints&quot;:[0,0],&quot;projectAmount&quot;:[0,0],&quot;slot&quot;:[0,&quot;grid&quot;],&quot;data-astro-cid-k46tgmgn&quot;:[0,true]}" ssr client="only" opts="{&quot;name&quot;:&quot;ProfilePanel&quot;,&quot;value&quot;:true}"></astro-island> </div>   </div> </section>  <section class="py-14 undefined bg-gradient-to-br from-gray-50 via-blue-200 to-gray-50 dark:text-gray-900 dark:from-gray-800 dark:via-blue-500 dark:to-gray-800" data-astro-cid-blzvvx3q>   <div class="relative inset-0 opacity-100 z-2 px-4 sm:px-6 lg:px-8 text-center text-slate-100 dark:text-slate-300" data-astro-cid-blzvvx3q>  <h1 class="text-4xl md:text-5xl font-bold mb-6 text-slate-100 dark:text-slate-300 " data-astro-cid-blzvvx3q> Medet Ahmetson </h1>   <div class="grid md:grid-cols-2 gap-8 items-center"> <div class="order-2 md:order-1"> <img src="https://dummyimage.com/400x300/4A90E2/ffffff?text=Medet+Working" class="w-full h-auto rounded-lg" referrerpolicy="no-referrer"> </div> <div class="order-1 md:order-2">  <p class="text-gray-700 mb-4" data-astro-cid-k46tgmgn>
+I'm Medet. Born in Turkmenistan, living abroad for over a decade, most of
+      it spent chasing startups. I was a classic startup kid — pitch decks,
+      investors, products, the usual.
+</p> <p class="text-gray-700 mb-4" data-astro-cid-k46tgmgn>
+Eventually, I ended up in blockchain around 2018. While most people were
+      running into it for money, blockchain flipped me the other way: it pulled
+      me into an open-source guy.
+</p> <p class="text-gray-700 mb-4" data-astro-cid-k46tgmgn> <strong data-astro-cid-k46tgmgn>Here's why:</strong> In crypto there's this unwritten law — the code
+      must be open. That principle hit me harder than the hype around tokens. While
+      others were trading tokens, I was building games. And instead of cashing out,
+      I was taking the game logic, documenting it, and turning it into libraries
+      so other devs could use it. That felt like the right thing to do.
+</p> <p class="text-gray-700 mb-4" data-astro-cid-k46tgmgn>
+But there was a fork in the road. My team was focused on the game
+      business. I kept asking the philosophical "why" questions — why games, why
+      ownership, why closed systems at all? I realized my old dream: computers
+      should work with IT — no software engines. And what really matters isn't
+      hardware or corporations, it's who owns the software.
+</p> <p class="text-gray-700" data-astro-cid-k46tgmgn>
+That's how Ara was born — an attempt to connect people directly with
+      open-source developers, bypassing the giants that lock everything down.
+      For three years, I worked on Ara.
+</p> <p class="text-gray-700 mt-4" data-astro-cid-k46tgmgn>
+The culmination of all that work became Ara. If Ara was the dream, Ara is
+      the tool that makes it practical.
+</p>  <div class="grid grid-cols-1 md:grid-cols-1 gap-6 order-1 md:order-2 space-y-6"></div> </div> </div>   </div> </section>  <section class="py-14 undefined bg-gray-100 dark:text-gray-900 dark:from-gray-900 dark:via-blue-500 dark:to-gray-900" data-astro-cid-blzvvx3q>   <div class="relative inset-0 opacity-100 z-2 px-4 sm:px-6 lg:px-8 text-center text-slate-100 dark:text-slate-300" data-astro-cid-blzvvx3q>  <h1 class="text-4xl md:text-5xl font-bold mb-6 text-slate-100 dark:text-slate-300 " data-astro-cid-blzvvx3q> Sergey Pak </h1>   <div class="grid md:grid-cols-2 gap-8 items-center"> <div class="order-2 md:order-1"> <img src="https://dummyimage.com/400x300/6B46C1/ffffff?text=Sergey+Coding" class="w-full h-auto rounded-lg" referrerpolicy="no-referrer"> </div> <div class="order-1 md:order-2">  <p class="text-gray-700 mb-4" data-astro-cid-k46tgmgn>
+Sergey has been in IT since the mid-90s — before I was even born. He built
+      CRMs and hotel booking apps back when the internet was dial-up.
+</p> <p class="text-gray-700 mb-4" data-astro-cid-k46tgmgn>
+If I bring the restless startup kid energy, Sergey brings decades of
+      perspective. He's the one who takes my messy vision and says, "Okay, let's
+      strip it down, simplify it, and actually ship it."
+</p> <p class="text-gray-700" data-astro-cid-k46tgmgn>
+He believed in Ara early on, and helped cut through the noise to make it
+      real. Where I'm the "big idea" person, he's the "make it work" person.
+</p>  <div class="grid grid-cols-1 md:grid-cols-1 gap-6 order-1 md:order-2 space-y-6"></div> </div> </div>   </div> </section>  <main class="grid grid-cols-1 lg:grid-cols-4  mx-auto "> <div class="lg:col-span-1 space-y-4 mr-4 ">  </div> <div class="lg:col-span-2 space-y-4 mx-4 "> <div class="relative overflow-hidden bg-transparent"><div class="relative z-0 hover:z-0"><div class="rounded-xs shadow-md relative overflow-hidden border-1 border-slate-200 dark:border-slate-500/10 bg-white dark:bg-slate-900 p-4 transition-all duration-300 hover:shadow-lg space-y-4 z-10 text-cascade-purple text-center"><div class="relative z-10"><div class="mb-4 flex items-center justify-between"><h2 class="font-georgia flex items-center gap-1 h-5 text-slate-700 dark:text-slate-300/75"><span class="text-lg lg:text-xl">What we believe</span></h2></div><div class="font-noto-sans space-y-3 text-sm text-slate-600 dark:text-slate-400 overflow-y-auto"> <ul class="text-left" data-astro-cid-k46tgmgn> <li data-astro-cid-k46tgmgn>"Open source is the backbone of the internet."</li> <li data-astro-cid-k46tgmgn>
+"Developers should be able to survive and grow doing the work they
+          love.",
+</li> <li data-astro-cid-k46tgmgn>"Transparency and honesty are the foundation.",</li> <li data-astro-cid-k46tgmgn>"Ara was built because we needed it ourselves."</li> </ul> </div></div></div></div><style>
+        @keyframes beamTop {
+          0% {
+            transform: translateX(-100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateX(100vw);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamRight {
+          0% {
+            transform: translateY(-100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateY(100vh);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamBottom {
+          0% {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateX(-100vw);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamLeft {
+          0% {
+            transform: translateY(100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateY(-100vh);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutup {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(0, -32px) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutdown {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(0, 32px) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutleft {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(-32px, 0) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutright {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(32px, 0) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes moveLight {
+          0% {
+            top: 0;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+          25% {
+            top: 0;
+            left: 100%;
+            transform: translate(-4px, -4px);
+          }
+          50% {
+            top: 100%;
+            left: 100%;
+            transform: translate(-4px, -4px);
+          }
+          75% {
+            top: 100%;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+          100% {
+            top: 0;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+        }
+      </style></div> </div> <div class="lg:col-span-1 space-y-4 ml-4 ">  </div> </main> <section class="py-14 undefined bg-gradient-to-br from-purple-600 via-blue-600 to-teal-500 text-white dark:text-gray-900 dark:from-purple-800 dark:via-blue-500 dark:to-teal-800" data-astro-cid-blzvvx3q>   <div class="relative inset-0 opacity-100 z-2 px-4 sm:px-6 lg:px-8 text-center text-slate-100 dark:text-slate-300" data-astro-cid-blzvvx3q>  <h1 class="text-4xl md:text-5xl font-bold mb-6 text-slate-100 dark:text-slate-300 " data-astro-cid-blzvvx3q> Ready to Join the Ara Ecosystem? </h1>   <div class="max-w-4xl mx-auto text-center" data-astro-cid-k46tgmgn> <p class="text-lg text-white opacity-90 mb-8" data-astro-cid-k46tgmgn>
+Be part of a growing community that's changing how open source
+        development works.
+</p> </div>  <div class="flex flex-col sm:flex-row gap-8 mt-8 justify-center" data-astro-cid-blzvvx3q> <a target="_self" href="/login" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors undefined"> <div class="relative overflow-hidden bg-transparent"><div class="relative z-0 hover:z-0"><button data-slot="ripple-button" class="inline-flex items-center justify-center gap-2 whitespace-nowrap disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*=&#x27;size-&#x27;])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs h-9 has-[&gt;svg]:px-3 hyperlink border text-slate-700 border-slate-300 bg-slate-200 hover:bg-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600 px-6 pr-5 py-3 text-base rounded-xs font-medium transition-colors duration-200" tabindex="0" style="position:relative;overflow:hidden">Sign In as a Maintainer</button></div><style>
+        @keyframes beamTop {
+          0% {
+            transform: translateX(-100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateX(100vw);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamRight {
+          0% {
+            transform: translateY(-100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateY(100vh);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamBottom {
+          0% {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateX(-100vw);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes beamLeft {
+          0% {
+            transform: translateY(100%);
+            opacity: 0;
+          }
+          5% {
+            opacity: 0.8;
+          }
+          95% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateY(-100vh);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutup {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(0, -32px) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutdown {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(0, 32px) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutleft {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(-32px, 0) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flyOutright {
+          0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(32px, 0) scale(0.5);
+            opacity: 0;
+          }
+        }
+
+        @keyframes moveLight {
+          0% {
+            top: 0;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+          25% {
+            top: 0;
+            left: 100%;
+            transform: translate(-4px, -4px);
+          }
+          50% {
+            top: 100%;
+            left: 100%;
+            transform: translate(-4px, -4px);
+          }
+          75% {
+            top: 100%;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+          100% {
+            top: 0;
+            left: 0;
+            transform: translate(-4px, -4px);
+          }
+        }
+      </style></div> </a> </div> </div> </section>   <footer class="backdrop-blur-lg text-slate-500 dark:text-slate-500 flex justify-between p-2 items-center overflow-hidden "> <div class="flex space-x-4"> <a target="_self" href="/meta/work" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors  text-slate-600 dark:text-slate-400 transition-colors">How it Works?</a> <a target="_self" href="/meta/team" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors  text-slate-600 dark:text-slate-400 transition-colors">Team</a> <a target="_self" href="/meta/policy" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors  text-slate-600 dark:text-slate-400 transition-colors">Privacy Policy (fun-storylike-edition)</a> </div> <div class="">
+by <a target="_self" href="https://ara.foundation" class="hyperlink text-blue-500 dark:text-blue-200 hover:text-teal-300 dark:hover:text-teal-200 false transition-colors  text-slate-600 dark:text-slate-400 transition-colors">Ara Foundation</a> </div> </footer> </body></html> 
