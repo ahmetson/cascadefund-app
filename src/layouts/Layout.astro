@@ -2,6 +2,7 @@
 import { ClientRouter } from "astro:transitions";
 import "@/styles/motion.css";
 import Captcha from "@/components/captcha.astro";
+import BrowseTracker from "@/components/navigation/BrowseTracker";
 ---
 
 <!doctype html>
@@ -19,6 +20,7 @@ import Captcha from "@/components/captcha.astro";
   <body
     class="min-h-screen bg-neutral-200 dark:bg-gray-900 transition-colors duration-300"
   >
+    <BrowseTracker client:load />
     <Captcha client:load />
     <slot />
     <!-- Google tag (gtag.js) -->

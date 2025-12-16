@@ -4,6 +4,7 @@ import "@/styles/global.css";
 import "@/styles/motion.css";
 import Header from "@/components/utilitified_decorations/LandingHeader.astro";
 import Footer from "@/components/utilitified_decorations/Footer.astro";
+import BrowseTracker from "@/components/navigation/BrowseTracker";
 
 interface Props {}
 ---
@@ -19,6 +20,7 @@ interface Props {}
     <ClientRouter />
   </head>
   <body class="min-h-screen bg-gray-200 dark:bg-gray-700">
+    <BrowseTracker client:load />
     <Header />
 
     <slot />

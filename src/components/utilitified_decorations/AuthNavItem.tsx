@@ -224,7 +224,7 @@ const AuthNavItem: React.FC<Props> = ({ className }) => {
                 )}
                 aria-label="Switch role"
               >
-                <span>Switch Role</span>
+                <span>Switch Demo User</span>
                 <ChevronDownIcon className="w-4 h-4" />
               </button>
             </DropdownMenuTrigger>
@@ -237,7 +237,7 @@ const AuthNavItem: React.FC<Props> = ({ className }) => {
                 'shadow-lg'
               )}
             >
-              <DropdownMenuLabel>Switch Role</DropdownMenuLabel>
+              <DropdownMenuLabel>Switch Demo Users</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuRadioGroup value={role || 'maintainer'} onValueChange={handleRoleChange}>
                 {users.map((user) => (

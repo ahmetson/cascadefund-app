@@ -47,15 +47,7 @@ const allGalaxies = allGalaxiesData.map((galaxy, index) => ({
   projectY={selectedGalaxy?.y}
   projectGalaxies={allGalaxies}
 >
-  {
-    selectedGalaxy && (
-      <BackButton
-        slot="left"
-        client:only="react"
-        uri={`/project?galaxy=${galaxyId}`}
-      />
-    )
-  }
+  {selectedGalaxy && <BackButton slot="left" client:load />}
 
   <div slot="header-navbar" class="flex items-center justify-center pt-4">
     <NewGalaxyButton client:only="react" />

@@ -10,7 +10,7 @@ import BackButton from "@/components/custom-ui/BackButton";
 ---
 
 <Layout hideLinks={Object.keys(MenuName)}>
-      <BackButton uri="/" slot="left" />
+      <BackButton slot="left" client:load />
       <UserBalancePanel slot="center" />
       <!-- <RecentTransactionPanel slot="center" /> -->
 </Layout>

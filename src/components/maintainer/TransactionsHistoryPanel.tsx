@@ -319,7 +319,7 @@ const TransactionsHistoryPanel: React.FC<TransactionsHistoryPanelProps> = ({
                   {showCascaded && (
                     <td className="py-4 px-2">
                       <div className="flex items-center gap-2">
-                        <BackButton uri="/project/transactions" />
+                        <BackButton />
                         <Tooltip
                           content={
                             <div className="text-sm">

@@ -9,6 +9,7 @@ import GridBackgrounded from "./GridBackgrounded";
 import { MenuItemProps } from "@/components/menu/MenuItem";
 import { GravityStarsBackground } from "@/components/animate-ui/components/backgrounds/gravity-stars";
 import { GradientBackground } from "@/components/animate-ui/components/backgrounds/gradient";
+import BrowseTracker from "@/components/navigation/BrowseTracker";
 
 interface Props {
   active?: string;
@@ -35,6 +36,7 @@ const { hideLinks, hideAuth, additional } = Astro.props;
   <body
     class="min-h-screen bg-slate-200 dark:bg-slate-800 border-1 border-red-500/10"
   >
+    <BrowseTracker client:load />
     <div>
       <GradientBackground
         className="fixed h-screen w-screen z-0 pointer-events-none"
