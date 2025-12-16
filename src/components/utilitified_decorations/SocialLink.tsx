@@ -1,5 +1,5 @@
 import React from 'react'
-import { FaGithub, FaTwitter, FaTelegram, FaDiscord, FaLinkedin } from 'react-icons/fa'
+import { FaGithub, FaTelegram, FaDiscord, FaLinkedin } from 'react-icons/fa'
 import { getIcon } from '../icon'
 import { SocialLink as SocialLinkType, SocialLinkType as LinkType } from '@/types/ara'
 import Link from '../custom-ui/Link'
@@ -43,7 +43,7 @@ const SocialLink: React.FC<SocialLinkProps> = ({ link,
     const iconMap: Record<LinkType, React.ReactNode> = {
       github: <FaGithub color={brandColors.github} size={20} className={brandColorClasses.github} />,
       telegram: <FaTelegram color={brandColors.telegram} size={20} className={brandColorClasses.telegram} />,
-      twitter: <FaTwitter color={brandColors.twitter} size={20} className={brandColorClasses.twitter} />,
+      twitter: getIcon({ iconType: 'x', className: brandColorClasses.twitter }),
       bluesky: getIcon({ iconType: 'bluesky', className: brandColorClasses.bluesky }),
       discord: <FaDiscord color={brandColors.discord} size={20} className={brandColorClasses.discord} />,
       linkedin: <FaLinkedin color={brandColors.linkedin} size={20} className={brandColorClasses.linkedin} />,
