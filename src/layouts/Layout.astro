@@ -3,6 +3,7 @@ import { ClientRouter } from "astro:transitions";
 import "@/styles/motion.css";
 import Captcha from "@/components/captcha.astro";
 import BrowseTracker from "@/components/navigation/BrowseTracker";
+import PageTransitionProvider from "@/components/navigation/PageTransitionProvider";
 ---
 
 <!doctype html>
@@ -23,6 +24,7 @@ import BrowseTracker from "@/components/navigation/BrowseTracker";
     <BrowseTracker client:load />
     <Captcha client:load />
     <slot />
+    <PageTransitionProvider client:load />
     <!-- Google tag (gtag.js) -->
     <script
       is:inline

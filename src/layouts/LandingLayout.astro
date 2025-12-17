@@ -5,6 +5,7 @@ import "@/styles/motion.css";
 import Header from "@/components/utilitified_decorations/LandingHeader.astro";
 import Footer from "@/components/utilitified_decorations/Footer.astro";
 import BrowseTracker from "@/components/navigation/BrowseTracker";
+import PageTransitionProvider from "@/components/navigation/PageTransitionProvider";
 
 interface Props {}
 ---
@@ -25,6 +26,7 @@ interface Props {}
 
     <slot />
     <Footer />
+    <PageTransitionProvider client:load />
   </body>
 </html>
 

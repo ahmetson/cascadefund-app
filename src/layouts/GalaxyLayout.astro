@@ -14,6 +14,7 @@ import GalaxyLayoutBody from "@/components/all-stars/GalaxyLayoutBody";
 import Space from "@/components/all-stars/Space";
 import { UserStar as UserStarData } from "@/types/all-stars";
 import BrowseTracker from "@/components/navigation/BrowseTracker";
+import PageTransitionProvider from "@/components/navigation/PageTransitionProvider";
 
 interface Props {
   active?: string;
@@ -158,5 +159,6 @@ const {
       maxGalaxyContent={maxGalaxyContent}
       projectId={projectId}
     />
+    <PageTransitionProvider client:load />
   </body>
 </html>

@@ -10,6 +10,7 @@ import { MenuItemProps } from "@/components/menu/MenuItem";
 import { GravityStarsBackground } from "@/components/animate-ui/components/backgrounds/gravity-stars";
 import { GradientBackground } from "@/components/animate-ui/components/backgrounds/gradient";
 import BrowseTracker from "@/components/navigation/BrowseTracker";
+import PageTransitionProvider from "@/components/navigation/PageTransitionProvider";
 
 interface Props {
   active?: string;
@@ -69,5 +70,6 @@ const { hideLinks, hideAuth, additional } = Astro.props;
       </ThreeColumnGrid>
       <Footer />
     </div>
+    <PageTransitionProvider client:load />
   </body>
 </html>
