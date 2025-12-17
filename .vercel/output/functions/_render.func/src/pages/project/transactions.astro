@@ -40,7 +40,7 @@ const defaultShowCascaded = cascaded === "true";
 ---
 
 <Layout hideLinks={Object.keys(MenuName)}>
-  <BackButton uri={`/project/donations?galaxy=${galaxyIdParam}`} slot="left" />
+  <BackButton slot="left" client:load />
   <TransactionsHistoryPanel
     galaxyId={galaxyIdParam}
     defaultShowCascaded={defaultShowCascaded}

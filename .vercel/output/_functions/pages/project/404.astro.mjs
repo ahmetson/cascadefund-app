@@ -1,8 +1,8 @@
-import { i as createComponent, w as renderComponent, r as renderTemplate, m as maybeRenderHead } from '../../chunks/astro/server_fdX1SiYK.mjs';
-import { $ as $$GalaxyLayout } from '../../chunks/GalaxyLayout_MHSrrbYe.mjs';
-import { M as MenuName } from '../../chunks/gradient_BwWwSSvf.mjs';
-import { B as BackButton } from '../../chunks/BackButton_DL5Gz7SV.mjs';
-import { b as mockUserStars } from '../../chunks/mock-data_DlL00DDQ.mjs';
+import { i as createComponent, w as renderComponent, r as renderTemplate, m as maybeRenderHead } from '../../chunks/astro/server_WCbI3U70.mjs';
+import { $ as $$GalaxyLayout } from '../../chunks/GalaxyLayout_CLlRJKZN.mjs';
+import { M as MenuName } from '../../chunks/BrowseTracker_CjQaYJF4.mjs';
+import { B as BackButton } from '../../chunks/BackButton_Cbeg5yyk.mjs';
+import { m as mockUserStars } from '../../chunks/mock-data_BzTrmzbT.mjs';
 export { renderers } from '../../renderers.mjs';
 
 const $$404 = createComponent(($$result, $$props, $$slots) => {
@@ -16,7 +16,7 @@ const $$404 = createComponent(($$result, $$props, $$slots) => {
 </h1> <p class="text-xl md:text-3xl text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl">
 The project or galaxy you're looking for doesn't exist or has been
             removed.
-</p> </div>`, "left": ($$result2) => renderTemplate`${renderComponent($$result2, "BackButton", BackButton, { "slot": "left", "uri": "/project/issues" })}` })}`;
+</p> </div>`, "left": ($$result2) => renderTemplate`${renderComponent($$result2, "BackButton", BackButton, { "slot": "left", "client:load": true, "client:component-hydration": "load", "client:component-path": "@/components/custom-ui/BackButton", "client:component-export": "default" })}` })}`;
 }, "/home/medet/ara-app/src/pages/project/404.astro", void 0);
 
 const $$file = "/home/medet/ara-app/src/pages/project/404.astro";

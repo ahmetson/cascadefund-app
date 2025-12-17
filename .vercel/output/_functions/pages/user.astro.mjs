@@ -1,10 +1,10 @@
-import { i as createComponent, j as createAstro, w as renderComponent, r as renderTemplate } from '../chunks/astro/server_fdX1SiYK.mjs';
-import { $ as $$GalaxyLayout } from '../chunks/GalaxyLayout_MHSrrbYe.mjs';
-import { M as MenuName } from '../chunks/gradient_BwWwSSvf.mjs';
-import { B as BackButton } from '../chunks/BackButton_DL5Gz7SV.mjs';
-import { getUserById, getUserByEmail } from '../chunks/user_CviJB2en.mjs';
-import { d as getGalaxiesByMaintainer } from '../chunks/galaxy_BhIVnuLu.mjs';
-import { b as mockUserStars } from '../chunks/mock-data_DlL00DDQ.mjs';
+import { i as createComponent, j as createAstro, w as renderComponent, r as renderTemplate } from '../chunks/astro/server_WCbI3U70.mjs';
+import { $ as $$GalaxyLayout } from '../chunks/GalaxyLayout_CLlRJKZN.mjs';
+import { M as MenuName } from '../chunks/BrowseTracker_CjQaYJF4.mjs';
+import { B as BackButton } from '../chunks/BackButton_Cbeg5yyk.mjs';
+import { getUserById, getUserByEmail } from '../chunks/user_Dmvk2cKy.mjs';
+import { d as getGalaxiesByMaintainer } from '../chunks/galaxy_D015Gxde.mjs';
+import { m as mockUserStars } from '../chunks/mock-data_BzTrmzbT.mjs';
 /* empty css                                 */
 export { renderers } from '../renderers.mjs';
 
@@ -47,7 +47,7 @@ const $$Index = createComponent(async ($$result, $$props, $$slots) => {
   }));
   const userX = userGalaxies.length > 0 ? userGalaxies.reduce((sum, g) => sum + g.x, 0) / userGalaxies.length : 0;
   const userY = userGalaxies.length > 0 ? userGalaxies.reduce((sum, g) => sum + g.y, 0) / userGalaxies.length : 0;
-  return renderTemplate`${renderComponent($$result, "GalaxyLayout", $$GalaxyLayout, { "active": MenuName.ProjectName, "hideLinks": Object.keys(MenuName), "projectName": user.nickname || "User Profile", "stars": mockUserStars, "projectGoal": 1e3, "projectX": userX, "projectY": userY, "projectGalaxies": allGalaxies }, { "center": async ($$result2) => renderTemplate`${renderComponent($$result2, "UserProfilePanel", null, { "slot": "center", "user": user, "galaxies": userGalaxies, "client:only": "react", "client:component-hydration": "only", "client:component-path": "@/components/user/UserProfilePanel", "client:component-export": "default" })}`, "default": async ($$result2) => renderTemplate`   ${renderComponent($$result2, "GalaxyAutoZoom", null, { "client:only": "react", "galaxyX": userX, "galaxyY": userY, "client:component-hydration": "only", "client:component-path": "@/components/all-stars/GalaxyAutoZoom", "client:component-export": "default" })} `, "left": async ($$result2) => renderTemplate`${renderComponent($$result2, "BackButton", BackButton, { "slot": "left", "uri": "/all-stars" })}` })} `;
+  return renderTemplate`${renderComponent($$result, "GalaxyLayout", $$GalaxyLayout, { "active": MenuName.ProjectName, "hideLinks": Object.keys(MenuName), "projectName": user.nickname || "User Profile", "stars": mockUserStars, "projectGoal": 1e3, "projectX": userX, "projectY": userY, "projectGalaxies": allGalaxies }, { "center": async ($$result2) => renderTemplate`${renderComponent($$result2, "UserProfilePanel", null, { "slot": "center", "user": user, "galaxies": userGalaxies, "client:only": "react", "client:component-hydration": "only", "client:component-path": "@/components/user/UserProfilePanel", "client:component-export": "default" })}`, "default": async ($$result2) => renderTemplate`   ${renderComponent($$result2, "GalaxyAutoZoom", null, { "client:only": "react", "galaxyX": userX, "galaxyY": userY, "client:component-hydration": "only", "client:component-path": "@/components/all-stars/GalaxyAutoZoom", "client:component-export": "default" })} `, "left": async ($$result2) => renderTemplate`${renderComponent($$result2, "BackButton", BackButton, { "slot": "left", "client:load": true, "client:component-hydration": "load", "client:component-path": "@/components/custom-ui/BackButton", "client:component-export": "default" })}` })} `;
 }, "/home/medet/ara-app/src/pages/user/index.astro", void 0);
 
 const $$file = "/home/medet/ara-app/src/pages/user/index.astro";

@@ -1,11 +1,11 @@
-import { i as createComponent, w as renderComponent, r as renderTemplate } from '../../chunks/astro/server_fdX1SiYK.mjs';
-import { $ as $$PanelViewLayout } from '../../chunks/PanelViewLayout_Bt8c-AIX.mjs';
-import { I as ItemName } from '../../chunks/LandingNavbar_Dh9NiZBJ.mjs';
+import { i as createComponent, w as renderComponent, r as renderTemplate } from '../../chunks/astro/server_WCbI3U70.mjs';
+import { $ as $$PanelViewLayout } from '../../chunks/PanelViewLayout_aQb_8Ejw.mjs';
+import { I as ItemName } from '../../chunks/LandingNavbar_x5WCuRyq.mjs';
 import { jsx, jsxs } from 'react/jsx-runtime';
 import { useState, useEffect } from 'react';
 import { L as LoadingSpinner } from '../../chunks/LoadingSpinner_DhXAEzrZ.mjs';
-import { B as BasePanel } from '../../chunks/Panel_CqTuM3BW.mjs';
-import { C as Component } from '../../chunks/eventTypes_PbqAZmEg.mjs';
+import { B as BasePanel } from '../../chunks/Panel_5oXz7djo.mjs';
+import { C as Component } from '../../chunks/BrowseTracker_CjQaYJF4.mjs';
 export { renderers } from '../../renderers.mjs';
 
 const AuthSuccessCard = ({ gotoLink, gotoLabel, title, children }) => {

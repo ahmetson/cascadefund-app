@@ -24,31 +24,15 @@
 			"dest": "_render"
 		},
 		{
+			"src": "^/404/?$",
+			"dest": "_render"
+		},
+		{
 			"src": "^/all-stars/?$",
 			"dest": "_render"
 		},
 		{
 			"src": "^/api-json/?$",
-			"dest": "_render"
-		},
-		{
-			"src": "^/influencer/confirmed/?$",
-			"dest": "_render"
-		},
-		{
-			"src": "^/influencer/history/?$",
-			"dest": "_render"
-		},
-		{
-			"src": "^/influencer/project/?$",
-			"dest": "_render"
-		},
-		{
-			"src": "^/influencer/welcome/?$",
-			"dest": "_render"
-		},
-		{
-			"src": "^/influencer/work/?$",
 			"dest": "_render"
 		},
 		{
@@ -68,7 +52,7 @@
 			"dest": "_render"
 		},
 		{
-			"src": "^/meta/influencer/?$",
+			"src": "^/people/?$",
 			"dest": "_render"
 		},
 		{
@@ -130,6 +114,11 @@
 		{
 			"src": "^/$",
 			"dest": "_render"
+		},
+		{
+			"src": "^/.*$",
+			"dest": "_render",
+			"status": 404
 		}
 	]
 }

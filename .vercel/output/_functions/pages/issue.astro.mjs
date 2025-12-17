@@ -1,28 +1,26 @@
-import { i as createComponent, j as createAstro, w as renderComponent, r as renderTemplate } from '../chunks/astro/server_fdX1SiYK.mjs';
-import { $ as $$PanelViewLayout } from '../chunks/PanelViewLayout_Bt8c-AIX.mjs';
-import { B as BackButton } from '../chunks/BackButton_DL5Gz7SV.mjs';
+import { i as createComponent, j as createAstro, w as renderComponent, r as renderTemplate } from '../chunks/astro/server_WCbI3U70.mjs';
+import { $ as $$PanelViewLayout } from '../chunks/PanelViewLayout_aQb_8Ejw.mjs';
+import { B as BackButton } from '../chunks/BackButton_Cbeg5yyk.mjs';
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 import { useState, useEffect } from 'react';
-import { B as BasePanel } from '../chunks/Panel_CqTuM3BW.mjs';
-import '../chunks/accordion_CHQBqGdC.mjs';
+import { B as BasePanel } from '../chunks/Panel_5oXz7djo.mjs';
+import '../chunks/ripple_B-0pZuOp.mjs';
 import 'clsx';
 import { TheaterIcon } from 'lucide-react';
-import { g as getIcon, C as Component } from '../chunks/eventTypes_PbqAZmEg.mjs';
-import { B as Button, P as PanelAction } from '../chunks/PanelAction_DPZy3U8T.mjs';
-import { B as Badge } from '../chunks/Badge_B8Esv6UX.mjs';
+import { B as Badge, g as getIcon, C as Component, M as MenuName } from '../chunks/BrowseTracker_CjQaYJF4.mjs';
+import { B as Button, P as PanelAction } from '../chunks/PanelAction_BPm-vUQ5.mjs';
 import { E as Editable } from '../chunks/Editable_-ZF1-7I4.mjs';
 import { useEditorState } from '@tiptap/react';
-import { I as InfoPanel } from '../chunks/InfoPanel_BEeHNdQh.mjs';
-import { C as Component$1 } from '../chunks/Tooltip_w0cA3QON.mjs';
+import { I as InfoPanel } from '../chunks/InfoPanel_YQKDcEqY.mjs';
+import { C as Component$1 } from '../chunks/Tooltip_CwxsUbL0.mjs';
 import { g as getIssueStatIcon } from '../chunks/utils_gmanUkFe.mjs';
-import { M as MenuAvatar, T as TimeAgo, P as PanelFooter, F as Followings } from '../chunks/timeago-react_DjRt9YuX.mjs';
+import { M as MenuAvatar, T as TimeAgo, P as PanelFooter, F as Followings } from '../chunks/timeago-react_Bm2JnYlR.mjs';
 import { S as Spinner } from '../chunks/index_1nmfEu_R.mjs';
 import { K as Kbd } from '../chunks/Kbd_BAMFwbIi.mjs';
-import { d as actions, a as ISSUE_EVENT_TYPES } from '../chunks/issue_CKSMgj7X.mjs';
-import { g as getDemo, a as getUserById } from '../chunks/user_DywsuUsD.mjs';
-import { g as getIssueById } from '../chunks/issue_D6xZciY4.mjs';
+import { a as actions, b as ISSUE_EVENT_TYPES } from '../chunks/issue_ClqDH68H.mjs';
+import { g as getDemo, a as getUserById } from '../chunks/user_3Q2CxTy8.mjs';
+import { g as getIssueById } from '../chunks/issue_Dv6LAPam.mjs';
 import { ObjectId } from 'mongodb';
-import { M as MenuName } from '../chunks/gradient_BwWwSSvf.mjs';
 export { renderers } from '../renderers.mjs';
 
 function MenuBar({ editor, className = "" }) {
@@ -621,7 +619,7 @@ const $$Index = createComponent(async ($$result, $$props, $$slots) => {
   const Astro2 = $$result.createAstro($$Astro, $$props, $$slots);
   Astro2.self = $$Index;
   const issueIdParam = Astro2.url.searchParams.get("id");
-  const galaxyParam = Astro2.url.searchParams.get("galaxy");
+  Astro2.url.searchParams.get("galaxy");
   if (!issueIdParam) {
     return Astro2.redirect("/project/404?method=getIssueIdParam");
   }
@@ -634,8 +632,7 @@ const $$Index = createComponent(async ($$result, $$props, $$slots) => {
   if (!issue) {
     return Astro2.redirect("/project/404?method=getIssueById");
   }
-  const backUri = galaxyParam ? `/project/issues?galaxy=${galaxyParam}` : "/project/issues";
-  return renderTemplate`${renderComponent($$result, "Layout", $$PanelViewLayout, { "hideLinks": Object.keys(MenuName) }, { "center": async ($$result2) => renderTemplate`${renderComponent($$result2, "IssuePanel", IssueContentPanel, { "slot": "center", ...issue, "client:load": true, "client:component-hydration": "load", "client:component-path": "@/components/issue/IssuePanel", "client:component-export": "default" })}${renderComponent($$result2, "AssignToMeCTA", null, { "slot": "center", "client:only": "react", "issueId": issueIdParam, "client:component-hydration": "only", "client:component-path": "@/components/issue/AssignToMeCTA", "client:component-export": "default" })}`, "left": async ($$result2) => renderTemplate`${renderComponent($$result2, "BackButton", BackButton, { "slot": "left", "uri": backUri })}` })}`;
+  return renderTemplate`${renderComponent($$result, "Layout", $$PanelViewLayout, { "hideLinks": Object.keys(MenuName) }, { "center": async ($$result2) => renderTemplate`${renderComponent($$result2, "IssuePanel", IssueContentPanel, { "slot": "center", ...issue, "client:load": true, "client:component-hydration": "load", "client:component-path": "@/components/issue/IssuePanel", "client:component-export": "default" })}${renderComponent($$result2, "AssignToMeCTA", null, { "slot": "center", "client:only": "react", "issueId": issueIdParam, "client:component-hydration": "only", "client:component-path": "@/components/issue/AssignToMeCTA", "client:component-export": "default" })}`, "left": async ($$result2) => renderTemplate`${renderComponent($$result2, "BackButton", BackButton, { "slot": "left", "client:load": true, "client:component-hydration": "load", "client:component-path": "@/components/custom-ui/BackButton", "client:component-export": "default" })}` })}`;
 }, "/home/medet/ara-app/src/pages/issue/index.astro", void 0);
 
 const $$file = "/home/medet/ara-app/src/pages/issue/index.astro";

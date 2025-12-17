@@ -1,36 +1,34 @@
-import { i as createComponent, j as createAstro, w as renderComponent, r as renderTemplate } from '../../chunks/astro/server_fdX1SiYK.mjs';
-import { $ as $$PanelViewLayout } from '../../chunks/PanelViewLayout_Bt8c-AIX.mjs';
-import { P as Panel } from '../../chunks/MenuPanel_Bwq8NR-S.mjs';
-import { M as MenuName } from '../../chunks/gradient_BwWwSSvf.mjs';
+import { i as createComponent, j as createAstro, w as renderComponent, r as renderTemplate } from '../../chunks/astro/server_WCbI3U70.mjs';
+import { $ as $$PanelViewLayout } from '../../chunks/PanelViewLayout_aQb_8Ejw.mjs';
+import { P as Panel } from '../../chunks/MenuPanel_CuPcNm2C.mjs';
+import { E as ElectricBorder, g as getIcon, B as Badge, M as MenuName } from '../../chunks/BrowseTracker_CjQaYJF4.mjs';
 import { ObjectId } from 'mongodb';
-import { g as getGalaxyById } from '../../chunks/galaxy_BhIVnuLu.mjs';
-import { a as getProjectById } from '../../chunks/project_BR7Mg4Nw.mjs';
+import { g as getGalaxyById } from '../../chunks/galaxy_D015Gxde.mjs';
+import { a as getProjectById } from '../../chunks/project_T6up3nk6.mjs';
 import { jsxs, jsx, Fragment } from 'react/jsx-runtime';
 import * as React from 'react';
 import { useState, useEffect, memo, useRef, useCallback, useMemo } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { c as cn, t as truncateStr } from '../../chunks/utils_CRaJ9uIg.mjs';
-import { g as getStrictContext, S as Slot } from '../../chunks/get-strict-context_Cu432M04.mjs';
-import { B as Badge } from '../../chunks/Badge_B8Esv6UX.mjs';
-import { u as updateVersionStatus, c as completePatch, m as markPatchTested, a as updatePatches, r as removePatch, b as releaseVersion, d as getVersions, R as ROADMAP_EVENT_TYPES } from '../../chunks/roadmap_B2ZXwx8w.mjs';
-import { B as BasePanel } from '../../chunks/Panel_CqTuM3BW.mjs';
-import { P as PageLikePanel } from '../../chunks/PageLikePanel_CRfOVdJz.mjs';
-import { g as getAnimationColors, B as Button } from '../../chunks/PanelAction_DPZy3U8T.mjs';
-import { C as Component } from '../../chunks/Tooltip_w0cA3QON.mjs';
-import { E as ElectricBorder, g as getIcon } from '../../chunks/eventTypes_PbqAZmEg.mjs';
-import { M as MenuAvatar, T as TimeAgo, P as PanelFooter, F as Followings } from '../../chunks/timeago-react_DjRt9YuX.mjs';
+import { g as getStrictContext, S as Slot } from '../../chunks/slot_C0HxhKXe.mjs';
+import { B as BasePanel } from '../../chunks/Panel_5oXz7djo.mjs';
+import { P as PageLikePanel } from '../../chunks/PageLikePanel_DyHCjbTr.mjs';
+import { g as getAnimationColors, B as Button } from '../../chunks/PanelAction_BPm-vUQ5.mjs';
+import { C as Component } from '../../chunks/Tooltip_CwxsUbL0.mjs';
+import { M as MenuAvatar, T as TimeAgo, P as PanelFooter, F as Followings } from '../../chunks/timeago-react_Bm2JnYlR.mjs';
 import NumberFlow from '@number-flow/react';
 import * as RadixSlider from '@radix-ui/react-slider';
 import { Checkbox as Checkbox$1 } from 'radix-ui';
-import { u as useControlledState } from '../../chunks/accordion_CHQBqGdC.mjs';
+import { u as useControlledState } from '../../chunks/ripple_B-0pZuOp.mjs';
 import { A as AvatarList, P as ProfileRating } from '../../chunks/AvatarList_QbL7je5L.mjs';
 import { L as LoadingSpinner } from '../../chunks/LoadingSpinner_DhXAEzrZ.mjs';
 import { useDrop, useDrag, DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { a as getUserById, g as getDemo, i as incrementDemoStep } from '../../chunks/user_DywsuUsD.mjs';
+import { g as getDemo, i as incrementDemoStep, a as getUserById } from '../../chunks/user_3Q2CxTy8.mjs';
 import { D as DEMO_EVENT_TYPES } from '../../chunks/demo_CnQUSMeS.mjs';
-import { a as getIssueById, b as updateIssue } from '../../chunks/issue_Clh8NcXi.mjs';
-import { a as PATCH_EVENT_TYPES, P as PATCH_KEYWORD } from '../../chunks/patch_Cnq5U_SF.mjs';
+import { g as getIssueById, a as updateIssue } from '../../chunks/issue_7cyO0TZY.mjs';
+import { a as actions } from '../../chunks/issue_ClqDH68H.mjs';
+import { P as PATCH_EVENT_TYPES, a as PATCH_KEYWORD } from '../../chunks/patch_D1PjuDPm.mjs';
 export { renderers } from '../../renderers.mjs';
 
 const HighlightContext = React.createContext(void 0);
@@ -693,6 +691,11 @@ const C$1 = ({ activeTab: initialTab, tabs, onTabChange }) => {
   );
 };
 
+const ROADMAP_EVENT_TYPES = {
+  VERSION_CREATED: "version-created",
+  VERSION_RELEASED: "version-released"
+};
+
 const [CheckboxProvider, useCheckbox] = getStrictContext("CheckboxContext");
 function Checkbox({
   defaultChecked,
@@ -868,6 +871,130 @@ const C = memo(function C2({
     }
   );
 });
+
+async function getVersions(galaxyId) {
+  try {
+    const result = await actions.getVersionsByGalaxy({ galaxyId });
+    return result.data?.versions || [];
+  } catch (error) {
+    console.error("Error fetching versions:", error);
+    return [];
+  }
+}
+async function updateVersionStatus(params) {
+  try {
+    const result = await actions.updateVersionStatus(params);
+    if (result.data?.success) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error("Error updating version status:", error);
+    return false;
+  }
+}
+async function updatePatches(versionId, patches) {
+  try {
+    const result = await actions.updatePatches({ versionId, patches });
+    if (result.data?.success) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error("Error updating patches:", error);
+    return false;
+  }
+}
+async function removePatch(params) {
+  try {
+    const result = await actions.removePatch(params);
+    if (result.data?.success) {
+      window.dispatchEvent(new CustomEvent(PATCH_EVENT_TYPES.PATCH_REMOVED, {
+        detail: {
+          patchId: params.patchId,
+          versionId: params.versionId
+        }
+      }));
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error("Error removing patch:", error);
+    return false;
+  }
+}
+async function completePatch(params) {
+  try {
+    const result = await actions.completePatch(params);
+    if (result.data?.success) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error("Error completing patch:", error);
+    return false;
+  }
+}
+async function testPatch(params) {
+  try {
+    const result = await actions.testPatch(params);
+    if (result.data?.success) {
+      if (params.tested) {
+        const demo = getDemo();
+        if (demo.email) {
+          await incrementDemoStep({ email: demo.email, expectedStep: 6 });
+        }
+      }
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error("Error testing patch:", error);
+    return false;
+  }
+}
+async function markPatchTested(versionId, patchId, tested) {
+  return testPatch({ versionId, patchId, tested });
+}
+async function releaseVersion(params) {
+  try {
+    const demo = getDemo();
+    if (!demo.email) {
+      console.error("No demo email found");
+      return false;
+    }
+    const closeResult = await actions.closeIssuesByVersion({
+      versionId: params.versionId,
+      email: demo.email
+    });
+    if (!closeResult.data?.success) {
+      console.error("Failed to close issues");
+      return false;
+    }
+    const statusResult = await updateVersionStatus({
+      versionId: params.versionId,
+      status: "archived"
+    });
+    if (!statusResult) {
+      console.error("Failed to update version status");
+      return false;
+    }
+    const eventDetail = {
+      versionId: params.versionId,
+      tag: params.tag,
+      galaxyId: params.galaxyId
+    };
+    window.dispatchEvent(new CustomEvent(ROADMAP_EVENT_TYPES.VERSION_RELEASED, {
+      detail: eventDetail
+    }));
+    console.log("incrementing demo step for the 7th step after release version");
+    await incrementDemoStep({ email: demo.email, expectedStep: 7 });
+    return true;
+  } catch (error) {
+    console.error("Error releasing version:", error);
+    return false;
+  }
+}
 
 const normalizeStatus = (incoming) => {
   if (incoming === "completed") return "archived";

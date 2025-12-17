@@ -1,8 +1,7 @@
-import { i as createComponent, w as renderComponent, r as renderTemplate, m as maybeRenderHead } from '../chunks/astro/server_fdX1SiYK.mjs';
-import { $ as $$PanelViewLayout } from '../chunks/PanelViewLayout_Bt8c-AIX.mjs';
-import { P as PageLikePanel } from '../chunks/PageLikePanel_CRfOVdJz.mjs';
-import { C as Component } from '../chunks/eventTypes_PbqAZmEg.mjs';
-import { M as MenuName } from '../chunks/gradient_BwWwSSvf.mjs';
+import { i as createComponent, w as renderComponent, r as renderTemplate, m as maybeRenderHead } from '../chunks/astro/server_WCbI3U70.mjs';
+import { $ as $$PanelViewLayout } from '../chunks/PanelViewLayout_aQb_8Ejw.mjs';
+import { P as PageLikePanel } from '../chunks/PageLikePanel_DyHCjbTr.mjs';
+import { C as Component, M as MenuName } from '../chunks/BrowseTracker_CjQaYJF4.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Index = createComponent(($$result, $$props, $$slots) => {
@@ -16,7 +15,7 @@ Demo version! Your account will be created automatically for a session.
       > --> <!-- <p class="text-sm mt-4">
         By signing in, you agree to our{" "}
         <Link
-          uri="/meta/policy"
+          uri="/privacy-policy"
           className="text-blue-600 hover:text-blue-800"
           asNewTab={true}
         >

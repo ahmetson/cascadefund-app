@@ -18,7 +18,7 @@ const userData = {
     stars={userData.stars}
     projectGoal={userData.projectGoal}
 >
-    <BackButton slot="left" uri="/all-stars" />
+    <BackButton slot="left" client:load />
 
     <div
         slot="center"
@@ -36,4 +36,3 @@ const userData = {
         </p>
     </div>
 </GalaxyLayout>
-

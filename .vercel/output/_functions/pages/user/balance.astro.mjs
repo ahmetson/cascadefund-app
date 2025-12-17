@@ -1,14 +1,13 @@
-import { i as createComponent, w as renderComponent, r as renderTemplate } from '../../chunks/astro/server_fdX1SiYK.mjs';
-import { $ as $$PanelViewLayout } from '../../chunks/PanelViewLayout_Bt8c-AIX.mjs';
-import { M as MenuName } from '../../chunks/gradient_BwWwSSvf.mjs';
+import { i as createComponent, w as renderComponent, r as renderTemplate } from '../../chunks/astro/server_WCbI3U70.mjs';
+import { $ as $$PanelViewLayout } from '../../chunks/PanelViewLayout_aQb_8Ejw.mjs';
+import { g as getIcon, M as MenuName } from '../../chunks/BrowseTracker_CjQaYJF4.mjs';
 import { jsxs, jsx } from 'react/jsx-runtime';
 import { useState } from 'react';
-import { P as PageLikePanel } from '../../chunks/PageLikePanel_CRfOVdJz.mjs';
+import { P as PageLikePanel } from '../../chunks/PageLikePanel_DyHCjbTr.mjs';
 import NumberFlow from '@number-flow/react';
-import { F as FormField } from '../../chunks/LabeledInput_D4gARwhf.mjs';
+import { F as FormField } from '../../chunks/LabeledInput_CTr_fZWm.mjs';
 import { Popover } from '@base-ui-components/react/popover';
-import { g as getIcon } from '../../chunks/eventTypes_PbqAZmEg.mjs';
-import { B as BackButton } from '../../chunks/BackButton_DL5Gz7SV.mjs';
+import { B as BackButton } from '../../chunks/BackButton_Cbeg5yyk.mjs';
 export { renderers } from '../../renderers.mjs';
 
 const BalanceInfoItem = ({ icon, iconColor = "bg-blue-600", children }) => {
@@ -102,7 +101,7 @@ const UserBalancePanel = () => {
 };
 
 const $$Balance = createComponent(($$result, $$props, $$slots) => {
-  return renderTemplate`${renderComponent($$result, "Layout", $$PanelViewLayout, { "hideLinks": Object.keys(MenuName) }, { "center": ($$result2) => renderTemplate`${renderComponent($$result2, "UserBalancePanel", UserBalancePanel, { "slot": "center" })}`, "left": ($$result2) => renderTemplate`${renderComponent($$result2, "BackButton", BackButton, { "uri": "/", "slot": "left" })}` })}`;
+  return renderTemplate`${renderComponent($$result, "Layout", $$PanelViewLayout, { "hideLinks": Object.keys(MenuName) }, { "center": ($$result2) => renderTemplate`${renderComponent($$result2, "UserBalancePanel", UserBalancePanel, { "slot": "center" })}`, "left": ($$result2) => renderTemplate`${renderComponent($$result2, "BackButton", BackButton, { "slot": "left", "client:load": true, "client:component-hydration": "load", "client:component-path": "@/components/custom-ui/BackButton", "client:component-export": "default" })}` })}`;
 }, "/home/medet/ara-app/src/pages/user/balance.astro", void 0);
 
 const $$file = "/home/medet/ara-app/src/pages/user/balance.astro";

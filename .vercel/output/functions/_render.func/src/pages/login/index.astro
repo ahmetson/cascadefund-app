@@ -6,11 +6,7 @@ import { MenuName } from "@/components/navbar/WorkNavbar.astro";
 ---
 
 <PanelViewLayout hideLinks={Object.keys(MenuName)} hideAuth={true}>
-  <PageLikePanel
-    slot="center"
-    title="Welcome to Ara"
-    titleCenter={true}
-  >
+  <PageLikePanel slot="center" title="Welcome to Ara" titleCenter={true}>
     <div class="text-center space-y-2 mt-8">
       <Link
         uri="/login/callback"
@@ -29,7 +25,7 @@ import { MenuName } from "@/components/navbar/WorkNavbar.astro";
       <!-- <p class="text-sm mt-4">
         By signing in, you agree to our{" "}
         <Link
-          uri="/meta/policy"
+          uri="/privacy-policy"
           className="text-blue-600 hover:text-blue-800"
           asNewTab={true}
         >

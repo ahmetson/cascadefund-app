@@ -1,1 +1,0 @@
-import{j as o}from"./jsx-runtime.D_zvdyIk.js";import{M as r}from"./MenuItem.BRkJm4Pq.js";import"./index.C9GdNTjf.js";import"./Link.DQs8_5h1.js";import"./ElectricBorder.DAWLx7iV.js";import"./utils.BnlJtBIq.js";import"./index.DxhH1ShK.js";import"./Badge.CwoN8wRJ.js";const c=({uri:t="/data/issue"})=>o.jsx(r,{uri:t,label:"Back",icon:"arrow-left"});export{c as default};

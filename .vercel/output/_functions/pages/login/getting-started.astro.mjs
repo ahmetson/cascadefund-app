@@ -1,13 +1,38 @@
-import { i as createComponent, w as renderComponent, r as renderTemplate, m as maybeRenderHead } from '../../chunks/astro/server_fdX1SiYK.mjs';
-import { $ as $$PanelViewLayout } from '../../chunks/PanelViewLayout_Bt8c-AIX.mjs';
-import { I as ItemName } from '../../chunks/LandingNavbar_Dh9NiZBJ.mjs';
-import { P as PageLikePanel } from '../../chunks/PageLikePanel_CRfOVdJz.mjs';
-import { g as getIcon, C as Component } from '../../chunks/eventTypes_PbqAZmEg.mjs';
-import { I as Importer$1 } from '../../chunks/RowGrid_Dl5riSnU.mjs';
-import { C } from '../../chunks/RolePanel_D-bVkXSM.mjs';
-import { I as InfoPanel } from '../../chunks/InfoPanel_BEeHNdQh.mjs';
-import { I as Importer } from '../../chunks/ReactComponentImporter_CKrAs9OZ.mjs';
+import { i as createComponent, w as renderComponent, r as renderTemplate, m as maybeRenderHead } from '../../chunks/astro/server_WCbI3U70.mjs';
+import { $ as $$PanelViewLayout } from '../../chunks/PanelViewLayout_aQb_8Ejw.mjs';
+import { I as ItemName } from '../../chunks/LandingNavbar_x5WCuRyq.mjs';
+import { P as PageLikePanel } from '../../chunks/PageLikePanel_DyHCjbTr.mjs';
+import { C as Component, g as getIcon } from '../../chunks/BrowseTracker_CjQaYJF4.mjs';
+import { jsx, jsxs } from 'react/jsx-runtime';
+import { I as InfoPanel } from '../../chunks/InfoPanel_YQKDcEqY.mjs';
 export { renderers } from '../../renderers.mjs';
+
+const Importer$1 = ({ children, className, cols, gap }) => {
+  cols = cols === void 0 ? 2 : cols;
+  gap = gap === void 0 ? 6 : gap;
+  return /* @__PURE__ */ jsx("div", { className: `grid grid-cols-1 md:grid-cols-${cols} gap-${gap} ${className || ""}`, children });
+};
+
+const C = ({
+  id,
+  title,
+  description,
+  buttonText,
+  buttonVariant,
+  icon,
+  avatar,
+  iconBgColor,
+  href
+}) => {
+  return /* @__PURE__ */ jsx("div", { className: `${iconBgColor} card image-full text-gray-100 w-36 h-60 shadow-sm p-0!`, children: /* @__PURE__ */ jsxs(PageLikePanel, { titleCenter: true, icon, title, bg: { src: avatar, label: `${title} avatar` }, children: [
+    /* @__PURE__ */ jsx("p", { className: "h-20 flex items-center text-gray-300 dark:text-gray-100 mt-8", children: description }),
+    /* @__PURE__ */ jsx("div", { className: "card-actions justify-center overflow-hidden", children: buttonVariant === "primary" ? /* @__PURE__ */ jsx(Component, { uri: href || "#", className: "inline-flex items-center bg-rose-500 hover:bg-rose-600 text-white dark:text-gray-100 hover:text-blue-50! font-bold py-2 px-4 rounded transition-colors", children: buttonText }) : /* @__PURE__ */ jsx(Component, { uri: href || "#", className: buttonVariant, children: buttonText }) })
+  ] }, id) });
+};
+
+const Importer = ({ element }) => {
+  return element;
+};
 
 const $$GettingStarted = createComponent(($$result, $$props, $$slots) => {
   const roles = [

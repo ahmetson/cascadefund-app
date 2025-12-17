@@ -29,15 +29,10 @@ const issue = await getIssueById(issueIdParam);
 if (!issue) {
     return Astro.redirect("/project/404?method=getIssueById");
 }
-
-// Build back button URI
-const backUri = galaxyParam
-    ? `/project/issues?galaxy=${galaxyParam}`
-    : "/project/issues";
 ---
 
 <Layout hideLinks={Object.keys(MenuName)}>
-    <BackButton slot="left" uri={backUri} />
+    <BackButton slot="left" client:load />
 
     <IssuePanel slot="center" {...issue} client:load />
     <AssignToMeCTA slot="center" client:only="react" issueId={issueIdParam} />

@@ -5,7 +5,8 @@
     "**/*"
   ],
   "exclude": [
-    "dist"
+    "dist",
+    ".vercel/output"
   ],
   "compilerOptions": {
     "verbatimModuleSyntax": false,

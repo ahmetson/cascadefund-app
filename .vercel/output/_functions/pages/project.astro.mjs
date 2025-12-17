@@ -1,11 +1,11 @@
-import { i as createComponent, j as createAstro, w as renderComponent, r as renderTemplate } from '../chunks/astro/server_fdX1SiYK.mjs';
-import { $ as $$GalaxyLayout } from '../chunks/GalaxyLayout_MHSrrbYe.mjs';
-import { M as MenuName } from '../chunks/gradient_BwWwSSvf.mjs';
-import { B as BackButton } from '../chunks/BackButton_DL5Gz7SV.mjs';
-import { a as getGalaxySpace, g as getUserStar } from '../chunks/all-stars_Diq-6NBV.mjs';
-import { g as getGalaxyById } from '../chunks/galaxy_BhIVnuLu.mjs';
-import { a as getProjectById } from '../chunks/project_BR7Mg4Nw.mjs';
-import { getUserById, getUserByEmail } from '../chunks/user_CviJB2en.mjs';
+import { i as createComponent, j as createAstro, w as renderComponent, r as renderTemplate } from '../chunks/astro/server_WCbI3U70.mjs';
+import { $ as $$GalaxyLayout } from '../chunks/GalaxyLayout_CLlRJKZN.mjs';
+import { M as MenuName } from '../chunks/BrowseTracker_CjQaYJF4.mjs';
+import { B as BackButton } from '../chunks/BackButton_Cbeg5yyk.mjs';
+import { a as getGalaxySpace, g as getUserStar } from '../chunks/all-stars_C7i-8iZJ.mjs';
+import { g as getGalaxyById } from '../chunks/galaxy_D015Gxde.mjs';
+import { a as getProjectById } from '../chunks/project_T6up3nk6.mjs';
+import { getUserById, getUserByEmail } from '../chunks/user_Dmvk2cKy.mjs';
 import { a as DEMO_COOKIE_NAMES } from '../chunks/demo_CnQUSMeS.mjs';
 export { renderers } from '../renderers.mjs';
 
@@ -139,7 +139,7 @@ const $$Index = createComponent(async ($$result, $$props, $$slots) => {
     // 7 days ago
     contestToDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1e3)
     // 30 days from now
-  }, "client:component-hydration": "only", "client:component-path": "@/components/all-stars/AllStarsContest", "client:component-export": "default" })}`, "left": async ($$result2) => renderTemplate`${renderComponent($$result2, "BackButton", BackButton, { "slot": "left", "uri": galaxyIdParam ? `/all-stars?galaxy=${galaxyIdParam}` : "/all-stars" })}`, "right": async ($$result2) => renderTemplate`${renderComponent($$result2, "ProjectGoalPanel", null, { "slot": "right", "client:only": "react", "stars": projectData.stars, "totalStars": projectData.rating.stars, "totalSunshines": projectData.rating.sunshines, "goalStars": 100, "projectGoal": projectData.projectGoal, "goalDonations": projectData.balance * 10, "projectName": projectData.title, "client:component-hydration": "only", "client:component-path": "@/components/project/ProjectGoalPanel", "client:component-export": "default" })}` })}`;
+  }, "client:component-hydration": "only", "client:component-path": "@/components/all-stars/AllStarsContest", "client:component-export": "default" })}`, "left": async ($$result2) => renderTemplate`${renderComponent($$result2, "BackButton", BackButton, { "slot": "left", "client:load": true, "client:component-hydration": "load", "client:component-path": "@/components/custom-ui/BackButton", "client:component-export": "default" })}`, "right": async ($$result2) => renderTemplate`${renderComponent($$result2, "ProjectGoalPanel", null, { "slot": "right", "client:only": "react", "stars": projectData.stars, "totalStars": projectData.rating.stars, "totalSunshines": projectData.rating.sunshines, "goalStars": 100, "projectGoal": projectData.projectGoal, "goalDonations": projectData.balance * 10, "projectName": projectData.title, "client:component-hydration": "only", "client:component-path": "@/components/project/ProjectGoalPanel", "client:component-export": "default" })}` })}`;
 }, "/home/medet/ara-app/src/pages/project/index.astro", void 0);
 
 const $$file = "/home/medet/ara-app/src/pages/project/index.astro";

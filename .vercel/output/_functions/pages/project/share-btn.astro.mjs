@@ -1,10 +1,10 @@
-import { i as createComponent, j as createAstro, w as renderComponent, r as renderTemplate } from '../../chunks/astro/server_fdX1SiYK.mjs';
-import { $ as $$PanelViewLayout } from '../../chunks/PanelViewLayout_Bt8c-AIX.mjs';
-import { P as Panel } from '../../chunks/MenuPanel_Bwq8NR-S.mjs';
-import { M as MenuName } from '../../chunks/gradient_BwWwSSvf.mjs';
+import { i as createComponent, j as createAstro, w as renderComponent, r as renderTemplate } from '../../chunks/astro/server_WCbI3U70.mjs';
+import { $ as $$PanelViewLayout } from '../../chunks/PanelViewLayout_aQb_8Ejw.mjs';
+import { P as Panel } from '../../chunks/MenuPanel_CuPcNm2C.mjs';
+import { M as MenuName } from '../../chunks/BrowseTracker_CjQaYJF4.mjs';
 import { ObjectId } from 'mongodb';
-import { g as getGalaxyById } from '../../chunks/galaxy_BhIVnuLu.mjs';
-import { a as getProjectById } from '../../chunks/project_BR7Mg4Nw.mjs';
+import { g as getGalaxyById } from '../../chunks/galaxy_D015Gxde.mjs';
+import { a as getProjectById } from '../../chunks/project_T6up3nk6.mjs';
 export { renderers } from '../../renderers.mjs';
 
 const $$Astro = createAstro();
