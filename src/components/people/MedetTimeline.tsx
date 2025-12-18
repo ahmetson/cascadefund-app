@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import { BasePanel } from '@/components/panel'
 import Link from '@/components/custom-ui/Link'
-import { cn } from '@/lib/utils'
+import { ClockIcon } from '@/svg/index'
 
 interface TimelinePoint {
   id: number
@@ -136,7 +136,7 @@ const MedetTimeline: React.FC = () => {
       content: (
         <div className="space-y-2">
           <p className="text-sm text-slate-700 dark:text-slate-300">
-            Joined to work on games on blockchain
+            Joined Blocklords to work on the games on a blockchain
           </p>
           <div className="text-xs text-slate-500 dark:text-slate-500 italic border-l-2 border-blue-500 pl-2">
             No token, no NFT. Strictly gameplay on smart contracts
@@ -279,6 +279,21 @@ const MedetTimeline: React.FC = () => {
 
   return (
     <div className="relative w-full min-h-[200vh] py-20 px-4 md:px-8">
+      {/* Title Section */}
+      <div className="text-center mb-12">
+        <h3 className="text-3xl md:text-4xl font-bold text-slate-800 dark:text-slate-200 mb-6 flex items-center justify-center gap-3">
+          <ClockIcon className="text-blue-500 dark:text-blue-400" />
+          Bio Chronology
+        </h3>
+      </div>
+
+      {/* Decorative separator */}
+      <div className="flex items-center justify-center gap-2 my-12 opacity-50 mb-16">
+        <div className="w-1 h-1 rounded-full bg-slate-400 dark:bg-slate-500"></div>
+        <div className="w-2 h-2 rounded-full bg-slate-400 dark:bg-slate-500"></div>
+        <div className="w-1 h-1 rounded-full bg-slate-400 dark:bg-slate-500"></div>
+      </div>
+
       {/* SVG for dashed lines */}
       <svg
         className="absolute inset-0 w-full h-full pointer-events-none"
