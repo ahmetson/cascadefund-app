@@ -33,7 +33,7 @@ const extractYouTubeVideoId = (url: string): string | null => {
 };
 
 const LandingVideoMiniPanel: React.FC<LandingVideoMiniPanelProps> = ({
-    youtubeUrl = 'https://youtu.be/suOaUQmMSGo?si=cbKjF74oBUmCbKQF',
+    youtubeUrl,
 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
@@ -42,7 +42,7 @@ const LandingVideoMiniPanel: React.FC<LandingVideoMiniPanelProps> = ({
     const observerRef = useRef<IntersectionObserver | null>(null);
 
     const videoId = useMemo(() => {
-        return extractYouTubeVideoId(youtubeUrl);
+        return extractYouTubeVideoId(youtubeUrl!);
     }, [youtubeUrl]);
 
     const embedUrl = useMemo(() => {

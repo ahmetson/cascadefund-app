@@ -40,12 +40,12 @@ const extractYouTubeVideoId = (url: string): string | null => {
 };
 
 const LandingVideoPanel: React.FC<LandingVideoPanelProps> = ({
-    youtubeUrl = 'https://youtu.be/suOaUQmMSGo?si=cbKjF74oBUmCbKQF',
+    youtubeUrl,
 }) => {
     const [isHovered, setIsHovered] = useState(false);
 
     const videoId = useMemo(() => {
-        return extractYouTubeVideoId(youtubeUrl);
+        return extractYouTubeVideoId(youtubeUrl!);
     }, [youtubeUrl]);
 
     const embedUrl = useMemo(() => {
@@ -91,7 +91,7 @@ const LandingVideoPanel: React.FC<LandingVideoPanelProps> = ({
                         <p className="text-sm text-slate-700 dark:text-slate-300 font-medium">
                             First, check out our{' '}
                             <span className="text-blue-600 dark:text-blue-400 font-semibold">
-                                2-minute walkthrough
+                                5-minute walkthrough
                             </span>
                         </p>
                         <p className="text-xs text-slate-600 dark:text-slate-400">
