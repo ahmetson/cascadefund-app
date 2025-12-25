@@ -141,6 +141,23 @@ function authVerificationToAuthVerificationModel(verification: AuthVerification)
 }
 
 /**
+ * Get auth user by ID
+ */
+export async function getAuthUserById(userId: string): Promise<AuthUser | null> {
+    try {
+        const { getDb } = await import('@/server-side/db')
+        const db = await getDb()
+        const collection = db.collection<AuthUserModel>('user')
+        
+        const user = await collection.findOne({ id: userId })
+        return authUserModelToAuthUser(user)
+    } catch (error) {
+        console.error('Error getting auth user by id:', error)
+        return null
+    }
+}
+
+/**
  * Get accounts by user ID
  */
 export async function getAccountsByUserId(userId: string): Promise<AuthAccount[]> {

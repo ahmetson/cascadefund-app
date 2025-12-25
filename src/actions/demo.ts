@@ -3,38 +3,16 @@ import { z } from 'astro:schema'
 import { ObjectId } from 'mongodb'
 import { Wallet } from 'ethers'
 import { getDemoByEmail, createDemo, updateDemoStep } from '@/server-side/demo'
-import { emailToNickname, createStars, getStarByIds, getStarById, updateStarSunshines } from '@/server-side/star'
+import { createStars, getStarByIds, getStarById, updateStarSunshines } from '@/server-side/star'
 import { getGalaxyById, updateGalaxySunshines } from '@/server-side/galaxy'
 import { processPayment } from '@/server-side/crypto-sockets'
 import type { Star, Roles } from '@/types/star'
 
 /**
- * Generate a random user with profile picture from DiceBear
+ * Generate a random star for demo purposes
  */
-function generateRandomStar(role: Roles, index: number, email: string): Star {
-    const randomSeed = `${role}-${index}-${Date.now()}-${Math.random()}`
-    const avatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${randomSeed}&size=256`
-
-    // Generate random names for demo
-    const names = [
-        'Alex Johnson',
-        'Sam Taylor',
-        'Jordan Smith',
-        'Casey Brown',
-        'Morgan Davis',
-        'Riley Wilson',
-        'Avery Martinez',
-        'Quinn Anderson',
-        'Sage Thompson',
-        'River Garcia'
-    ]
-
-    const randomName = names[Math.floor(Math.random() * names.length)]
-
+function generateRandomStar(role: Roles, index: number): Star {
     return {
-        src: avatarUrl,
-        nickname: randomName.replace(' ', '-').toLowerCase(),
-        email: email,
         sunshines: 0,
         stars: 0,
         role: role as Roles,
@@ -52,18 +30,15 @@ async function generateDemoStars(email: string): Promise<Star[]> {
     const wallet3 = Wallet.createRandom()
 
     const stars = [{
-        email,
         role: 'user',
-        nickname: emailToNickname(email),
-        src: `https://api.dicebear.com/9.x/avataaars/svg?seed=${email}&size=256`,
         demoPrivateKey: wallet1.privateKey,
     } as Star,
     {
-        ...generateRandomStar('maintainer', 1, email + '.m'),
+        ...generateRandomStar('maintainer', 1),
         demoPrivateKey: wallet2.privateKey,
     } as Star,
     {
-        ...generateRandomStar('contributor', 2, email + '.c'),
+        ...generateRandomStar('contributor', 2),
         demoPrivateKey: wallet3.privateKey,
     } as Star
     ]
@@ -109,7 +84,7 @@ export const server = {
 
                 return {
                     success: true,
-                    users: users,
+                    users: stars,
                 }
             } catch (error) {
                 console.error('Error in demo start action:', error)
@@ -233,7 +208,7 @@ export const server = {
                 }
 
                 // Calculate total sunshines
-                const currentSunshines = user.sunshines || 0
+                const currentSunshines = star.sunshines || 0
                 const totalSunshines = currentSunshines + sunshinesAmount
                 return {
                     success: true,

@@ -169,9 +169,9 @@ const AuthHeader: React.FC<Props> = ({ className }) => {
   if (user) {
     return <AuthStar
       star={star || undefined}
-      src={star?.src || user.image}
+      src={user.image}
       email={user.email}
-      nickname={star?.nickname || user.name || user.username || user.email?.split('@')[0] || 'User'}
+      nickname={user.name || user.username || user.email?.split('@')[0] || 'User'}
       className="w-8 h-8"
     />
   }

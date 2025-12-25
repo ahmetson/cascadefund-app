@@ -2,9 +2,6 @@ export type Roles = 'user' | 'maintainer' | 'contributor'
 
 export interface Star {
     _id?: string
-    email?: string
-    src?: string
-    nickname?: string
     sunshines?: number
     stars?: number
     role?: Roles

@@ -8,6 +8,7 @@ import ProfileWithBlogs from "@/components/user/ProfileWithBlogs";
 import CreateBlogCTA from "@/components/blog/CreateBlogCTA";
 import ConditionalSignOutButton from "@/components/auth/ConditionalSignOutButton";
 import { getStarById, getStarByEmail } from "@/server-side/star";
+import { getAuthUserById } from "@/server-side/auth";
 import { getGalaxiesByMaintainer } from "@/server-side/galaxy";
 import { getBlogsByAuthor } from "@/server-side/blog";
 import { mockUserStars } from "@/types/mock-data";
@@ -89,12 +90,22 @@ const authUser: AuthUser | null = betterAuthUser
           updatedAt: betterAuthUser.updatedAt,
       }
     : null;
+
+// Get auth user for the star being viewed
+let starAuthUser: AuthUser | null = null;
+let displayName = "User Profile";
+if (user?.userId) {
+    starAuthUser = await getAuthUserById(user.userId);
+    if (starAuthUser) {
+        displayName = starAuthUser.name || starAuthUser.username || starAuthUser.email?.split("@")[0] || "User Profile";
+    }
+}
 ---
 
 <GalaxyLayout
     active={MenuName.ProjectName}
     hideLinks={Object.keys(MenuName)}
-    projectName={user.nickname || "User Profile"}
+    projectName={displayName}
     stars={mockUserStars}
     projectGoal={1000}
     projectX={userX}
@@ -103,14 +114,14 @@ const authUser: AuthUser | null = betterAuthUser
 >
     <BackButton slot="left" client:load />
 
-    <ConditionalSignOutButton slot="right" starEmail={user.email} client:load />
+    <ConditionalSignOutButton slot="right" starEmail={starAuthUser?.email} client:load />
 
     <ProfileWithBlogs
         slot="center"
         user={user}
         galaxies={userGalaxies}
         blogs={userBlogs}
-        authUser={authUser}
+        authUser={starAuthUser}
         client:only="react"
     />
 

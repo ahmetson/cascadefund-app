@@ -33,10 +33,10 @@ const AuthStar: React.FC<AuthStarProps> = ({
   role,
   star
 }) => {
-  // Use star object if provided, otherwise fall back to individual props
-  const finalSrc = star?.src || src
+  // Use individual props (star object no longer contains src/nickname)
+  const finalSrc = src
   const finalAlt = alt || 'Avatar'
-  const finalNickname = star?.nickname || nickname
+  const finalNickname = nickname
   const finalSunshines = star?.sunshines ?? sunshines
   const finalStars = star?.stars ?? stars
   const finalRole = star?.role || role

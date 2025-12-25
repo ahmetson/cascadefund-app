@@ -2,6 +2,7 @@ import { defineAction } from 'astro:actions'
 import { z } from 'astro:schema'
 import { getDemoByEmail } from '@/server-side/demo'
 import { getStarById, updateStarSunshines, getStarByIds } from '@/server-side/star'
+import { getAuthUserById } from '@/server-side/auth'
 import { getGalaxyById, updateGalaxySunshines } from '@/server-side/galaxy'
 import { getIssuesByGalaxy, getShiningIssues, getPublicBacklogIssues, createIssue, updateIssueSunshines, getIssueById, setIssueContributor, unsetIssueContributor, updateIssue, patchIssue, unpatchIssue } from '@/server-side/issue'
 import type { Issue, IssueUser, IssueStat, IssueStatType } from '@/types/issue'
@@ -208,6 +209,15 @@ export const server = {
                     }
                 }
 
+                // Get auth user data for username
+                let username = 'unknown'
+                if (user.userId) {
+                    const authUser = await getAuthUserById(user.userId)
+                    if (authUser) {
+                        username = authUser.name || authUser.username || authUser.email?.split('@')[0] || 'unknown'
+                    }
+                }
+                
                 // Create issue with authorId
                 const issue: Issue = {
                     galaxy: galaxyId,
@@ -219,7 +229,7 @@ export const server = {
                     createdTime: Math.floor(Date.now() / 1000),
                     sunshines,
                     users: [{
-                        username: user.nickname || user.email?.split('@')[0] || 'unknown',
+                        username,
                         starshineAmount: sunshines,
                         transactionDate: Math.floor(Date.now() / 1000),
                     }],
@@ -308,7 +318,14 @@ export const server = {
                 }
 
                 // Update issue sunshines
-                const username = user.nickname || user.email?.split('@')[0] || 'unknown';
+                // Get auth user data for username
+                let username = 'unknown'
+                if (user.userId) {
+                    const authUser = await getAuthUserById(user.userId)
+                    if (authUser) {
+                        username = authUser.name || authUser.username || authUser.email?.split('@')[0] || 'unknown'
+                    }
+                }
                 const issueUpdated = await updateIssueSunshines(issueId, userId, username, sunshinesToAdd);
                 if (!issueUpdated) {
                     // Rollback user sunshines if issue update fails
@@ -394,7 +411,14 @@ export const server = {
                 }
 
                 // Set contributor
-                const username = user.nickname || user.email?.split('@')[0] || 'unknown';
+                // Get auth user data for username
+                let username = 'unknown'
+                if (user.userId) {
+                    const authUser = await getAuthUserById(user.userId)
+                    if (authUser) {
+                        username = authUser.name || authUser.username || authUser.email?.split('@')[0] || 'unknown'
+                    }
+                }
                 const updated = await setIssueContributor(issueId, userId, username);
                 if (!updated) {
                     return {

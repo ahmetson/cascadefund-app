@@ -26,7 +26,13 @@ const starClipPath = 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70
 const ProfilePanel: React.FC<ProfilePanelProps> = ({ user, galaxies, authUser }) => {
     const defaultSrc = 'https://api.backdropbuild.com/storage/v1/object/public/avatars/9nFM8HasgS.jpeg'
     const defaultAlt = 'Avatar'
-    const { isCurrentUser } = useIsCurrentUser(user.email)
+    // Get email from authUser if available, otherwise fallback (for demo/legacy)
+    const userEmail = authUser?.email || (user as any).email
+    const { isCurrentUser } = useIsCurrentUser(userEmail)
+    // Get display values from authUser
+    const displayName = authUser?.name || authUser?.username || authUser?.email?.split('@')[0] || 'Unknown User'
+    const displayImage = authUser?.image || defaultSrc
+    const displayNickname = authUser?.username || authUser?.displayUsername || authUser?.name || authUser?.email?.split('@')[0]
     const [accounts, setAccounts] = useState<Array<{ providerId: string; providerAccountId: string }>>([])
     const [isLoadingAccounts, setIsLoadingAccounts] = useState(false)
 
@@ -101,8 +107,8 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({ user, galaxies, authUser })
                         }}
                     >
                         <img
-                            src={user.src || defaultSrc}
-                            alt={defaultAlt || user.nickname || 'Star avatar'}
+                            src={displayImage}
+                            alt={defaultAlt || displayName || 'Star avatar'}
                             className="w-full h-full object-cover"
                         />
                     </div>
@@ -115,7 +121,7 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({ user, galaxies, authUser })
                     {/* Name and Role */}
                     <div className="text-center space-y-3">
                         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
-                            {user.nickname || user.email?.split('@')[0] || 'Unknown User'}
+                            {displayName}
                         </h1>
                         {user.role && (
                             <div className="inline-flex items-center">
@@ -221,17 +227,17 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({ user, galaxies, authUser })
                         )}
 
                         {/* Email */}
-                        {user.email && (
+                        {userEmail && (
                             <div className="space-y-2">
                                 <Label>Email</Label>
                                 <div className="text-sm font-medium text-slate-900 dark:text-slate-100 px-3 py-2 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
-                                    {user.email}
+                                    {userEmail}
                                 </div>
                             </div>
                         )}
 
                         {/* Display Name (from auth user) */}
-                        {isCurrentUser && authUser?.name && (
+                        {authUser?.name && (
                             <div className="space-y-2">
                                 <Label>Display Name</Label>
                                 <div className="text-sm font-medium text-slate-900 dark:text-slate-100 px-3 py-2 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
@@ -240,12 +246,12 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({ user, galaxies, authUser })
                             </div>
                         )}
 
-                        {/* Nickname (from star) */}
-                        {user.nickname && (
+                        {/* Username/Nickname (from auth user) */}
+                        {displayNickname && (
                             <div className="space-y-2">
-                                <Label>Nickname</Label>
+                                <Label>Username</Label>
                                 <div className="text-sm font-medium text-slate-900 dark:text-slate-100 px-3 py-2 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
-                                    {user.nickname}
+                                    {displayNickname}
                                 </div>
                             </div>
                         )}

@@ -13,9 +13,6 @@ function starModelToStar(model: StarModel | null): Star | null {
     if (!model) return null
     return {
         _id: model._id?.toString(),
-        email: model.email,
-        src: model.src,
-        nickname: model.nickname,
         sunshines: model.sunshines,
         stars: model.stars,
         role: model.role,
@@ -28,9 +25,6 @@ function starModelToStar(model: StarModel | null): Star | null {
 function starToStarModel(star: Star): StarModel {
     return {
         _id: star._id ? new ObjectId(star._id) : undefined,
-        email: star.email,
-        src: star.src,
-        nickname: star.nickname,
         sunshines: star.sunshines,
         stars: star.stars,
         role: star.role,
@@ -125,10 +119,12 @@ export async function createStars(stars: Star[]): Promise<string[]> {
 
 /**
  * Get or create star by email (returns star ID as string)
+ * Note: This function is deprecated. Use getOrCreateStarByUserId instead.
+ * Kept for backward compatibility with demo mode.
  */
 export async function getOrCreateStarByEmail(email: string): Promise<string> {
     try {
-        // Try to get existing star
+        // Try to get existing star by email (legacy support)
         const existingStar = await getStarByEmail(email)
         if (existingStar && existingStar._id) {
             // Generate private key if star doesn't have one
@@ -144,18 +140,51 @@ export async function getOrCreateStarByEmail(email: string): Promise<string> {
             return existingStar._id
         }
 
-        // Create new star if doesn't exist
+        // Create new star if doesn't exist (for demo mode only)
         const wallet = Wallet.createRandom()
         const newStar: Star = {
-            email,
             role: 'maintainer',
-            nickname: emailToNickname(email),
             demoPrivateKey: wallet.privateKey,
         }
         const insertedId = await createStar(newStar)
         return insertedId
     } catch (error) {
         console.error('Error getting or creating star by email:', error)
+        throw error
+    }
+}
+
+/**
+ * Get or create star by userId (returns star ID as string)
+ */
+export async function getOrCreateStarByUserId(userId: string): Promise<string> {
+    try {
+        const collection = await getCollection<StarModel>('stars')
+        const existingStar = await collection.findOne({ userId: new ObjectId(userId) })
+        
+        if (existingStar && existingStar._id) {
+            // Generate private key if star doesn't have one
+            if (!existingStar.demoPrivateKey) {
+                const wallet = Wallet.createRandom()
+                await collection.updateOne(
+                    { _id: existingStar._id },
+                    { $set: { demoPrivateKey: wallet.privateKey } }
+                )
+            }
+            return existingStar._id.toString()
+        }
+
+        // Create new star if doesn't exist
+        const wallet = Wallet.createRandom()
+        const newStar: Star = {
+            userId,
+            role: 'maintainer',
+            demoPrivateKey: wallet.privateKey,
+        }
+        const insertedId = await createStar(newStar)
+        return insertedId
+    } catch (error) {
+        console.error('Error getting or creating star by userId:', error)
         throw error
     }
 }

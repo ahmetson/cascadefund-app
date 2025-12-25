@@ -2,8 +2,9 @@ import { ObjectId } from 'mongodb'
 import { getCollection } from './db'
 import { getAllGalaxies } from './galaxy'
 import { getIssueById } from './issue'
+import { getAuthUserById } from './auth'
 import type { AllStarStats, SolarForgeModel, UserStar, SpaceTracer } from '@/types/all-stars'
-import type { StarModel } from './user'
+import type { StarModel } from './star'
 
 /**
  * Get all star statistics by aggregating data from galaxies and users
@@ -121,18 +122,30 @@ export async function upsertSpaceUserStar(params: {
         return userStarModelToUserStar(updated)
     }
 
-    const { getStarById } = await import('./user')
-    const user = await getStarById(userId)
+    const { getStarById } = await import('./star')
+    const star = await getStarById(userId)
+    
+    // Get auth user data for nickname and src
+    let nickname = data?.nickname || userId
+    let src = data?.src
+    if (star?.userId) {
+        const authUser = await getAuthUserById(star.userId)
+        if (authUser) {
+            nickname = data?.nickname || authUser.name || authUser.username || authUser.email?.split("@")[0] || userId
+            src = data?.src ?? authUser.image
+        }
+    }
+    
     const base: UserStarModel = {
         galaxyId,
         userId,
-        nickname: data?.nickname || user?.nickname || userId,
-        src: data?.src ?? user?.src,
-        alt: data?.alt ?? user?.alt,
-        stars: data?.stars ?? user?.stars,
-        sunshines: data?.sunshines ?? user?.sunshines,
-        role: data?.role ?? user?.role,
-        uri: data?.uri ?? user?.uri,
+        nickname,
+        src,
+        alt: data?.alt,
+        stars: data?.stars ?? star?.stars,
+        sunshines: data?.sunshines ?? star?.sunshines,
+        role: data?.role ?? star?.role,
+        uri: data?.uri,
         createdTime: now,
         updatedTime: now,
         // x and y intentionally omitted on first create if not provided

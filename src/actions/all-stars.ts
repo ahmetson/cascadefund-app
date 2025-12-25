@@ -2,6 +2,7 @@ import { defineAction } from 'astro:actions'
 import { z } from 'astro:schema'
 import { Wallet } from 'ethers'
 import { getAllStarStats, checkSolarForgeByIssue, updateIssueStars, getGalaxySpace, getUserStar as getUserStarFromSpace, upsertSpaceUserStar, updateUserStarPosition as updateUserStarPositionDb, createSpaceTracer } from '@/server-side/all-stars'
+import { getAuthUserById } from '@/server-side/auth'
 import { getIssueById, updateIssueSolarForgeTxid } from '@/server-side/issue'
 import { updateStarStars, getStarById } from '@/server-side/star'
 import { getGalaxyById } from '@/server-side/galaxy'
@@ -114,17 +115,28 @@ async function solarForgeByIssue(issueId: string): Promise<SolarForgeByIssueResu
                 }
 
                 if (issue.galaxy) {
+                    // Get auth user data for nickname and src
+                    let nickname: string | undefined
+                    let src: string | undefined
+                    if (user.userId) {
+                        const authUser = await getAuthUserById(user.userId)
+                        if (authUser) {
+                            nickname = authUser.name || authUser.username || authUser.email?.split('@')[0]
+                            src = authUser.image
+                        }
+                    }
+
                     await upsertSpaceUserStar({
                         galaxyId: issue.galaxy,
                         userId,
                         data: {
-                            nickname: user.nickname,
-                            src: user.src,
-                            alt: user.alt,
+                            nickname,
+                            src,
+                            alt: undefined,
                             stars: user.stars,
                             sunshines: user.sunshines,
                             role: user.role,
-                            uri: user.uri,
+                            uri: undefined,
                         },
                     })
                 }

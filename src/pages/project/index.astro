@@ -15,6 +15,7 @@ import { getGalaxySpace, getUserStar } from "@/server-side/all-stars";
 import { getGalaxyById } from "@/server-side/galaxy";
 import { getProjectById } from "@/server-side/project";
 import { getStarById, getStarByEmail } from "@/server-side/star";
+import { getAuthUserById } from "@/server-side/auth";
 import { DEMO_COOKIE_NAMES } from "@/types/demo";
 import type { UserStar } from "@/types/all-stars";
 
@@ -40,9 +41,18 @@ if (!project) {
 
 // Fetch maintainer user for author info
 const maintainer = await getStarById(galaxy.maintainer);
-const authorUri = `/star?email=${maintainer?.email || "unknown"}`;
-const authorName =
-  maintainer?.nickname || maintainer?.email?.split("@")[0] || "Unknown";
+let authorUri = "/star?id=unknown";
+let authorName = "Unknown";
+let maintainerSrc: string | undefined;
+
+if (maintainer?.userId) {
+  const maintainerAuthUser = await getAuthUserById(maintainer.userId);
+  if (maintainerAuthUser) {
+    authorUri = `/star?id=${maintainer._id || "unknown"}`;
+    authorName = maintainerAuthUser.name || maintainerAuthUser.username || maintainerAuthUser.email?.split("@")[0] || "Unknown";
+    maintainerSrc = maintainerAuthUser.image;
+  }
+}
 
 // Extract social links
 const githubLink = project.socialLinks?.find((link) => link.type === "github");
@@ -77,15 +87,25 @@ if (demoEmail) {
         galaxyId: galaxyIdParam,
       };
     } else {
+      // Get auth user data if userId is available
+      let nickname = demoEmail.split("@")[0];
+      let src: string | undefined;
+      if (demoUser.userId) {
+        const authUser = await getAuthUserById(demoUser.userId);
+        if (authUser) {
+          nickname = authUser.name || authUser.username || nickname;
+          src = authUser.image;
+        }
+      }
       currentUserData = {
         galaxyId: galaxyIdParam,
-        nickname: demoUser.nickname || demoEmail.split("@")[0],
-        src: demoUser.src,
-        alt: demoUser.alt,
+        nickname,
+        src,
+        alt: undefined,
         stars: demoUser.stars,
         sunshines: demoUser.sunshines,
         role: demoUser.role,
-        uri: demoUser.uri,
+        uri: undefined,
         userId: demoUser._id,
         draggable: isPlaceMode,
       };
@@ -132,7 +152,7 @@ const projectData: ProjectInfoProps = {
   author: {
     uri: authorUri,
     children: authorName,
-    icon: maintainer?.src,
+    icon: maintainerSrc,
     rating:
       maintainer?.role === "maintainer"
         ? {
