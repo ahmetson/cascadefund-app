@@ -68,3 +68,27 @@ All commands are run from the root of the project, from a terminal:
    pnpm install
    ```
 
+4. Configuration
+   ```bash
+   cp .env.example .env # Then set the necessary information
+   ```
+
+5. Setup
+   ```bash
+   pnpm run setup
+   ```
+
+5. Run for the first time (let's setup)
+   Use dev, if you run the client on frontend. And use beta if the
+   database is remote.
+
+   ```bash
+   pnpm run dev # or
+   pnpm run beta
+   ```
+
+6. Create your first user
+   Visit the page at https://localhost:4321/
+
+   Then, login on top-right button. It will create the data on frontend.
+   Enjoy! :)
