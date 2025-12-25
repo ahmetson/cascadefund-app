@@ -16,7 +16,6 @@ import { UserStar as UserStarData } from "@/types/all-stars";
 import BrowseTracker from "@/components/navigation/BrowseTracker";
 import PageTransitionProvider from "@/components/navigation/PageTransitionProvider";
 import Analytics from "./Analytics.astro";
-import { setup } from "@/setup";
 
 interface Props {
   active?: string;
@@ -59,7 +58,12 @@ const {
   isStatic = false,
 } = Astro.props;
 
-await setup();
+if (Astro.locals.session) {
+  console.log("User is authenticated");
+} else {
+  // Redirect to login page if the user is not authenticated
+  console.log("User is not authenticated");
+}
 ---
 
 <!doctype html>
