@@ -25,9 +25,9 @@ export const validateGitUrl = (url: string): string | null => {
 /**
  * Fetch README content from GitHub or GitLab repository
  * @param data Repository analysis data
- * @returns Readme content as a string
+ * @returns Object with readme content and URL, or null if not found
  */
-export const fetchReadmeContent = async (data: RepositoryAnalysis): Promise<string | null> => {
+export const fetchReadmeContent = async (data: RepositoryAnalysis): Promise<{ content: string | null; url: string | null }> => {
     const readmeFiles = ['README.md', 'README.txt', 'README'];
     for (const file of readmeFiles) {
         let readmeUrl = '';
@@ -44,13 +44,11 @@ export const fetchReadmeContent = async (data: RepositoryAnalysis): Promise<stri
             if (response.ok) {
                 const content = await response.text();
                 // Limit to reasonable size (e.g., 10KB)
-                if (content.length <= 10000) {
-                    return content.substring(0, 10000);
-                }
-                return content;
+                const limitedContent = content.length <= 10000 ? content.substring(0, 10000) : content;
+                return { content: limitedContent, url: readmeUrl };
             }
         }
     }
 
-    return null;
+    return { content: null, url: null };
 };

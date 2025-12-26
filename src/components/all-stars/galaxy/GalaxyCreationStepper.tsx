@@ -51,8 +51,8 @@ const GalaxyCreationStepper: React.FC<AddingStepperProps> = ({ onCancel, onCompl
     const handleAnalysisComplete = (data: any) => {
         setRepositoryData(data);
         // Try to fetch README content
-        fetchReadmeContent(data).then((content) => {
-            setReadmeContent(content !== null ? content : '');
+        fetchReadmeContent(data).then((result) => {
+            setReadmeContent(result.content !== null ? result.content : '');
             console.log(`Set the repository data`, repositoryData, readmeContent)
             setAutoAdvanceStep(2);
         }).catch((error) => {

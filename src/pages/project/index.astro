@@ -14,8 +14,10 @@ import { getGalaxyById } from "@/server-side/galaxy";
 import { getProjectById } from "@/server-side/project";
 import { getStarById, getStarByUserId } from "@/server-side/star";
 import { getAuthUserById } from "@/server-side/auth";
+import { getSBOMByProjectId } from "@/server-side/sbom";
 import type { UserStar } from "@/types/all-stars";
 import type { AuthUser } from "@/types/auth";
+import RepositoryInfoPanel from "@/components/project/RepositoryInfoPanel";
 
 // Get galaxy ID from query parameter
 const galaxyIdParam = Astro.url.searchParams.get("galaxy");
@@ -39,11 +41,13 @@ if (!project) {
 
 // Fetch maintainer user for author info
 const maintainer = await getStarById(galaxy.maintainer);
+console.error(`Found maintainer of the project:`, maintainer?.userId);
 let authorName = "Unknown";
 let maintainerSrc: string | undefined;
 
 if (maintainer?.userId) {
   const maintainerAuthUser = await getAuthUserById(maintainer.userId);
+  console.log(`Maintainer was fetched from the database:`, maintainerAuthUser);
   if (maintainerAuthUser) {
     authorName =
       maintainerAuthUser.name ||
@@ -67,6 +71,9 @@ const documentationLink = project.socialLinks?.find(
 const isPlaceMode = Astro.url.searchParams.get("place") === "true";
 
 const galaxySpace = await getGalaxySpace(galaxyIdParam);
+
+// Fetch SBOM data
+const sbom = await getSBOMByProjectId(project._id!);
 
 // Get authenticated user from middleware
 const betterAuthUser = Astro.locals.user;
@@ -213,6 +220,11 @@ const projectData: ProjectInfoProps = {
     githubUrl={githubLink?.uri}
     blockchainExplorerUrl={blockchainExplorerLink?.uri}
     documentationUrl={documentationLink?.uri}
+    readmeContent={project.readmeContent}
+    readmeUpdateTime={project.readmeUpdateTime}
+    readmeUrl={project.readmeUrl}
+    tags={galaxy.tags}
+    projectId={project._id}
     client:only="react"
   />
   {
@@ -245,6 +257,17 @@ const projectData: ProjectInfoProps = {
     projectGoal={projectData.projectGoal}
     goalDonations={projectData.balance * 10}
     projectName={projectData.title}
+    donationAmount={galaxy.donationAmount}
+    maintainerName={authorName}
+    maintainerImage={maintainerSrc}
+    ownershipGoal={1000}
+  />
+
+  <RepositoryInfoPanel
+    slot="center"
+    project={project}
+    galaxy={galaxy}
+    sbom={sbom}
   />
 
   <!-- <HighlightedInteraction slot="right" /> -->

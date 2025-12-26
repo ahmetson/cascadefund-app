@@ -10,6 +10,8 @@ interface GoalChartProps {
     goalDonations?: number;
     energyCount?: number;
     remainingStars?: number;
+    ownershipGoal?: number; // Number of owners needed for ownership transfer
+    currentOwners?: number; // Current number of owners
 }
 
 const GoalChart: React.FC<GoalChartProps> = ({
@@ -19,6 +21,8 @@ const GoalChart: React.FC<GoalChartProps> = ({
     goalDonations,
     energyCount = 0,
     remainingStars = 0,
+    ownershipGoal = 1000,
+    currentOwners = 0,
 }) => {
     // State for hover tracking
     const [hoveredSegment, setHoveredSegment] = React.useState<'stars' | 'sunshines' | 'remaining' | null>(null);
@@ -65,23 +69,47 @@ const GoalChart: React.FC<GoalChartProps> = ({
     // Generate unique ID for clipPath using React hook
     const clipPathId = React.useId().replace(/:/g, '-');
 
+    // Calculate ownership progress
+    const ownershipProgress = ownershipGoal > 0 ? (currentOwners / ownershipGoal) * 100 : 0;
+    const remainingOwners = Math.max(0, ownershipGoal - currentOwners);
+
     return (
         <div className="w-full space-y-3 pt-2 border-t border-slate-200/30 dark:border-slate-700/30 relative">
-            {/* Ownership Transition Display */}
-            <div className="flex items-center gap-3 text-sm font-medium text-slate-700 dark:text-slate-300">
-                <div className="flex items-center gap-1">
-                    {getIcon({ iconType: 'user', className: 'w-5 h-5 text-blue-600 dark:text-blue-400' })}
-                    <span>Single Author</span>
+            {/* Ownership Progress Bar */}
+            <div className="space-y-2">
+                <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-400">
+                    <span>Ownership Transfer Progress</span>
+                    <span className="font-semibold">
+                        <NumberFlow
+                            value={currentOwners}
+                            locales="en-US"
+                            format={{ style: 'decimal', maximumFractionDigits: 0 }}
+                        />
+                        {' / '}
+                        <NumberFlow
+                            value={ownershipGoal}
+                            locales="en-US"
+                            format={{ style: 'decimal', maximumFractionDigits: 0 }}
+                        />
+                        {' tokens'}
+                    </span>
                 </div>
-                {getIcon({ iconType: 'arrow-right', className: 'w-4 h-4 text-slate-500' })}
-                <div className="flex items-center gap-1">
-                    <div className="flex -space-x-1">
-                        {getIcon({ iconType: 'user', className: 'w-5 h-5 text-blue-600 dark:text-blue-400' })}
-                        {getIcon({ iconType: 'user', className: 'w-5 h-5 text-blue-600 dark:text-blue-400' })}
-                        {getIcon({ iconType: 'user', className: 'w-5 h-5 text-blue-600 dark:text-blue-400' })}
+                <div className="w-full h-3 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                    <div
+                        className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-500 ease-out"
+                        style={{ width: `${Math.min(100, ownershipProgress)}%` }}
+                    />
+                </div>
+                {remainingOwners > 0 && (
+                    <div className="text-xs text-slate-500 dark:text-slate-400 text-center">
+                        <NumberFlow
+                            value={remainingOwners}
+                            locales="en-US"
+                            format={{ style: 'decimal', maximumFractionDigits: 0 }}
+                        />
+                        {' tokens left to forge'}
                     </div>
-                    <span>Multiple Owners</span>
-                </div>
+                )}
             </div>
             <div className="flex flex-row space-y-6">
                 {/* 60% - Star Pie Chart Section */}
@@ -114,6 +142,25 @@ const GoalChart: React.FC<GoalChartProps> = ({
                                 </clipPath>
                             </defs>
 
+                            {/* Star outline border */}
+                            <path
+                                d={`M ${chartSize * 0.5} ${chartSize * 0.0} 
+                                    L ${chartSize * 0.61} ${chartSize * 0.35} 
+                                    L ${chartSize * 0.98} ${chartSize * 0.35} 
+                                    L ${chartSize * 0.68} ${chartSize * 0.57} 
+                                    L ${chartSize * 0.79} ${chartSize * 0.91} 
+                                    L ${chartSize * 0.5} ${chartSize * 0.70} 
+                                    L ${chartSize * 0.21} ${chartSize * 0.91} 
+                                    L ${chartSize * 0.32} ${chartSize * 0.57} 
+                                    L ${chartSize * 0.02} ${chartSize * 0.35} 
+                                    L ${chartSize * 0.39} ${chartSize * 0.35} Z`}
+                                fill="none"
+                                stroke="#d4a574"
+                                strokeWidth="1.5"
+                                strokeLinejoin="round"
+                                strokeOpacity="0.4"
+                                className="dark:stroke-amber-300/30"
+                            />
                             <g clipPath={`url(#${clipPathId})`}>
                                 {/* Background circle */}
                                 <circle
@@ -131,8 +178,10 @@ const GoalChart: React.FC<GoalChartProps> = ({
                                     <path
                                         d={createPieSlice(0, starsAngle, radius, centerX, centerY)}
                                         fill="#f97316"
-                                        stroke={hoveredSegment === 'stars' ? '#f97316' : '#f59e0b'}
-                                        strokeWidth={hoveredSegment === 'stars' ? '2' : '3'}
+                                        stroke={hoveredSegment === 'stars' ? '#fbbf24' : '#fcd34d'}
+                                        strokeWidth={hoveredSegment === 'stars' ? '1.5' : '2'}
+                                        strokeLinejoin="round"
+                                        strokeOpacity="0.5"
                                         className="fill-orange-500 dark:fill-orange-500/70 hover:fill-yellow-500/90 dark:hover:fill-yellow-500/70 cursor-pointer transition-all duration-200"
                                         style={{
                                             pointerEvents: 'all',
@@ -160,8 +209,10 @@ const GoalChart: React.FC<GoalChartProps> = ({
                                     <path
                                         d={createPieSlice(starsAngle, starsAngle + sunshinesAngle, radius, centerX, centerY)}
                                         fill="#eab308"
-                                        stroke={hoveredSegment === 'sunshines' ? '#f97316' : '#f59e0b'}
-                                        strokeWidth={hoveredSegment === 'sunshines' ? '3' : '2'}
+                                        stroke={hoveredSegment === 'sunshines' ? '#fde047' : '#fef08a'}
+                                        strokeWidth={hoveredSegment === 'sunshines' ? '1.5' : '2'}
+                                        strokeLinejoin="round"
+                                        strokeOpacity="0.5"
                                         className="dark:fill-yellow-500 cursor-pointer transition-all duration-200"
                                         style={{
                                             pointerEvents: 'all',
@@ -189,8 +240,10 @@ const GoalChart: React.FC<GoalChartProps> = ({
                                     <path
                                         d={createPieSlice(starsAngle + sunshinesAngle, 360, radius, centerX, centerY)}
                                         fill="#9ca3af"
-                                        stroke={hoveredSegment === 'remaining' ? '#6b7280' : '#4b5563'}
-                                        strokeWidth={hoveredSegment === 'remaining' ? '3' : '2'}
+                                        stroke={hoveredSegment === 'remaining' ? '#d6d3d1' : '#e7e5e4'}
+                                        strokeWidth={hoveredSegment === 'remaining' ? '1.5' : '2'}
+                                        strokeLinejoin="round"
+                                        strokeOpacity="0.4"
                                         className="dark:fill-slate-600 cursor-pointer transition-all duration-200"
                                         opacity={hoveredSegment === 'remaining' ? 0.5 : 0.3}
                                         style={{
@@ -284,7 +337,7 @@ const GoalChart: React.FC<GoalChartProps> = ({
                 <div className="flex-[0.4] w-full space-y-3 -mt-4 flex items-center relative">
                     <InfoPanel className="absolute top-15 left-0 flex flex-col px-4 py-2 space-y-4 rounded-lg bg-white/5 dark:bg-slate-900/5 border border-slate-200/20 dark:border-slate-700/20">
                         <h3 className="text-sm font-semibold text-slate-800/80 dark:text-slate-300/70 -ml-2">
-                            Total Stats
+                            Goal Progress
                         </h3>
                         {/* Energy */}
                         <div className="flex gap-2">

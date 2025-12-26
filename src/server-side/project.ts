@@ -30,6 +30,9 @@ function projectModelToProject(model: ProjectModel | null): Project | null {
         license: model.license,
         totalCommits: model.totalCommits,
         branchName: model.branchName,
+        readmeContent: model.readmeContent,
+        readmeUpdateTime: model.readmeUpdateTime,
+        readmeUrl: model.readmeUrl,
     }
 }
 
@@ -48,6 +51,9 @@ function projectToProjectModel(project: Project): ProjectModel {
         license: project.license,
         totalCommits: project.totalCommits,
         branchName: project.branchName,
+        readmeContent: project.readmeContent,
+        readmeUpdateTime: project.readmeUpdateTime,
+        readmeUrl: project.readmeUrl,
     }
 }
 

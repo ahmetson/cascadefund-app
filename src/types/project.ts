@@ -20,6 +20,9 @@ export interface Project {
     license?: string;
     totalCommits?: number;
     branchName?: string; // Default branch name from Git repository
+    readmeContent?: string; // Full README markdown content
+    readmeUpdateTime?: number; // Unix timestamp of last README fetch
+    readmeUrl?: string; // URL where README was fetched from
 }
 
 // Legacy type for backward compatibility

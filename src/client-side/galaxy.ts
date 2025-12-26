@@ -104,3 +104,37 @@ export async function createGalaxyBlockchainTransaction(
         return { success: false, error: 'An error occurred' };
     }
 }
+
+/**
+ * Update project README content
+ */
+export async function updateProjectReadme(
+    projectId: string
+): Promise<{ success: boolean; data?: any; error?: string }> {
+    try {
+        const session = await authClient.getSession();
+        const user = session?.data?.user as AuthUser | undefined;
+        if (!user?.id) {
+            return { success: false, error: 'User not logged in' };
+        }
+
+        const result = await actions.updateProjectReadme({
+            projectId,
+            userId: user.id,
+        });
+
+        if (result.data?.success && result.data.data) {
+            return {
+                success: true,
+                data: result.data.data,
+            };
+        }
+        return {
+            success: false,
+            error: result.data?.error || 'Failed to update README',
+        };
+    } catch (error) {
+        console.error('Error updating project README:', error);
+        return { success: false, error: 'An error occurred' };
+    }
+}

@@ -215,6 +215,42 @@ export const server = {
                 ];
 
 
+                // Fetch README content and URL if not provided
+                let readmeContentToStore = readmeContent || '';
+                let readmeUrlToStore: string | undefined = undefined;
+                let readmeUpdateTimeToStore: number | undefined = undefined;
+
+                if (!readmeContent) {
+                    // Fetch README if not provided
+                    const { fetchReadmeContent } = await import('@/lib/git-repository');
+                    const readmeResult = await fetchReadmeContent({
+                        gitUrl,
+                        provider,
+                        owner,
+                        repo,
+                        host,
+                        metadata,
+                        license,
+                        projectLinks,
+                        dependencyTree,
+                    });
+                    readmeContentToStore = readmeResult.content || '';
+                    readmeUrlToStore = readmeResult.url || undefined;
+                } else {
+                    // If readmeContent is provided, construct the URL
+                    if (provider === 'github') {
+                        readmeUrlToStore = `https://raw.githubusercontent.com/${owner}/${repo}/${metadata.defaultBranch}/README.md`;
+                    } else if (provider === 'gitlab') {
+                        const baseUrl = host ? `https://${host}` : 'https://gitlab.com';
+                        const encodedPath = encodeURIComponent(`${owner}/${repo}`);
+                        readmeUrlToStore = `${baseUrl}/api/v4/projects/${encodedPath}/repository/files/README.md/raw?ref=${metadata.defaultBranch}`;
+                    }
+                }
+
+                if (readmeContentToStore) {
+                    readmeUpdateTimeToStore = now;
+                }
+
                 const projectData: Omit<Project, '_id'> = {
                     forkLines: [],
                     socialLinks,
@@ -224,6 +260,9 @@ export const server = {
                     license: license.license, // Extract license string from LicenseInfo object
                     totalCommits: metadata.totalCommits,
                     branchName: metadata.defaultBranch, // Store default branch name
+                    readmeContent: readmeContentToStore || undefined,
+                    readmeUpdateTime: readmeUpdateTimeToStore,
+                    readmeUrl: readmeUrlToStore,
                 };
 
                 // This will return existing project ID if duplicate, or create new one
@@ -410,6 +449,166 @@ export const server = {
                 return {
                     success: false,
                     error: error instanceof Error ? error.message : 'Failed to create blockchain transaction',
+                };
+            }
+        },
+    }),
+
+    /**
+     * Update project README content
+     */
+    updateProjectReadme: defineAction({
+        input: z.object({
+            projectId: z.string(),
+            userId: z.string(),
+        }),
+        handler: async ({ projectId, userId }): Promise<{ success: boolean; data?: Project; error?: string }> => {
+            try {
+                // Get project
+                const project = await getProjectById(projectId);
+                if (!project) {
+                    return {
+                        success: false,
+                        error: 'Project not found',
+                    };
+                }
+
+                // Get galaxy to verify maintainer
+                const collection = await getCollection('galaxies');
+                const galaxy = await collection.findOne({ projectLink: new ObjectId(projectId) });
+                if (!galaxy) {
+                    return {
+                        success: false,
+                        error: 'Galaxy not found for this project',
+                    };
+                }
+
+                // Get user/star
+                const star = await getStarByUserId(userId);
+                if (!star || !star._id) {
+                    return {
+                        success: false,
+                        error: 'User not found',
+                    };
+                }
+
+                // Verify user is the maintainer
+                if (galaxy.maintainer.toString() !== star._id.toString()) {
+                    return {
+                        success: false,
+                        error: 'Only the maintainer can update the README',
+                    };
+                }
+
+                // Find GitHub or GitLab link to fetch README
+                const gitLink = project.socialLinks.find(link => link.type === 'github' || link.type === 'gitlab');
+                if (!gitLink) {
+                    return {
+                        success: false,
+                        error: 'No Git repository link found for this project',
+                    };
+                }
+
+                // Parse Git URL to get provider, owner, repo
+                const gitUrl = gitLink.uri;
+                const provider = gitLink.type as 'github' | 'gitlab';
+                let owner = '';
+                let repo = '';
+                let host: string | undefined = undefined;
+
+                if (provider === 'github') {
+                    const match = gitUrl.match(/github\.com[\/:]([^\/]+)\/([^\/\.]+)/);
+                    if (match) {
+                        owner = match[1];
+                        repo = match[2].replace(/\.git$/, '');
+                    }
+                } else if (provider === 'gitlab') {
+                    const urlObj = new URL(gitUrl);
+                    host = urlObj.hostname;
+                    const match = gitUrl.match(/gitlab\.com[\/:]([^\/]+)\/([^\/\.]+)/) || 
+                                  gitUrl.match(/\/([^\/]+)\/([^\/\.]+)\.git/);
+                    if (match) {
+                        owner = match[1];
+                        repo = match[2].replace(/\.git$/, '');
+                    }
+                }
+
+                if (!owner || !repo) {
+                    return {
+                        success: false,
+                        error: 'Could not parse Git repository information',
+                    };
+                }
+
+                // Fetch repository metadata to get default branch
+                const metadata = await fetchRepositoryMetadata(provider, owner, repo, host);
+                if (!metadata) {
+                    return {
+                        success: false,
+                        error: 'Could not fetch repository metadata',
+                    };
+                }
+
+                // Fetch README content
+                const { fetchReadmeContent } = await import('@/lib/git-repository');
+                const readmeResult = await fetchReadmeContent({
+                    gitUrl,
+                    provider,
+                    owner,
+                    repo,
+                    host,
+                    metadata: {
+                        lastCommitId: metadata.lastCommitId,
+                        lastCommitTimestamp: metadata.lastCommitTimestamp,
+                        totalCommits: metadata.totalCommits,
+                        visibility: metadata.visibility,
+                        defaultBranch: metadata.defaultBranch,
+                        name: metadata.name,
+                        description: metadata.description,
+                        language: metadata.language,
+                        homepage: metadata.homepage,
+                        topics: metadata.topics,
+                    },
+                    license: { license: project.license, confidence: 1, source: 'database' },
+                    projectLinks: {
+                        homepage: project.socialLinks.find(l => l.type === 'project')?.uri,
+                        documentation: project.socialLinks.find(l => l.type === 'documentation')?.uri,
+                    },
+                    dependencyTree: { dependencies: [], source: '', completeness: 'direct-only' },
+                });
+
+                // Update project with new README data
+                const now = Math.floor(Date.now() / 1000);
+                const projectCollection = await getCollection('projects');
+                await projectCollection.updateOne(
+                    { _id: new ObjectId(projectId) },
+                    {
+                        $set: {
+                            readmeContent: readmeResult.content || undefined,
+                            readmeUpdateTime: readmeResult.content ? now : undefined,
+                            readmeUrl: readmeResult.url || undefined,
+                        },
+                    }
+                );
+
+                // Fetch updated project
+                const updatedProject = await getProjectById(projectId);
+                if (!updatedProject) {
+                    return {
+                        success: false,
+                        error: 'Failed to fetch updated project',
+                    };
+                }
+
+                return {
+                    success: true,
+                    data: updatedProject,
+                };
+            } catch (error) {
+                console.error('Error updating project README:', error);
+                return {
+                    success: false,
+                    error: error instanceof Error ? error.message : 'Failed to update README',
                 };
             }
         },

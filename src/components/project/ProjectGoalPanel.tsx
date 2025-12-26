@@ -15,6 +15,10 @@ interface ProjectGoalPanelProps {
     goalDonations?: number; // Donations needed (in parentheses)
     projectName?: string; // Project name
     projectGoal?: number; // Total stars needed to turn project into galaxy
+    donationAmount?: number; // Current donation amount
+    maintainerName?: string; // Current owner/maintainer name
+    maintainerImage?: string; // Current owner/maintainer image
+    ownershipGoal?: number; // Number of owners needed for ownership transfer (default 1000)
 }
 
 const ProjectGoalPanel: React.FC<ProjectGoalPanelProps> = ({
@@ -25,6 +29,10 @@ const ProjectGoalPanel: React.FC<ProjectGoalPanelProps> = ({
     goalDonations,
     projectName,
     projectGoal,
+    donationAmount = 0,
+    maintainerName,
+    maintainerImage,
+    ownershipGoal = 1000,
 }) => {
     // Calculate energy percentage (same logic as ProjectLandingHero)
     const sunshinesToStar = 360;
@@ -100,11 +108,11 @@ const ProjectGoalPanel: React.FC<ProjectGoalPanelProps> = ({
                         />
                     </div>
                     <div className="flex items-center gap-2">
-                        {getIcon({ iconType: 'star', className: 'w-6 h-6 text-yellow-500 dark:text-yellow-500/70 mt-1.5', fill: 'currentColor' })}
+                        {getIcon({ iconType: 'star', className: 'w-6 h-6 text-yellow-600 dark:text-yellow-500/70 mt-1.5', fill: 'currentColor' })}
                         <NumberFlow
                             value={starsCount}
                             locales="en-US"
-                            format={{ style: 'decimal', maximumFractionDigits: 2 }}
+                            format={{ style: 'decimal', maximumFractionDigits: 4 }}
                             className="text-sm font-semibold text-slate-800 dark:text-slate-400"
                         />
                     </div>
@@ -113,9 +121,74 @@ const ProjectGoalPanel: React.FC<ProjectGoalPanelProps> = ({
                         <NumberFlow
                             value={sunshinesCount}
                             locales="en-US"
-                            format={{ style: 'decimal', maximumFractionDigits: 0 }}
+                            format={{ style: 'decimal', maximumFractionDigits: 4 }}
                             className="text-sm font-semibold text-slate-800 dark:text-slate-400"
                         />
+                    </div>
+                    <div className="flex items-center gap-2 -mt-1.5">
+                        {getIcon({ iconType: 'money', className: 'w-5 h-5 text-green-500 dark:text-green-500/70 ' })}
+                        <NumberFlow
+                            value={donationAmount}
+                            locales="en-US"
+                            format={{ style: 'currency', currency: 'USD', maximumFractionDigits: 4 }}
+                            className="text-sm font-semibold text-slate-800 dark:text-slate-400"
+                        />
+                    </div>
+                </div>
+
+                {/* Owner Section */}
+                {maintainerName && (
+                    <div className="w-full px-4 py-2 rounded-lg bg-white/5 dark:bg-slate-900/5 border border-slate-200/20 dark:border-slate-700/20">
+                        <div className="flex items-center gap-2 justify-center">
+                            <span className="text-xs text-slate-600 dark:text-slate-400">Owner:</span>
+                            {maintainerImage && (
+                                <img
+                                    src={maintainerImage}
+                                    alt={maintainerName}
+                                    className="w-6 h-6 rounded-full"
+                                />
+                            )}
+                            <span className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                                {maintainerName}
+                            </span>
+                        </div>
+                    </div>
+                )}
+
+                {/* Ownership Transfer Goal Section */}
+                <div className="w-full px-4 py-3 rounded-lg bg-white/5 dark:bg-slate-900/5 border border-slate-200/20 dark:border-slate-700/20">
+                    <div className="flex items-center justify-center gap-2 text-sm text-slate-700 dark:text-slate-300">
+                        <span>Goal: Transfer ownership</span>
+                        {maintainerName && (
+                            <span className="font-semibold text-slate-800 dark:text-slate-200">
+                                {maintainerName}
+                            </span>
+                        )}
+                        <div>
+                            <div className="flex items-center gap-1">
+                                <span>→</span>
+                                {getIcon({ iconType: 'star', className: 'w-5 h-5 text-yellow-500' })}
+                                <NumberFlow
+                                    value={ownershipGoal}
+                                    locales="en-US"
+                                    format={{ style: 'decimal', maximumFractionDigits: 0 }}
+                                    className="font-semibold text-slate-800 dark:text-slate-200"
+                                />
+                                <span>tokens</span>
+                            </div>
+                            {/* Second line: ← <money icon> required tokens / 360 token */}
+                            <div className="flex items-center gap-1">
+                                <span>←</span>
+                                {getIcon({ iconType: 'money', className: 'w-4 h-4 text-green-500' })}
+                                <NumberFlow
+                                    value={ownershipGoal / 360}
+                                    locales="en-US"
+                                    format={{ style: 'decimal', maximumFractionDigits: 4 }}
+                                    className="font-semibold text-slate-800 dark:text-slate-200"
+                                />
+                                <span>USD</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -127,6 +200,8 @@ const ProjectGoalPanel: React.FC<ProjectGoalPanelProps> = ({
                     goalDonations={goalDonations}
                     energyCount={energyCount}
                     remainingStars={remainingStars}
+                    ownershipGoal={ownershipGoal}
+                    currentOwners={userCount}
                 />
             </div >
         </InfoPanel >
