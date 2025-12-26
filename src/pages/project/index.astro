@@ -7,8 +7,6 @@ import ProjectLandingHero from "@/components/project/ProjectLandingHero";
 import ProjectCTAPanel from "@/components/project/ProjectCTAPanel";
 import PlaceCtaPanel from "@/components/project/PlaceCtaPanel";
 import ProjectGoalPanel from "@/components/project/ProjectGoalPanel";
-// import ProjectPeople from "@/components/project/ProjectPeoplePanel";
-// import HighlightedInteraction from "@/components/project/HighlightedInteractionPanel";
 import BackButton from "@/components/custom-ui/BackButton";
 import AllStarsContest from "@/components/all-stars/AllStarsContest";
 import { getGalaxySpace, getUserStar } from "@/server-side/all-stars";
@@ -41,14 +39,12 @@ if (!project) {
 
 // Fetch maintainer user for author info
 const maintainer = await getStarById(galaxy.maintainer);
-let authorUri = "/star?id=unknown";
 let authorName = "Unknown";
 let maintainerSrc: string | undefined;
 
 if (maintainer?.userId) {
   const maintainerAuthUser = await getAuthUserById(maintainer.userId);
   if (maintainerAuthUser) {
-    authorUri = `/star?id=${maintainer._id || "unknown"}`;
     authorName =
       maintainerAuthUser.name ||
       maintainerAuthUser.username ||

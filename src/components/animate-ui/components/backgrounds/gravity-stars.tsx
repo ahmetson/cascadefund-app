@@ -4,7 +4,6 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
-type MouseGravity = 'attract' | 'repel';
 type GlowAnimation = 'instant' | 'ease' | 'spring';
 type StarsInteractionType = 'bounce' | 'merge';
 
@@ -15,9 +14,6 @@ type GravityStarsProps = {
   glowIntensity?: number;
   glowAnimation?: GlowAnimation;
   movementSpeed?: number;
-  mouseInfluence?: number;
-  mouseGravity?: MouseGravity;
-  gravityStrength?: number;
   starsInteraction?: boolean;
   starsInteractionType?: StarsInteractionType;
 } & React.ComponentProps<'div'>;
@@ -42,9 +38,6 @@ function GravityStarsBackground({
   glowIntensity = 15,
   glowAnimation = 'ease',
   movementSpeed = 0.3,
-  mouseInfluence = 100,
-  mouseGravity = 'attract',
-  gravityStrength = 75,
   starsInteraction = false,
   starsInteractionType = 'bounce',
   className,
@@ -54,7 +47,6 @@ function GravityStarsBackground({
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
   const animRef = React.useRef<number | null>(null);
   const starsRef = React.useRef<Particle[]>([]);
-  const mouseRef = React.useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const [dpr, setDpr] = React.useState(1);
   const [canvasSize, setCanvasSize] = React.useState({
     width: 800,
@@ -116,88 +108,16 @@ function GravityStarsBackground({
     }
   }, [initStars, redistributeStars]);
 
-  const handlePointerMove = React.useCallback(
-    (e: React.MouseEvent | React.TouchEvent) => {
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-      const rect = canvas.getBoundingClientRect();
-      let clientX = 0;
-      let clientY = 0;
-      if ('touches' in e) {
-        const t = e.touches[0];
-        if (!t) return;
-        clientX = t.clientX;
-        clientY = t.clientY;
-      } else {
-        clientX = e.clientX;
-        clientY = e.clientY;
-      }
-      mouseRef.current = { x: clientX - rect.left, y: clientY - rect.top };
-    },
-    [],
-  );
-
   const updateStars = React.useCallback(() => {
     const w = canvasSize.width;
     const h = canvasSize.height;
-    const mouse = mouseRef.current;
 
     for (let i = 0; i < starsRef.current.length; i++) {
       const p = starsRef.current[i];
 
-      const dx = mouse.x - p.x;
-      const dy = mouse.y - p.y;
-      const dist = Math.hypot(dx, dy);
-
-      if (dist < mouseInfluence && dist > 0) {
-        const force = (mouseInfluence - dist) / mouseInfluence;
-        const nx = dx / dist;
-        const ny = dy / dist;
-        const g = force * (gravityStrength * 0.001);
-
-        if (mouseGravity === 'attract') {
-          p.vx += nx * g;
-          p.vy += ny * g;
-        } else if (mouseGravity === 'repel') {
-          p.vx -= nx * g;
-          p.vy -= ny * g;
-        }
-
-        p.opacity = Math.min(1, p.baseOpacity + force * 0.4);
-
-        const targetGlow = 1 + force * 2;
-        const currentGlow = p.glowMultiplier || 1;
-
-        if (glowAnimation === 'instant') {
-          p.glowMultiplier = targetGlow;
-        } else if (glowAnimation === 'ease') {
-          const ease = 0.15;
-          p.glowMultiplier = currentGlow + (targetGlow - currentGlow) * ease;
-        } else {
-          const spring = (targetGlow - currentGlow) * 0.2;
-          const damping = 0.85;
-          p.glowVelocity = (p.glowVelocity || 0) * damping + spring;
-          p.glowMultiplier = currentGlow + (p.glowVelocity || 0);
-        }
-      } else {
-        p.opacity = Math.max(p.baseOpacity * 0.3, p.opacity - 0.02);
-        const targetGlow = 1;
-        const currentGlow = p.glowMultiplier || 1;
-        if (glowAnimation === 'instant') {
-          p.glowMultiplier = targetGlow;
-        } else if (glowAnimation === 'ease') {
-          const ease = 0.08;
-          p.glowMultiplier = Math.max(
-            1,
-            currentGlow + (targetGlow - currentGlow) * ease,
-          );
-        } else {
-          const spring = (targetGlow - currentGlow) * 0.15;
-          const damping = 0.9;
-          p.glowVelocity = (p.glowVelocity || 0) * damping + spring;
-          p.glowMultiplier = Math.max(1, currentGlow + (p.glowVelocity || 0));
-        }
-      }
+      // Keep opacity and glow at base values (no mouse interaction)
+      p.opacity = p.baseOpacity;
+      p.glowMultiplier = 1;
 
       if (starsInteraction) {
         for (let j = i + 1; j < starsRef.current.length; j++) {
@@ -243,12 +163,28 @@ function GravityStarsBackground({
       p.x += p.vx;
       p.y += p.vy;
 
+      // Add slight random movement to keep stars active
       p.vx += (Math.random() - 0.5) * 0.001;
       p.vy += (Math.random() - 0.5) * 0.001;
 
-      p.vx *= 0.999;
-      p.vy *= 0.999;
+      // Maintain constant speed by normalizing velocity to target speed
+      const currentSpeed = Math.hypot(p.vx, p.vy);
+      const targetSpeed = movementSpeed * (0.5 + Math.random() * 0.5);
+      if (currentSpeed > 0) {
+        const speedRatio = targetSpeed / currentSpeed;
+        // Only adjust if speed is too low or too high (maintain movement)
+        if (currentSpeed < targetSpeed * 0.5 || currentSpeed > targetSpeed * 1.5) {
+          p.vx *= speedRatio;
+          p.vy *= speedRatio;
+        }
+      } else {
+        // If star is idle, give it a random direction
+        const angle = Math.random() * Math.PI * 2;
+        p.vx = Math.cos(angle) * targetSpeed;
+        p.vy = Math.sin(angle) * targetSpeed;
+      }
 
+      // Wrap around edges for infinite loop effect
       if (p.x < 0) p.x = w;
       if (p.x > w) p.x = 0;
       if (p.y < 0) p.y = h;
@@ -257,10 +193,7 @@ function GravityStarsBackground({
   }, [
     canvasSize.width,
     canvasSize.height,
-    mouseInfluence,
-    mouseGravity,
-    gravityStrength,
-    glowAnimation,
+    movementSpeed,
     starsInteraction,
     starsInteractionType,
   ]);
@@ -348,8 +281,6 @@ function GravityStarsBackground({
       ref={containerRef}
       data-slot="gravity-stars-background"
       className={cn('relative size-full overflow-hidden', className)}
-      onMouseMove={(e) => handlePointerMove(e)}
-      onTouchMove={(e) => handlePointerMove(e)}
       {...props}
     >
       <canvas ref={canvasRef} className="w-full h-full" />

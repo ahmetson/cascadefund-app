@@ -42,6 +42,7 @@ interface Props {
     leaderboardPosition?: number;
   }>;
   isStatic?: boolean;
+  disableGalaxyBackground?: boolean;
 }
 const {
   hideLinks,
@@ -56,6 +57,7 @@ const {
   projectId,
   projectGalaxies,
   isStatic = false,
+  disableGalaxyBackground = true,
 } = Astro.props;
 
 if (Astro.locals.session) {
@@ -99,24 +101,28 @@ if (Astro.locals.session) {
       <GridBackgrounded />
       {
         isStatic ? (
-          <GravityStarsBackground className="fixed h-screen w-screen z-1 pointer-events-none" />
+          <GravityStarsBackground className="fixed h-screen w-screen z-1" />
         ) : (
           <GravityStarsBackground
             client:only="react"
-            className="fixed h-screen w-screen z-1 pointer-events-none"
+            className="fixed h-screen w-screen z-1 pointer-events-auto"
           />
         )
       }
       <div class="fixed h-screen w-screen z-2">
-        <Galaxy
-          client:only="react"
-          mouseInteraction={false}
-          speed={0.25}
-          rotationSpeed={0.015}
-          twinkleIntensity={0.1}
-          glowIntensity={0.1}
-          autoCenterRepulsion={0.5}
-        />
+        {
+          disableGalaxyBackground ? null : (
+            <Galaxy
+              client:only="react"
+              mouseInteraction={false}
+              speed={0.25}
+              rotationSpeed={0.015}
+              twinkleIntensity={0.1}
+              glowIntensity={0.1}
+              autoCenterRepulsion={0.5}
+            />
+          )
+        }
       </div>
       <slot
         name="background"
@@ -133,22 +139,22 @@ if (Astro.locals.session) {
     <!-- Content Container Body - Will be transformed by GalaxyZoomWrapper -->
     <div
       id="galaxy-space"
-      class="z-2 relative border border-red-500/20"
+      class="z-2 relative border border-red-500/20 pointer-events-none"
       style="transform-origin: center center;"
     >
       <Space
         client:only="react"
         users={stars || []}
-        className="z-10"
+        className="z-10 pointer-events-auto"
         galaxyId={projectId}
         projectGalaxies={projectGalaxies}
       />
       <section class="mt-6">
-        <slot name="hero" />
+        <slot name="hero" class="pointer-events-auto" />
       </section>
       <ThreeColumnGrid
         centerPercents="3/5"
-        className="mx-auto py-16 space-x-8 px-8 min-h-[calc(100vh-4rem)]"
+        className="mx-auto py-16 space-x-8 px-8 min-h-[calc(100vh-4rem)] pointer-events-auto"
       >
         <slot name="left" class="mr-4" slot="left" />
         <slot name="center" class="mx-4" slot="center" />
