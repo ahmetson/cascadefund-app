@@ -18,6 +18,7 @@ import { getSBOMByProjectId } from "@/server-side/sbom";
 import type { UserStar } from "@/types/all-stars";
 import type { AuthUser } from "@/types/auth";
 import RepositoryInfoPanel from "@/components/project/RepositoryInfoPanel";
+import GalaxyBar from "@/components/project/GalaxyBar";
 
 // Get galaxy ID from query parameter
 const galaxyIdParam = Astro.url.searchParams.get("galaxy");
@@ -260,6 +261,7 @@ const projectData: ProjectInfoProps = {
     donationAmount={galaxy.donationAmount}
     maintainerName={authorName}
     maintainerImage={maintainerSrc}
+    maintainerId={maintainer?._id?.toString()}
     ownershipGoal={1000}
   />
 
@@ -268,6 +270,15 @@ const projectData: ProjectInfoProps = {
     project={project}
     galaxy={galaxy}
     sbom={sbom}
+  />
+
+  <GalaxyBar
+    slot="footer"
+    client:only="react"
+    galaxyId={galaxyIdParam}
+    projectIcon={project.socialLinks?.find((link) => link.type === "project")
+      ?.uri}
+    projectName={galaxy.name}
   />
 
   <!-- <HighlightedInteraction slot="right" /> -->

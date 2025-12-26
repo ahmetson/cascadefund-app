@@ -5,6 +5,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../animate-ui/components/animate/tooltip";
+import { cn } from '@/lib/utils';
 
 interface Props {
   content: string | React.ReactNode;
@@ -30,7 +31,13 @@ const Component: React.FC<Props> = ({ children, content, openDelay = 50 }) => {
         <TooltipContent
           key={contentKey}
           autoFocus
-          className="rounded-xs bg-black text-blue-100 border-color-teal-900 dark:bg-black dark:text-slate-200 dark:border-color-teal-500"
+          className={cn(
+            "rounded-xs max-w-2xl h-auto",
+            "bg-white/90 backdrop-blur-md text-slate-800",
+            "dark:bg-white/10 dark:backdrop-blur-md dark:text-slate-100",
+            "border border-slate-200/50 dark:border-slate-700/50",
+            "shadow-lg text-lg"
+          )}
         >
           {content}
         </TooltipContent>

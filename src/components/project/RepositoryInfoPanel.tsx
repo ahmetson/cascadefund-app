@@ -96,14 +96,6 @@ const RepositoryInfoPanel: React.FC<RepositoryInfoPanelProps> = ({
                                 ))}
                             </div>
                         )}
-
-
-                        {project.readmeUrl && (
-                            <div className="mt-3">
-                                <LabelValue label="README URL" value={project.readmeUrl} />
-                                <LabelValue label="README Last Updated" value={formatRelativeTime(project.readmeUpdateTime)} />
-                            </div>
-                        )}
                     </div>
                 )}
             </div>

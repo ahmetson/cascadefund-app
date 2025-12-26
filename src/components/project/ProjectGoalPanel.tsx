@@ -6,6 +6,8 @@ import { cn } from '@/lib/utils';
 import Tooltip from '@/components/custom-ui/Tooltip';
 import GoalChart from './GoalChart';
 import InfoPanel from '../panel/InfoPanel';
+import AuthStar from '@/components/auth/AuthStar';
+import Link from '@/components/custom-ui/Link';
 
 interface ProjectGoalPanelProps {
     stars?: UserStarData[]; // For user count
@@ -18,6 +20,7 @@ interface ProjectGoalPanelProps {
     donationAmount?: number; // Current donation amount
     maintainerName?: string; // Current owner/maintainer name
     maintainerImage?: string; // Current owner/maintainer image
+    maintainerId?: string; // Maintainer star ID for profile link
     ownershipGoal?: number; // Number of owners needed for ownership transfer (default 1000)
 }
 
@@ -32,6 +35,7 @@ const ProjectGoalPanel: React.FC<ProjectGoalPanelProps> = ({
     donationAmount = 0,
     maintainerName,
     maintainerImage,
+    maintainerId,
     ownershipGoal = 1000,
 }) => {
     // Calculate energy percentage (same logic as ProjectLandingHero)
@@ -141,16 +145,36 @@ const ProjectGoalPanel: React.FC<ProjectGoalPanelProps> = ({
                     <div className="w-full px-4 py-2 rounded-lg bg-white/5 dark:bg-slate-900/5 border border-slate-200/20 dark:border-slate-700/20">
                         <div className="flex items-center gap-2 justify-center">
                             <span className="text-xs text-slate-600 dark:text-slate-400">Owner:</span>
-                            {maintainerImage && (
+                            {maintainerId && (
+                                <AuthStar
+                                    src={maintainerImage}
+                                    alt={maintainerName}
+                                    nickname={maintainerName}
+                                    className="w-6 h-6"
+                                    imgClassName="w-full h-full"
+                                    uri="/star"
+                                    star={{ _id: maintainerId } as any}
+                                />
+                            )}
+                            {!maintainerId && maintainerImage && (
                                 <img
                                     src={maintainerImage}
                                     alt={maintainerName}
                                     className="w-6 h-6 rounded-full"
                                 />
                             )}
-                            <span className="text-sm font-semibold text-slate-800 dark:text-slate-200">
-                                {maintainerName}
-                            </span>
+                            {maintainerId ? (
+                                <Link
+                                    uri={`/star?id=${maintainerId}`}
+                                    className="text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:underline"
+                                >
+                                    {maintainerName}
+                                </Link>
+                            ) : (
+                                <span className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                                    {maintainerName}
+                                </span>
+                            )}
                         </div>
                     </div>
                 )}

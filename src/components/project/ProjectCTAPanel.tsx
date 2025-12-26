@@ -285,7 +285,9 @@ const ProjectCTAPanel: React.FC<ProjectCTAPanelProps> = ({ galaxyId, projectName
 
   // Get current step content (default to step 0 if undefined)
   const currentStep = demoStep !== undefined ? demoStep : 0;
-  const stepContent = stepsContent[Math.min(currentStep, stepsContent.length - 1)];
+  // Skip step 0 (Obtain Sunshines) - it's now in the GalaxyBar footer
+  const effectiveStep = currentStep === 0 ? 1 : currentStep;
+  const stepContent = stepsContent[Math.min(effectiveStep, stepsContent.length - 1)];
 
   // Don't render if still loading step
   if (isLoadingStep) {
@@ -294,6 +296,11 @@ const ProjectCTAPanel: React.FC<ProjectCTAPanelProps> = ({ galaxyId, projectName
         <p className="text-slate-600 dark:text-slate-400">Loading...</p>
       </div>
     );
+  }
+
+  // Don't render step 0 (Obtain Sunshines) - it's now in the GalaxyBar footer
+  if (currentStep === 0) {
+    return null;
   }
 
   return (

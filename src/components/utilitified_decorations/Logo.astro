@@ -4,38 +4,58 @@ import Link from "@/components/custom-ui/Link";
 interface Props {
   className?: string;
   imgClassName?: string;
+  noLink?: boolean;
 }
 
-const { className, imgClassName } = Astro.props;
+const { className, imgClassName, noLink = false } = Astro.props;
 ---
 
-<Link
-  id="logo"
-  uri="/"
-  className={" flex flex-start h-14 items-center " + (className || "")}
->
-  <div
-    class={`w-8 h-8 bg-transparent rounded flex items-center justify-center relative ${imgClassName}`}
-  >
-    <img
-      src="/ara_logo.png"
-      id="logoImg"
-      alt="Ara Logo"
-      class="w-full h-full absolute inset-0"
-      loading="eager"
-      fetchpriority="high"
-      decoding="async"
-    />
-    <img
-      src="/ara_logo_hover.png"
-      id="hoveredLogoImg"
-      alt="Ara Logo"
-      class="w-full h-full absolute inset-0"
-      loading="lazy"
-      decoding="async"
-    />
-  </div>
-</Link>
+{
+  noLink ? (
+    <div class={`flex flex-start h-14 items-center ${className || ""}`}>
+      <div
+        class={`w-8 h-8 bg-transparent rounded flex items-center justify-center relative ${imgClassName || ""}`}
+      >
+        <img
+          src="/ara_logo.png"
+          alt="Ara Logo"
+          class="w-full h-full"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </div>
+    </div>
+  ) : (
+    <Link
+      id="logo"
+      uri="/"
+      className={" flex flex-start h-14 items-center " + (className || "")}
+    >
+      <div
+        class={`w-8 h-8 bg-transparent rounded flex items-center justify-center relative ${imgClassName || ""}`}
+      >
+        <img
+          src="/ara_logo.png"
+          id="logoImg"
+          alt="Ara Logo"
+          class="w-full h-full absolute inset-0"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+        <img
+          src="/ara_logo_hover.png"
+          id="hoveredLogoImg"
+          alt="Ara Logo"
+          class="w-full h-full absolute inset-0"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    </Link>
+  )
+}
 <style>
   :global(.hyperlink) #logoImg {
     display: block;
