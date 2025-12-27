@@ -17,10 +17,10 @@ import type { Issue } from '@/types/issue'
 import AuthStar from '../auth/AuthStar'
 import { DndProvider, useDrag } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { getDemo, incrementDemoStep } from '@/client-side/demo'
-import { type DemoRoleChangeEvent, DEMO_EVENT_TYPES } from '@/types/demo'
+import { authClient, getAuthUserById } from '@/client-side/auth'
+import type { AuthUser } from '@/types/auth'
 import { getIssueById, updateIssue } from '@/client-side/issue'
-import { getStarById } from '@/client-side/star'
+import { getStarById, getStarByUserId } from '@/client-side/star'
 import { updatePatches, markPatchTested, removePatch, updateVersionStatus, revertPatch, completePatch, releaseVersion } from '@/client-side/roadmap'
 import { PATCH_EVENT_TYPES, PATCH_KEYWORD } from '@/types/patch'
 import { cn, truncateStr } from '@/lib/utils'
@@ -48,10 +48,11 @@ const ProjectVersionPanel: React.FC<Version> = ({
   const [patchesList, setPatchesList] = useState<Patch[]>(patches)
   const [revertingIssueId, setRevertingIssueId] = useState<string | null>(null)
   const [notificationMessage, setNotificationMessage] = useState<string | null>(null)
+  const { data: session, isPending } = authClient.useSession();
   const [maintainerUser, setMaintainerUser] = useState<Star | null>(null)
+  const [maintainerAuthUser, setMaintainerAuthUser] = useState<AuthUser | null>(null)
   const [isLoadingMaintainer, setIsLoadingMaintainer] = useState<boolean>(false)
   const [currentUser, setCurrentUser] = useState<Star | null>(null)
-  const [demoRole, setDemoRole] = useState<string | null>(null)
   const [totalSunshines, setTotalSunshines] = useState<number>(0)
   const [isLoadingSunshines, setIsLoadingSunshines] = useState<boolean>(false)
   const [isDraggingFromThisPanel, setIsDraggingFromThisPanel] = useState<boolean>(false)
@@ -62,9 +63,16 @@ const ProjectVersionPanel: React.FC<Version> = ({
     if (maintainer && typeof maintainer === 'string') {
       setIsLoadingMaintainer(true)
       getStarById(maintainer)
-        .then((userData) => {
+        .then(async (userData) => {
           if (userData) {
             setMaintainerUser(userData)
+            // Fetch auth user for image/nickname
+            if (userData.userId) {
+              const authUser = await getAuthUserById(userData.userId)
+              if (authUser) {
+                setMaintainerAuthUser(authUser)
+              }
+            }
           }
         })
         .catch((error: unknown) => {
@@ -75,6 +83,7 @@ const ProjectVersionPanel: React.FC<Version> = ({
         })
     } else {
       setMaintainerUser(null)
+      setMaintainerAuthUser(null)
     }
   }, [maintainer])
 
@@ -109,16 +118,15 @@ const ProjectVersionPanel: React.FC<Version> = ({
     fetchSunshines()
   }, [patchesList])
 
-  // Resolve current demo user & role
-  const updateCurrentUser = useCallback(() => {
-    const demo = getDemo()
-    if (!demo) return
-    if (demo.role) {
-      setDemoRole(demo.role)
+  // Fetch current user from session
+  useEffect(() => {
+    if (isPending) {
+      return;
     }
-    const selected = demo.users?.find(u => u.role === demo.role) || demo.users?.[0]
-    if (selected?._id) {
-      getStarById(selected._id.toString())
+
+    const user = session?.user as AuthUser | undefined;
+    if (user?.id) {
+      getStarByUserId(user.id)
         .then((userData) => {
           if (userData) {
             setCurrentUser(userData)
@@ -130,29 +138,7 @@ const ProjectVersionPanel: React.FC<Version> = ({
     } else {
       setCurrentUser(null)
     }
-  }, [])
-
-  useEffect(() => {
-    updateCurrentUser()
-  }, [updateCurrentUser])
-
-  // Listen for role change events
-  useEffect(() => {
-    const handleRoleChange = (event: Event) => {
-      const customEvent = event as CustomEvent<DemoRoleChangeEvent>
-      const newRole = customEvent.detail.role
-      if (newRole) {
-        setDemoRole(newRole)
-        updateCurrentUser()
-      }
-    }
-
-    window.addEventListener(DEMO_EVENT_TYPES.ROLE_CHANGED, handleRoleChange as EventListener)
-
-    return () => {
-      window.removeEventListener(DEMO_EVENT_TYPES.ROLE_CHANGED, handleRoleChange as EventListener)
-    }
-  }, [updateCurrentUser])
+  }, [session, isPending])
 
   // Listen for PATCH_UPDATE and PATCH_REMOVED events
   useEffect(() => {
@@ -222,18 +208,21 @@ const ProjectVersionPanel: React.FC<Version> = ({
   const authorProfile = useMemo(() => {
     if (!maintainerUser) return undefined
 
+    const nickname = maintainerAuthUser?.name || maintainerAuthUser?.username || maintainerAuthUser?.email?.split('@')[0] || 'Unknown'
+    const icon = maintainerAuthUser?.image
+
     return {
       uri: `/star?id=${maintainerUser._id}`,
-      children: maintainerUser.nickname || maintainerUser.email?.split('@')[0] || 'Unknown',
-      icon: maintainerUser.src,
+      children: nickname,
+      icon: icon,
     }
-  }, [maintainerUser])
+  }, [maintainerUser, maintainerAuthUser])
 
   const currentUserId = currentUser?._id?.toString()
   const maintainerId = typeof maintainer === 'string' ? maintainer : maintainerUser?._id?.toString()
   const isMaintainer = useMemo(
-    () => demoRole === 'maintainer' || (currentUserId && maintainerId && currentUserId === maintainerId),
-    [demoRole, currentUserId, maintainerId]
+    () => currentUserId && maintainerId && currentUserId === maintainerId,
+    [currentUserId, maintainerId]
   )
 
   const getStatusText = (status: VersionStatus, readyForRelease: boolean) => {
@@ -290,14 +279,6 @@ const ProjectVersionPanel: React.FC<Version> = ({
     try {
       const success = await updateVersionStatus({ versionId, status: nextStatus })
       if (success) {
-        // Step 5: Complete Version - when status changes from 'complete' to 'testing'
-        if (status === 'complete' && nextStatus === 'testing') {
-          const demo = getDemo();
-          if (demo.email) {
-            await incrementDemoStep({ email: demo.email, expectedStep: 5 });
-          }
-        }
-
         setStatus(nextStatus)
         return true
       }
@@ -347,9 +328,9 @@ const ProjectVersionPanel: React.FC<Version> = ({
 
   const changePatchList = async (item: { id: string; title: string, sunshines?: number }, versionId: string, completed: boolean = false) => {
     try {
-      const demo = getDemo();
-      if (!demo.email) {
-        console.error('No demo email found');
+      const user = session?.user as AuthUser | undefined;
+      if (!user?.email) {
+        console.error('No authenticated user found');
         return;
       }
 
@@ -377,7 +358,7 @@ const ProjectVersionPanel: React.FC<Version> = ({
       // Update issue
       const updateSuccess = await updateIssue({
         issueId: item.id,
-        email: demo.email,
+        email: user.email,
         listHistory: newListHistory,
       });
 
@@ -482,24 +463,27 @@ const ProjectVersionPanel: React.FC<Version> = ({
         })
     }, [patch.id])
 
-    // Fetch current demo user
+    // Fetch current user from session
     useEffect(() => {
-      const demo = getDemo()
-      if (demo.email && demo.users && demo.role) {
-        const user = demo.users.find(u => u.role === demo.role) || demo.users[0]
-        if (user && user._id) {
-          getStarById(user._id.toString())
-            .then((userData) => {
-              if (userData) {
-                setCurrentUser(userData)
-              }
-            })
-            .catch((error: unknown) => {
-              console.error('Error fetching current user:', error)
-            })
-        }
+      if (isPending) {
+        return;
       }
-    }, [])
+
+      const user = session?.user as AuthUser | undefined;
+      if (user?.id) {
+        getStarByUserId(user.id)
+          .then((userData) => {
+            if (userData) {
+              setCurrentUser(userData)
+            }
+          })
+          .catch((error: unknown) => {
+            console.error('Error fetching current user:', error)
+          })
+      } else {
+        setCurrentUser(null)
+      }
+    }, [session, isPending])
 
     // Fetch contributor user
     useEffect(() => {

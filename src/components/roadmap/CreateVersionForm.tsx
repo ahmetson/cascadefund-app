@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import ScrollStack, { ScrollStackItem } from '@/components/ScrollStack';
 import Button from '@/components/custom-ui/Button';
-import { getDemo } from '@/client-side/demo';
+import { authClient } from '@/client-side/auth';
+import type { AuthUser } from '@/types/auth';
 import { createVersion } from '@/client-side/roadmap';
 import { Checkbox, CheckboxIndicator } from '@/components/animate-ui/primitives/radix/checkbox';
 
@@ -12,6 +13,7 @@ interface CreateVersionFormProps {
 }
 
 const CreateVersionForm: React.FC<CreateVersionFormProps> = ({ galaxyId, onSuccess, onCancel }) => {
+    const { data: session, isPending } = authClient.useSession();
     const [tag, setTag] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [currentCardIndex, setCurrentCardIndex] = useState(0);
@@ -102,19 +104,17 @@ const CreateVersionForm: React.FC<CreateVersionFormProps> = ({ galaxyId, onSucce
             return;
         }
 
+        const user = session?.user as AuthUser | undefined;
+        if (!user?.id) {
+            alert('Please log in to create a version');
+            return;
+        }
+
         setIsLoading(true);
         try {
-            const demo = getDemo();
-            if (!demo.email) {
-                alert('Please log in to create a version');
-                setIsLoading(false);
-                return;
-            }
-
             const version = await createVersion({
                 galaxyId,
                 tag: tag.trim(),
-                email: demo.email,
             });
 
             if (version) {

@@ -2,8 +2,8 @@ import { defineAction } from 'astro:actions'
 import { z } from 'astro:schema'
 import { getVersionsByGalaxy, getVersionById, updateVersionStatus, revertPatch, createVersion, updatePatches, removePatch, completePatch, testPatch } from '@/server-side/roadmap'
 import type { Version, Patch } from '@/types/roadmap'
-import { getDemoByEmail } from '@/server-side/demo'
-import { getStarByIds } from '@/server-side/star'
+import { getStarByUserId } from '@/server-side/star'
+import { auth } from '@/lib/auth'
 
 export const server = {
     getVersionsByGalaxy: defineAction({
@@ -109,34 +109,29 @@ export const server = {
         input: z.object({
             galaxyId: z.string(),
             tag: z.string(),
-            email: z.string().email(),
         }),
-        handler: async ({ galaxyId, tag, email }): Promise<{ success: boolean; version?: Version; error?: string }> => {
+        handler: async ({ galaxyId, tag }, { request }): Promise<{ success: boolean; version?: Version; error?: string }> => {
             try {
-                // Get demo to find maintainer user
-                const demo = await getDemoByEmail(email);
-                if (!demo || !demo.users || demo.users.length === 0) {
+                // Check authentication
+                const session = await auth.api.getSession({
+                    headers: request.headers,
+                });
+
+                if (!session || !session.user) {
                     return {
                         success: false,
-                        error: 'Demo not found',
+                        error: 'Authentication required. Please log in to create a version',
                     };
                 }
 
-                // Get all stars from demo
-                const users = await getStarByIds(demo.users);
-                if (!users || users.length === 0) {
-                    return {
-                        success: false,
-                        error: 'Users not found',
-                    };
-                }
+                const authenticatedUserId = session.user.id;
 
-                // Find maintainer user
-                const maintainerUser = users.find(u => u.userId === demo.users[0].toString());
-                if (!maintainerUser || !maintainerUser._id) {
+                // Get the star for the authenticated user
+                const authenticatedUserStar = await getStarByUserId(authenticatedUserId);
+                if (!authenticatedUserStar || !authenticatedUserStar._id) {
                     return {
                         success: false,
-                        error: 'Maintainer user not found',
+                        error: 'User profile not found. Please ensure your account is set up correctly.',
                     };
                 }
 
@@ -146,7 +141,7 @@ export const server = {
                     createdTime: Math.floor(Date.now() / 1000),
                     status: 'complete',
                     patches: [],
-                    maintainer: maintainerUser._id.toString(),
+                    maintainer: authenticatedUserStar._id.toString(),
                 };
 
                 const created = await createVersion(newVersion);
