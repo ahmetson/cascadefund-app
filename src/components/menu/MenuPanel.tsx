@@ -6,7 +6,7 @@ import Tooltip from '@/components/custom-ui/Tooltip';
 import { getIcon } from '@/components/icon';
 import Link from '@/components/custom-ui/Link';
 import Galaxy from '../Galaxy';
-import type { Galaxy } from '@/types/galaxy';
+import type { Galaxy as GalaxyType } from '@/types/galaxy';
 
 type MenuName = 'ihistory' | 'iwork' | 'balance' | 'cbalance' | 'project' | 'marketing' | 'work' | 'cwork' | 'guide' | 'dependencies' | 'roadmap' | 'issues' | 'share-btn' | 'donations';
 
@@ -19,7 +19,7 @@ interface Props {
   projectIcon?: string
   projectName?: string
   starCount?: number
-  galaxy?: Galaxy
+  galaxy?: GalaxyType
 }
 
 const isOnlyInfluencerMenu = (activeMenuItem: MenuName): boolean => {
@@ -37,6 +37,7 @@ const GalaxyObject: React.FC<{
   const isZeroStars = starCount === 0;
   const starColorClass = isZeroStars ? 'text-rose-500' : '';
 
+  console.log('projectIcon', projectIcon);
   const projectIconElement = projectIcon ? (
     <img
       src={projectIcon}
@@ -73,37 +74,35 @@ const GalaxyObject: React.FC<{
 
   return (
     <Tooltip content={tooltipContent} openDelay={300}>
-      <div className="w-full">
-        <Link
-          uri={projectUri}
-          className={`flex flex-col items-center justify-center py-4 px-3 rounded-sm cursor-pointer transition-colors relative ${active
-            ? 'bg-slate-100/60 dark:bg-slate-700/40'
-            : 'hover:bg-slate-50/40 dark:hover:bg-slate-800/30'
-            }`}
-          focus={focus}
-        >
-          <div className="absolute top-0 left-0 right-0 bottom-0">
-            <Galaxy mouseRepulsion={false} autoCenterRepulsion={1} glowIntensity={0.2} density={0.1} rotationSpeed={0.01} />
-          </div>
+      <Link
+        uri={projectUri}
+        className={`w-full flex flex-col items-center justify-center py-4 px-3 rounded-sm cursor-pointer transition-colors relative ${active
+          ? 'bg-slate-100/60 dark:bg-slate-700/40'
+          : 'hover:bg-slate-50/40 dark:hover:bg-slate-800/30'
+          }`}
+        focus={focus}
+      >
+        <div className="absolute top-0 left-0 right-0 bottom-0 pointer-events-none">
+          <Galaxy mouseRepulsion={false} autoCenterRepulsion={1} glowIntensity={0.2} density={0.1} rotationSpeed={0.01} />
+        </div>
 
-          <div className="flex flex-col items-center gap-2 relative">
-            {projectIconElement}
-            <GradientText
-              colors={['#ffaa40', '#9c40ff', '#ffaa40']}
-              animationSpeed={8}
-              className="font-semibold text-lg text-center"
-            >
-              {projectName}
-            </GradientText>
-            <div className={`flex items-center gap-1 ${starColorClass}`}>
-              {starIcon}
-              <span className={`text-sm font-medium ${starColorClass}`}>
-                {starCount}
-              </span>
-            </div>
+        <div className="flex flex-col items-center gap-2 relative">
+          {projectIconElement}
+          <GradientText
+            colors={['#ffaa40', '#9c40ff', '#ffaa40']}
+            animationSpeed={8}
+            className="font-semibold text-lg text-center underline"
+          >
+            {projectName}
+          </GradientText>
+          <div className={`flex items-center gap-1 ${starColorClass}`}>
+            {starIcon}
+            <span className={`text-sm font-medium ${starColorClass}`}>
+              {starCount}
+            </span>
           </div>
-        </Link>
-      </div>
+        </div>
+      </Link>
     </Tooltip>
   );
 }
@@ -224,7 +223,6 @@ const Panel: React.FC<Props> = ({
   title = 'Main Menu',
   onlyCustomChildren = false,
   children,
-  projectIcon,
   projectName,
   starCount,
   galaxy
@@ -233,7 +231,7 @@ const Panel: React.FC<Props> = ({
   const galaxyId = galaxy?._id?.toString();
 
   // Get project icon from galaxy's project if available, otherwise use provided projectIcon or default to ara logo
-  const finalProjectIcon = projectIcon || (galaxy ? undefined : undefined); // Will use ara logo if not provided
+  const finalProjectIcon = undefined; // Will use ara logo if not provided
   const finalProjectName = projectName || galaxy?.name || 'Ara';
   const finalStarCount = starCount !== undefined ? starCount : (galaxy?.stars || 0);
 
