@@ -61,10 +61,12 @@ const LandingVideoPanel: React.FC<LandingVideoPanelProps> = ({
         <motion.div
             data-landing-video-panel
             className={cn(
-                'absolute top-[20vh] right-8 z-40',
+                'fixed top-[20vh] right-8 z-[100]',
                 'w-full max-w-sm',
-                'hidden md:block' // Hide on mobile
+                'hidden md:block', // Hide on mobile
+                'pointer-events-auto' // Ensure pointer events work
             )}
+            style={{ pointerEvents: 'auto', zIndex: 100 }}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, ease: 'easeOut' }}
@@ -82,8 +84,10 @@ const LandingVideoPanel: React.FC<LandingVideoPanelProps> = ({
                     'hover:shadow-2xl hover:shadow-blue-500/30',
                     'shadow-lg shadow-blue-500/10',
                     // Pulse animation when hovered
-                    isHovered && 'animate-pulse-subtle'
+                    isHovered && 'animate-pulse-subtle',
+                    'pointer-events-auto' // Ensure panel is clickable
                 )}
+                style={{ pointerEvents: 'auto' }}
             >
                 <div className="flex flex-col space-y-4">
                     {/* Introduction Text */}

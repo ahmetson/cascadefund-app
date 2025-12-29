@@ -70,7 +70,8 @@ const mockGalaxy: Galaxy = {
   <!-- Hero Section -->
   <section
     slot="hero"
-    class="relative flex flex-col items-center justify-center min-h-[60vh] text-center px-4 py-20"
+    class="relative flex flex-col items-center justify-center min-h-[60vh] text-center px-4 py-20 pointer-events-auto"
+    style="pointer-events: auto;"
   >
     <!-- Video Panel - Part of Hero Section -->
     <LandingVideoPanel
@@ -934,5 +935,14 @@ const mockGalaxy: Galaxy = {
 
   .scrollbar-hide::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera */
+  }
+
+  /* Ensure video panel and hero section are clickable */
+  [data-landing-video-panel] {
+    pointer-events: auto !important;
+  }
+
+  section[slot="hero"] {
+    pointer-events: auto !important;
   }
 </style>
