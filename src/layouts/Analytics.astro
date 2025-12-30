@@ -1,64 +1,130 @@
 ---
 import SpeedInsights from "@vercel/speed-insights/astro";
+
+// Only load analytics in production
+const isProduction = import.meta.env.PROD;
 ---
 
-<SpeedInsights />
-<!-- Google tag (gtag.js) -->
-<script
-    is:inline
-    async
-    src="https://www.googletagmanager.com/gtag/js?id=G-1C3STMHZBW"></script>
-<script is:inline>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-        dataLayer.push(arguments);
-    }
-    gtag("js", new Date());
-    gtag("config", "G-1C3STMHZBW");
-</script>
-<!-- Yandex.Metrika counter -->
-<script type="text/javascript" is:inline>
-    (function (m, e, t, r, i, k, a) {
-        m[i] =
-            m[i] ||
-            function () {
-                (m[i].a = m[i].a || []).push(arguments);
-            };
-        m[i].l = 1 * new Date();
-        for (var j = 0; j < document.scripts.length; j++) {
-            if (document.scripts[j].src === r) {
-                return;
-            }
-        }
-        ((k = e.createElement(t)),
-            (a = e.getElementsByTagName(t)[0]),
-            (k.async = 1),
-            (k.src = r),
-            a.parentNode.insertBefore(k, a));
-    })(
-        window,
-        document,
-        "script",
-        "https://mc.yandex.ru/metrika/tag.js?id=105948361",
-        "ym",
-    );
-
-    ym(105948361, "init", {
-        ssr: true,
-        webvisor: true,
-        clickmap: true,
-        ecommerce: "dataLayer",
-        accurateTrackBounce: true,
-        trackLinks: true,
-    });
-</script>
-<noscript
-    ><div>
-        <img
-            src="https://mc.yandex.ru/watch/105948361"
-            style="position:absolute; left:-9999px;"
-            alt=""
-        />
-    </div></noscript
->
-<!-- /Yandex.Metrika counter -->
+{isProduction && (
+    <>
+        <SpeedInsights />
+        <!-- Google tag (gtag.js) - Deferred and non-blocking -->
+        <script
+            is:inline
+            defer
+            src="https://www.googletagmanager.com/gtag/js?id=G-1C3STMHZBW"
+            onerror="console.warn('Google Analytics failed to load')"
+        ></script>
+        <script is:inline defer>
+            // Wait for script to load or use timeout
+            (function() {
+                const timeout = setTimeout(() => {
+                    console.warn('Google Analytics initialization timeout');
+                }, 5000);
+                
+                function initGtag() {
+                    if (typeof gtag === 'undefined') {
+                        window.dataLayer = window.dataLayer || [];
+                        window.gtag = function() {
+                            dataLayer.push(arguments);
+                        };
+                        gtag("js", new Date());
+                        gtag("config", "G-1C3STMHZBW");
+                    }
+                    clearTimeout(timeout);
+                }
+                
+                // Try to initialize after script loads
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', initGtag);
+                } else {
+                    setTimeout(initGtag, 100);
+                }
+            })();
+        </script>
+        <!-- Yandex.Metrika counter - Deferred and non-blocking -->
+        <script type="text/javascript" is:inline defer>
+            (function() {
+                // Defer initialization until after page load
+                function initYandex() {
+                    try {
+                        (function (m, e, t, r, i, k, a) {
+                            m[i] = m[i] || function () {
+                                (m[i].a = m[i].a || []).push(arguments);
+                            };
+                            m[i].l = 1 * new Date();
+                            
+                            // Check if already loaded
+                            for (var j = 0; j < document.scripts.length; j++) {
+                                if (document.scripts[j].src === r) {
+                                    return;
+                                }
+                            }
+                            
+                            // Create script with async
+                            k = e.createElement(t);
+                            a = e.getElementsByTagName(t)[0];
+                            k.async = 1;
+                            k.src = r;
+                            
+                            // Add error handling
+                            k.onerror = function() {
+                                console.warn('Yandex Metrika failed to load');
+                            };
+                            
+                            // Add timeout
+                            const timeout = setTimeout(() => {
+                                console.warn('Yandex Metrika load timeout');
+                            }, 5000);
+                            
+                            k.onload = function() {
+                                clearTimeout(timeout);
+                            };
+                            
+                            a.parentNode.insertBefore(k, a);
+                        })(
+                            window,
+                            document,
+                            "script",
+                            "https://mc.yandex.ru/metrika/tag.js?id=105948361",
+                            "ym",
+                        );
+                        
+                        // Initialize after a delay to ensure script is loaded
+                        setTimeout(function() {
+                            if (typeof ym !== 'undefined') {
+                                ym(105948361, "init", {
+                                    ssr: true,
+                                    webvisor: true,
+                                    clickmap: true,
+                                    ecommerce: "dataLayer",
+                                    accurateTrackBounce: true,
+                                    trackLinks: true,
+                                });
+                            }
+                        }, 1000);
+                    } catch (error) {
+                        console.warn('Yandex Metrika initialization error:', error);
+                    }
+                }
+                
+                // Defer until after page load
+                if (document.readyState === 'loading') {
+                    window.addEventListener('load', initYandex);
+                } else {
+                    setTimeout(initYandex, 500);
+                }
+            })();
+        </script>
+        <noscript
+            ><div>
+                <img
+                    src="https://mc.yandex.ru/watch/105948361"
+                    style="position:absolute; left:-9999px;"
+                    alt=""
+                />
+            </div></noscript
+        >
+        <!-- /Yandex.Metrika counter -->
+    </>
+)}

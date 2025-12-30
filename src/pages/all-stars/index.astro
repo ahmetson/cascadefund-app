@@ -12,17 +12,43 @@ import DemoCtaPanel from "@/components/project/DemoCtaPanel";
 import { mockContestData } from "@/types/mock-data";
 import { getAllGalaxies, getGalaxyById } from "@/server-side/galaxy";
 
+// Start timing frontmatter execution
+const frontmatterStartTime = performance.now();
+console.log("[all-stars] Frontmatter execution started");
+
 // Read galaxy query parameter
 const galaxyId = Astro.url.searchParams.get("galaxy");
-const selectedGalaxy = galaxyId ? await getGalaxyById(galaxyId) : null;
+const queryParamTime = performance.now();
+console.log(
+  `[all-stars] Query param read: ${(queryParamTime - frontmatterStartTime).toFixed(2)}ms`,
+);
+
+// Get selected galaxy if galaxyId is provided
+let selectedGalaxy = null;
+if (galaxyId) {
+  const getGalaxyStartTime = performance.now();
+  selectedGalaxy = await getGalaxyById(galaxyId);
+  const getGalaxyTime = performance.now();
+  console.log(
+    `[all-stars] getGalaxyById(${galaxyId}): ${(getGalaxyTime - getGalaxyStartTime).toFixed(2)}ms`,
+  );
+} else {
+  console.log("[all-stars] No galaxyId provided, skipping getGalaxyById");
+}
 
 // Get all galaxies from database (only those in space: x > 0 and y > 0)
+const getAllGalaxiesStartTime = performance.now();
 const allGalaxiesData = await getAllGalaxies(true);
+const getAllGalaxiesTime = performance.now();
+console.log(
+  `[all-stars] getAllGalaxies(true): ${(getAllGalaxiesTime - getAllGalaxiesStartTime).toFixed(2)}ms (found ${allGalaxiesData.length} galaxies)`,
+);
 
 // Get current user's starsunshines (for demo, using 0 to show locked state)
 const currentStarsunshines = 0;
 
 // Prepare all galaxies for display in the virtual screen
+const mapStartTime = performance.now();
 const allGalaxies = allGalaxiesData.map((galaxy, index) => ({
   x: galaxy.x,
   y: galaxy.y,
@@ -32,6 +58,17 @@ const allGalaxies = allGalaxiesData.map((galaxy, index) => ({
   tags: galaxy.tags,
   leaderboardPosition: index + 1,
 }));
+const mapTime = performance.now();
+console.log(
+  `[all-stars] Mapping galaxies: ${(mapTime - mapStartTime).toFixed(2)}ms`,
+);
+
+// Total frontmatter execution time
+const frontmatterEndTime = performance.now();
+const totalFrontmatterTime = frontmatterEndTime - frontmatterStartTime;
+console.log(
+  `[all-stars] Total frontmatter execution time: ${totalFrontmatterTime.toFixed(2)}ms`,
+);
 ---
 
 <GalaxyLayout
@@ -41,16 +78,11 @@ const allGalaxies = allGalaxiesData.map((galaxy, index) => ({
   projectX={0}
   projectY={0}
   projectGalaxies={allGalaxies}
+  isStatic={true}
 >
   <BackButton slot="left" client:load />
 
   <UniverseHero slot="center" client:only="react" />
-  <DemoCtaPanel
-    slot="center"
-    client:only="react"
-    projectName={selectedGalaxy?.name || ""}
-    galaxyId={selectedGalaxy?._id!.toString() || ""}
-  />
 
   <AllStarsContestPanel
     slot="right"
