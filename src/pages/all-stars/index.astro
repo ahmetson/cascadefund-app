@@ -84,21 +84,6 @@ console.log(
 
   <UniverseHero slot="center" client:only="react" />
 
-  <AllStarsContestPanel
-    slot="right"
-    client:only="react"
-    prizePool={mockContestData.prizePool}
-    contestFromDate={mockContestData.fromDate}
-    contestToDate={mockContestData.toDate}
-    contestDescription={mockContestData.description}
-  />
-
-  <AllStarsLeaderboardPanels
-    slot="left"
-    client:only="react"
-    topGalaxies={allGalaxiesData}
-  />
-
   <UniverseResearchPanel
     slot="footer"
     client:only="react"
