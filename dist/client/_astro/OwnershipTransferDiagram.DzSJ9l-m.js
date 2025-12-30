@@ -1,0 +1,1 @@
+import{bo as a}from"./OwnershipTransferDiagram.jAz1GKcX.js";import"./jsx-runtime.D_zvdyIk.js";import"./index.DxhH1ShK.js";import"./transform.zuSbIZii.js";import"./proxy.D4YeN7SK.js";export{a as default};
