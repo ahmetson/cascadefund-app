@@ -1,0 +1,1 @@
+import{j as t}from"./jsx-runtime.D_zvdyIk.js";const s=({children:r,className:e})=>t.jsx("div",{className:`flex items-center justify-between mb-2 border-t-2 border-gray-200/20 dark:border-gray-600/20 pt-1 ${e}`,children:r});export{s as P};

@@ -1,0 +1,1 @@
+import{r as n}from"./index.DxhH1ShK.js";import{u as a,f as i,g as f}from"./PopoverArrow.DJ2sAUqU.js";import{u as m}from"./PopoverDescription.BJLX2NXw.js";const x=n.forwardRef(function(t,s){const{render:p,className:c,...r}=t,{setTitleId:e}=a(),o=m(r.id);return i(()=>(e(o),()=>{e(void 0)}),[e,o]),f("h2",t,{ref:s,props:[{id:o},r]})});export{x as P};

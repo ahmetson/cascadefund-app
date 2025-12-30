@@ -38,8 +38,12 @@ import {
   LinkedInIcon,
   TwitterIcon,
   BlueskyIcon,
+  SettingsIcon,
+  UserIcon,
+  GraduateHatIcon,
 } from "@/svg/index";
-import Badge from "@/components/badge/Badge";
+import DecorativeStarSeparator from "@/components/utilitified_decorations/DecorativeStarSeparator.astro";
+import DecorativeSeparator from "@/components/utilitified_decorations/DecorativeSeparator.astro";
 
 // Create a mock Galaxy object for the hero panel
 const mockGalaxy: Galaxy = {
@@ -70,7 +74,7 @@ const mockGalaxy: Galaxy = {
   <!-- Hero Section -->
   <section
     slot="hero"
-    class="relative flex flex-col items-center justify-center min-h-[60vh] text-center px-4 py-20 pointer-events-auto"
+    class="relative flex flex-col items-center justify-center min-h-[30vh] text-center px-4 pointer-events-auto"
     style="pointer-events: auto;"
   >
     <!-- Video Panel - Part of Hero Section -->
@@ -81,223 +85,33 @@ const mockGalaxy: Galaxy = {
 
     <div class="w-full max-w-4xl mx-auto space-y-6">
       <div class="flex items-center justify-center gap-4 mb-6">
-        <img
-          src="/ara_logo.png"
-          alt="Ara Logo"
-          class="w-24 h-24 md:w-32 md:h-32"
-        />
-        <div class="text-6xl md:text-7xl lg:text-8xl font-bold">
+        <div class="text-4xl md:text-5xl lg:text-6xl font-bold">
           <AraGradientText client:only="react" className="font-bold" />
         </div>
       </div>
 
       <p
-        class="text-2xl md:text-3xl font-semibold text-slate-700 dark:text-slate-300"
+        class="text-xl md:text-2xl font-bold text-blue-600 dark:text-blue-400 -mt-4"
       >
-        Visual social media for long term sustainability
+        For open source users, maintainers, and people who learn programming
       </p>
-
-      <p
-        class="text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto gap-1 flex items-center justify-center -mb-12 mt-12"
-      >
-        It has <Badge variant="purple" className="mb-0.5 mx-1">3</Badge> core ideas
-      </p>
-
-      <!-- Feature Panels -->
-      <div
-        class="w-full max-w-6xl mx-auto my-16 flex flex-row md:grid md:grid-cols-3 gap-8 md:gap-10 overflow-x-auto md:overflow-x-visible snap-x snap-mandatory md:snap-none scrollbar-hide"
-      >
-        <!-- Panel 1: Galaxy = Project -->
-        <div
-          class="relative p-8 flex flex-col items-center justify-center min-w-[300px] md:min-w-0 flex-shrink-0 snap-center backdrop-blur-md bg-white/40 dark:bg-slate-900/40 border border-slate-200/50 dark:border-slate-700/50 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
-        >
-          <div
-            class="h-56 w-full rounded-xl relative flex items-center justify-center mb-6 bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-blue-900/20 dark:to-indigo-900/20"
-          >
-            <ProjectGalaxy
-              client:only="react"
-              x={20}
-              y={0}
-              projectName={mockGalaxy.name}
-              projectId={mockGalaxy._id}
-              galaxyData={mockGalaxy}
-              tags={mockGalaxy.tags}
-              leaderboardPosition={1}
-              className="rounded-lg ml-14 mt-14"
-            />
-          </div>
-          <div class="text-center">
-            <div class="flex items-center justify-center gap-2 mb-3">
-              <DashboardIcon
-                client:load
-                class="text-blue-500 dark:text-blue-400"
-              />
-              <h3 class="text-xl font-bold text-slate-800 dark:text-slate-200">
-                Galaxy = Project
-              </h3>
-            </div>
-            <p
-              class="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed"
-            >
-              A galaxy represents an open-source repository.
-            </p>
-          </div>
-        </div>
-
-        <!-- Panel 2: Stars = People -->
-        <div
-          class="relative p-8 flex flex-col items-center justify-center min-w-[300px] md:min-w-0 flex-shrink-0 snap-center backdrop-blur-md bg-white/40 dark:bg-slate-900/40 border border-slate-200/50 dark:border-slate-700/50 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
-        >
-          <div
-            class="h-56 w-full flex items-center justify-center mb-6 bg-gradient-to-br from-yellow-50/50 to-amber-50/50 dark:from-yellow-900/20 dark:to-amber-900/20 rounded-xl"
-          >
-            <UserStar
-              client:only="react"
-              x={0}
-              y={0}
-              email={mockUserStars[0].email}
-              nickname={mockUserStars[0].nickname}
-              src={`https://api.dicebear.com/9.x/avataaars/svg?seed=${mockUserStars[0].nickname}&size=256`}
-              alt={mockUserStars[0].alt}
-              stars={mockUserStars[0].stars}
-              sunshines={mockUserStars[0].sunshines}
-              role={mockUserStars[0].role}
-              funded={mockUserStars[0].funded}
-              received={mockUserStars[0].received}
-              issuesClosed={mockUserStars[0].issuesClosed}
-              issuesActive={mockUserStars[0].issuesActive}
-              tags={mockUserStars[0].tags || [
-                "Maintainer",
-                "Django",
-                "Solidity",
-                "p2p",
-              ]}
-              disableTooltip={true}
-              className="scale-120 ml-28 mt-28"
-            />
-          </div>
-          <div class="text-center">
-            <div class="flex items-center justify-center gap-2 mb-3">
-              <StarIcon
-                client:load
-                class="text-yellow-500 dark:text-yellow-400"
-              />
-              <h3 class="text-xl font-bold text-slate-800 dark:text-slate-200">
-                Stars = People
-              </h3>
-            </div>
-            <p
-              class="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed"
-            >
-              Users who forged tokens through collaboration.
-            </p>
-          </div>
-        </div>
-
-        <!-- Panel 3: Ownership evolves -->
-        <div
-          class="relative p-8 flex flex-col items-center justify-center min-w-[300px] md:min-w-0 flex-shrink-0 snap-center backdrop-blur-md bg-white/40 dark:bg-slate-900/40 border border-slate-200/50 dark:border-slate-700/50 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
-        >
-          <div
-            class="h-56 w-full flex items-center justify-center mb-6 bg-gradient-to-br from-purple-50/50 to-pink-50/50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl"
-          >
-            <AuthorOwnershipVisualization client:load class="w-full h-full" />
-          </div>
-          <div class="text-center">
-            <div class="flex items-center justify-center gap-1 mb-3">
-              <ChartIcon class="text-purple-500 dark:text-purple-400" />
-              <h3 class="text-xl font-bold text-slate-800 dark:text-slate-200">
-                Ownership Evolves
-              </h3>
-            </div>
-            <p
-              class="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed"
-            >
-              If galaxy gets massive, ownership shifts to the Star-holding
-              community.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Mobile scroll hint -->
-      <div class="w-full max-w-6xl mx-auto -mt-8 mb-2 md:hidden">
-        <p
-          class="text-sm text-slate-400 dark:text-slate-500 text-center flex items-center justify-center gap-1.5 opacity-50 italic"
-        >
-          <LeftArrowIcon client:load class="w-4 h-4" />
-          <FingerTouchIcon client:load class="w-4 h-4" />
-          <span class="text-sm">horizontally scrollable</span>
-          <RightArrowIcon client:load class="w-4 h-4" />
-        </p>
-      </div>
     </div>
-
-    <p
-      class="text-xl md:text-2xl font-bold text-blue-600 dark:text-blue-400 -mt-4"
-    >
-      for open source users, maintainers, and contributors
-    </p>
   </section>
 
   <!-- Main Content -->
-  <div slot="center" class="w-full max-w-4xl mx-auto space-y-16 py-20 px-4">
-    <!-- Decorative separator -->
-    <div class="flex items-center justify-center gap-4 my-8">
-      <div
-        class="flex-1 h-px bg-gradient-to-r from-transparent via-slate-300 to-slate-300 dark:via-slate-600 dark:to-slate-600"
-      >
-      </div>
-      <div class="flex items-center gap-2">
-        <StarIcon
-          client:load
-          class="w-4 h-4 text-yellow-500 dark:text-yellow-400"
-        />
-        <StarIcon
-          client:load
-          class="w-3 h-3 text-yellow-500 dark:text-yellow-400"
-        />
-        <StarIcon
-          client:load
-          class="w-2 h-2 text-yellow-500 dark:text-yellow-400"
-        />
-      </div>
-      <div
-        class="flex-1 h-px bg-gradient-to-l from-transparent via-slate-300 to-slate-300 dark:via-slate-600 dark:to-slate-600"
-      >
-      </div>
-    </div>
+  <div slot="center" class="w-full max-w-4xl mx-auto px-4">
+    <DecorativeStarSeparator />
 
     <!-- Why Ara -->
     <section id="why-ara-section" class="text-center space-y-12">
-      <div>
-        <div class="flex items-center justify-center gap-3 mb-4">
-          <LightbulbIcon class="text-blue-500 dark:text-blue-400" />
-          <h2
-            class="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-800 dark:text-slate-200"
-          >
-            Why Ara
-          </h2>
-        </div>
-        <p
-          class="text-2xl md:text-3xl font-semibold text-slate-700 dark:text-slate-300"
-        >
-          Open source, built to last.
-        </p>
-        <p
-          class="text-xl md:text-2xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto mt-4"
-        >
-          Ara turns open source projects into sustainable shared efforts between
-          maintainers and users.
-        </p>
-      </div>
-
-      <!-- Decorative separator -->
-      <div class="flex items-center justify-center gap-2 my-12 opacity-50">
-        <div class="w-1 h-1 rounded-full bg-slate-400 dark:bg-slate-500"></div>
-        <div class="w-2 h-2 rounded-full bg-slate-400 dark:bg-slate-500"></div>
-        <div class="w-1 h-1 rounded-full bg-slate-400 dark:bg-slate-500"></div>
-      </div>
+      <p
+        class="text-xl md:text-2xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto mt-4"
+      >
+        Ara is like a social media layer on top of the git repository.<br /><br
+        />
+        Here, open source projects turn into galaxies:<br /><br />
+        a sustainable shared efforts between maintainers, contributors, and users.
+      </p>
 
       <!-- What sustainable means in Ara -->
       <div class="mt-12">
@@ -305,18 +119,18 @@ const mockGalaxy: Galaxy = {
           class="text-3xl md:text-4xl font-bold text-slate-800 dark:text-slate-300 mb-8 flex items-center justify-center gap-3"
         >
           <CheckmarkCircleIcon class="text-green-500 dark:text-green-400" />
-          What sustainable means in Ara
+          How Ara helps open source thrive
         </h3>
-        <div class="grid md:grid-cols-2 gap-6 md:gap-8">
+        <div class="grid md:grid-cols-3 gap-6 md:gap-8">
           <div
             class="backdrop-blur-md bg-white/30 dark:bg-slate-900/30 border border-slate-300/40 dark:border-slate-700/40 rounded-xl p-6 md:p-8 text-left"
           >
             <div class="flex items-center gap-3 mb-4">
               <div class="p-2 rounded-lg bg-blue-500/20 dark:bg-blue-400/20">
-                <UsersIcon class="text-blue-500 dark:text-blue-400" />
+                <SettingsIcon class="text-blue-500 dark:text-blue-400" />
               </div>
               <h4 class="text-xl font-bold text-slate-800 dark:text-slate-200">
-                For maintainers and contributors
+                For maintainers
               </h4>
             </div>
             <ul class="space-y-3">
@@ -326,7 +140,7 @@ const mockGalaxy: Galaxy = {
                 <CheckmarkIcon
                   class="text-green-500 dark:text-green-400 mt-0.5 flex-shrink-0"
                 />
-                <span>Reliable funding to support ongoing work</span>
+                <span>Funding to sustain your work and life</span>
               </li>
               <li
                 class="flex items-start gap-2 text-slate-700 dark:text-slate-300"
@@ -334,7 +148,23 @@ const mockGalaxy: Galaxy = {
                 <CheckmarkIcon
                   class="text-green-500 dark:text-green-400 mt-0.5 flex-shrink-0"
                 />
-                <span>Long term collaborators instead of one off donors</span>
+                <span>Build visibility and reputation in your community</span>
+              </li>
+              <li
+                class="flex items-start gap-2 text-slate-700 dark:text-slate-300"
+              >
+                <CheckmarkIcon
+                  class="text-green-500 dark:text-green-400 mt-0.5 flex-shrink-0"
+                />
+                <span>Grow a team of contributors who can share the load</span>
+              </li>
+              <li
+                class="flex items-start gap-2 text-slate-700 dark:text-slate-300"
+              >
+                <CheckmarkIcon
+                  class="text-green-500 dark:text-green-400 mt-0.5 flex-shrink-0"
+                />
+                <span>Step back when you need to—your project keeps going</span>
               </li>
             </ul>
           </div>
@@ -346,7 +176,7 @@ const mockGalaxy: Galaxy = {
               <div
                 class="p-2 rounded-lg bg-purple-500/20 dark:bg-purple-400/20"
               >
-                <UsersGroupIcon class="text-purple-500 dark:text-purple-400" />
+                <UserIcon class="text-purple-500 dark:text-purple-400" />
               </div>
               <h4 class="text-xl font-bold text-slate-800 dark:text-slate-200">
                 For users
@@ -359,7 +189,64 @@ const mockGalaxy: Galaxy = {
                 <CheckmarkIcon
                   class="text-green-500 dark:text-green-400 mt-0.5 flex-shrink-0"
                 />
-                <span>Fund the features you need</span>
+                <span
+                  >Support projects you rely on and connect with their creators</span
+                >
+              </li>
+              <li
+                class="flex items-start gap-2 text-slate-700 dark:text-slate-300"
+              >
+                <CheckmarkIcon
+                  class="text-green-500 dark:text-green-400 mt-0.5 flex-shrink-0"
+                />
+                <span>Get insight into project direction and decisions</span>
+              </li>
+              <li
+                class="flex items-start gap-2 text-slate-700 dark:text-slate-300"
+              >
+                <CheckmarkIcon
+                  class="text-green-500 dark:text-green-400 mt-0.5 flex-shrink-0"
+                />
+                <span>Protect the features and APIs your work depends on</span>
+              </li>
+              <li
+                class="flex items-start gap-2 text-slate-700 dark:text-slate-300"
+              >
+                <CheckmarkIcon
+                  class="text-green-500 dark:text-green-400 mt-0.5 flex-shrink-0"
+                />
+                <span>Help newcomers gain real-world experience</span>
+              </li>
+            </ul>
+          </div>
+
+          <div
+            class="backdrop-blur-md bg-white/30 dark:bg-slate-900/30 border border-slate-200/40 dark:border-slate-700/40 rounded-xl p-6 md:p-8 text-left"
+          >
+            <div class="flex items-center gap-3 mb-4">
+              <div class="p-2 rounded-lg bg-green-500/20 dark:bg-green-400/20">
+                <GraduateHatIcon class="text-green-500 dark:text-green-400" />
+              </div>
+              <h4 class="text-xl font-bold text-slate-800 dark:text-slate-200">
+                For those starting their career
+              </h4>
+            </div>
+            <ul class="space-y-3">
+              <li
+                class="flex items-start gap-2 text-slate-700 dark:text-slate-300"
+              >
+                <CheckmarkIcon
+                  class="text-green-500 dark:text-green-400 mt-0.5 flex-shrink-0"
+                />
+                <span>Get hands-on experience with real projects</span>
+              </li>
+              <li
+                class="flex items-start gap-2 text-slate-700 dark:text-slate-300"
+              >
+                <CheckmarkIcon
+                  class="text-green-500 dark:text-green-400 mt-0.5 flex-shrink-0"
+                />
+                <span>Learn from maintainers using production-grade tools</span>
               </li>
               <li
                 class="flex items-start gap-2 text-slate-700 dark:text-slate-300"
@@ -368,205 +255,25 @@ const mockGalaxy: Galaxy = {
                   class="text-green-500 dark:text-green-400 mt-0.5 flex-shrink-0"
                 />
                 <span
-                  >Confidence that critical functionality will not be deprecated</span
+                  >Build credibility and earn funding for your contributions</span
                 >
               </li>
+              <li
+                class="flex items-start gap-2 text-slate-700 dark:text-slate-300"
+              >
+                <CheckmarkIcon
+                  class="text-green-500 dark:text-green-400 mt-0.5 flex-shrink-0"
+                />
+                <span>Find mentorship from experienced developers</span>
+              </li>
             </ul>
-          </div>
-        </div>
-      </div>
-
-      <!-- Decorative separator -->
-      <div class="flex items-center justify-center gap-2 my-12 opacity-50">
-        <div class="w-1 h-1 rounded-full bg-slate-400 dark:bg-slate-500"></div>
-        <div class="w-2 h-2 rounded-full bg-slate-400 dark:bg-slate-500"></div>
-        <div class="w-1 h-1 rounded-full bg-slate-400 dark:bg-slate-500"></div>
-      </div>
-
-      <!-- The problem today -->
-      <div class="mt-12">
-        <h3
-          class="text-3xl md:text-4xl font-bold text-slate-800 dark:text-slate-200 mb-6 flex items-center justify-center gap-3"
-        >
-          <WarningTriangleIcon class="text-red-500 dark:text-red-400" />
-          The problem today
-        </h3>
-        <div
-          class="backdrop-blur-md bg-white/30 dark:bg-slate-900/30 border border-red-200/40 dark:border-red-700/40 rounded-xl p-6 md:p-8 max-w-3xl mx-auto"
-        >
-          <div class="mb-6">
-            <DecliningGraph client:load class="w-full h-32 mx-auto" />
-          </div>
-          <p class="text-lg md:text-xl text-slate-700 dark:text-slate-300 mb-4">
-            Most open source projects rely on donations.
-          </p>
-          <p class="text-lg md:text-xl text-slate-700 dark:text-slate-300 mb-4">
-            In practice, donations rarely sustain long term maintenance or
-            continued development.
-          </p>
-          <!-- Problem indicators -->
-          <div class="grid grid-cols-3 gap-4 mt-6">
-            <div class="text-center">
-              <div
-                class="p-3 rounded-lg bg-red-100/50 dark:bg-red-900/30 inline-block mb-2"
-              >
-                <UsersIcon class="text-red-600 dark:text-red-400" />
-              </div>
-              <p class="text-md text-slate-600 dark:text-slate-400">
-                Only popular projects
-              </p>
-            </div>
-            <div class="text-center">
-              <div
-                class="p-3 rounded-lg bg-red-100/50 dark:bg-red-900/30 inline-block mb-2"
-              >
-                <BookIcon class="text-red-600 dark:text-red-400" />
-              </div>
-              <p class="text-md text-slate-600 dark:text-slate-400">
-                Requires soft skills
-              </p>
-            </div>
-            <div class="text-center">
-              <div
-                class="p-3 rounded-lg bg-red-100/50 dark:bg-red-900/30 inline-block mb-2"
-              >
-                <ClockIcon class="text-red-600 dark:text-red-400" />
-              </div>
-              <p class="text-md text-slate-600 dark:text-slate-400">
-                Unreliable long-term
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Decorative separator -->
-      <div class="flex items-center justify-center gap-2 my-12 opacity-50">
-        <div class="w-1 h-1 rounded-full bg-slate-400 dark:bg-slate-500"></div>
-        <div class="w-2 h-2 rounded-full bg-slate-400 dark:bg-slate-500"></div>
-        <div class="w-1 h-1 rounded-full bg-slate-400 dark:bg-slate-500"></div>
-      </div>
-
-      <!-- The Ara approach -->
-      <div class="mt-12">
-        <h3
-          class="text-3xl md:text-4xl font-bold text-slate-800 dark:text-slate-200 mb-6 flex items-center justify-center gap-3"
-        >
-          <LightningIcon class="text-blue-500 dark:text-blue-400" />
-          The Ara approach
-        </h3>
-        <div
-          class="backdrop-blur-md bg-white/30 dark:bg-slate-900/30 border border-blue-200/40 dark:border-blue-700/40 rounded-xl p-6 md:p-8 max-w-4xl mx-auto"
-        >
-          <!-- Flow Diagram -->
-          <div class="mb-6">
-            <AraApproachFlow class="w-full h-auto" />
-          </div>
-
-          <p class="text-lg md:text-xl text-slate-700 dark:text-slate-300">
-            Instead of asking for donations, Ara gives users a reason to invest.
-            Funding becomes participation, collaboration, and shared
-            responsibility, benefiting both the people who build the project and
-            the people who rely on it.
-          </p>
-        </div>
-      </div>
-
-      <!-- Before/After Comparison Diagram -->
-      <div class="mt-12 max-w-4xl mx-auto">
-        <div class="grid md:grid-cols-2 gap-6">
-          <div
-            class="backdrop-blur-md bg-red-50/30 dark:bg-red-900/20 border border-red-200/40 dark:border-red-700/40 rounded-xl p-6"
-          >
-            <h5
-              class="text-lg font-bold text-red-700 dark:text-red-400 mb-4 flex items-center gap-2"
-            >
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  fill-rule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                  clip-rule="evenodd"></path>
-              </svg>
-              Before (Donations)
-            </h5>
-            <div class="space-y-3">
-              <div
-                class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400"
-              >
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path
-                    d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"
-                  ></path>
-                </svg>
-                <span>Unreliable, one-time payments</span>
-              </div>
-              <div
-                class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400"
-              >
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path
-                    d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"
-                  ></path>
-                </svg>
-                <span>No long-term commitment</span>
-              </div>
-              <div
-                class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400"
-              >
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path
-                    d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"
-                  ></path>
-                </svg>
-                <span>Only popular projects benefit</span>
-              </div>
-            </div>
-          </div>
-          <div
-            class="backdrop-blur-md bg-green-50/30 dark:bg-green-900/20 border border-green-200/40 dark:border-green-700/40 rounded-xl p-6"
-          >
-            <h5
-              class="text-lg font-bold text-green-700 dark:text-green-400 mb-4 flex items-center gap-2"
-            >
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  fill-rule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                  clip-rule="evenodd"></path>
-              </svg>
-              After (Ara)
-            </h5>
-            <div class="space-y-3">
-              <div
-                class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400"
-              >
-                <StarIcon client:load class="w-4 h-4 text-green-500" />
-                <span>Sustainable, ongoing funding</span>
-              </div>
-              <div
-                class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400"
-              >
-                <StarIcon client:load class="w-4 h-4 text-green-500" />
-                <span>Long-term collaboration & ownership</span>
-              </div>
-              <div
-                class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400"
-              >
-                <StarIcon client:load class="w-4 h-4 text-green-500" />
-                <span>All projects can benefit</span>
-              </div>
-            </div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Decorative separator -->
-    <div class="flex items-center justify-center gap-2 my-12 opacity-50">
-      <div class="w-1 h-1 rounded-full bg-slate-400 dark:bg-slate-500"></div>
-      <div class="w-2 h-2 rounded-full bg-slate-400 dark:bg-slate-500"></div>
-      <div class="w-1 h-1 rounded-full bg-slate-400 dark:bg-slate-500"></div>
-    </div>
+    <DecorativeSeparator />
 
     <!-- Security through tokens -->
     <div class="mt-12">
@@ -697,6 +404,134 @@ const mockGalaxy: Galaxy = {
             </div>
           </div>
         </div>
+      </div>
+      <!-- Feature Panels -->
+      <div
+        class="w-full max-w-6xl mx-auto my-16 flex flex-row md:grid md:grid-cols-3 gap-8 md:gap-10 overflow-x-auto md:overflow-x-visible snap-x snap-mandatory md:snap-none scrollbar-hide"
+      >
+        <!-- Panel 1: Galaxy = Project -->
+        <div
+          class="relative p-8 flex flex-col items-center justify-center min-w-[300px] md:min-w-0 flex-shrink-0 snap-center backdrop-blur-md bg-white/40 dark:bg-slate-900/40 border border-slate-200/50 dark:border-slate-700/50 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
+        >
+          <div
+            class="h-56 w-full rounded-xl relative flex items-center justify-center mb-6 bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-blue-900/20 dark:to-indigo-900/20"
+          >
+            <ProjectGalaxy
+              client:only="react"
+              x={20}
+              y={0}
+              projectName={mockGalaxy.name}
+              projectId={mockGalaxy._id}
+              galaxyData={mockGalaxy}
+              tags={mockGalaxy.tags}
+              leaderboardPosition={1}
+              className="rounded-lg ml-14 mt-14"
+            />
+          </div>
+          <div class="text-center">
+            <div class="flex items-center justify-center gap-2 mb-3">
+              <DashboardIcon
+                client:load
+                class="text-blue-500 dark:text-blue-400"
+              />
+              <h3 class="text-xl font-bold text-slate-800 dark:text-slate-200">
+                Galaxy = Project
+              </h3>
+            </div>
+            <p
+              class="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed"
+            >
+              A galaxy represents an open-source repository.
+            </p>
+          </div>
+        </div>
+
+        <!-- Panel 2: Stars = People -->
+        <div
+          class="relative p-8 flex flex-col items-center justify-center min-w-[300px] md:min-w-0 flex-shrink-0 snap-center backdrop-blur-md bg-white/40 dark:bg-slate-900/40 border border-slate-200/50 dark:border-slate-700/50 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
+        >
+          <div
+            class="h-56 w-full flex items-center justify-center mb-6 bg-gradient-to-br from-yellow-50/50 to-amber-50/50 dark:from-yellow-900/20 dark:to-amber-900/20 rounded-xl"
+          >
+            <UserStar
+              client:only="react"
+              x={0}
+              y={0}
+              email={mockUserStars[0].email}
+              nickname={mockUserStars[0].nickname}
+              src={`https://api.dicebear.com/9.x/avataaars/svg?seed=${mockUserStars[0].nickname}&size=256`}
+              alt={mockUserStars[0].alt}
+              stars={mockUserStars[0].stars}
+              sunshines={mockUserStars[0].sunshines}
+              role={mockUserStars[0].role}
+              funded={mockUserStars[0].funded}
+              received={mockUserStars[0].received}
+              issuesClosed={mockUserStars[0].issuesClosed}
+              issuesActive={mockUserStars[0].issuesActive}
+              tags={mockUserStars[0].tags || [
+                "Maintainer",
+                "Django",
+                "Solidity",
+                "p2p",
+              ]}
+              disableTooltip={true}
+              className="scale-120 ml-28 mt-28"
+            />
+          </div>
+          <div class="text-center">
+            <div class="flex items-center justify-center gap-2 mb-3">
+              <StarIcon
+                client:load
+                class="text-yellow-500 dark:text-yellow-400"
+              />
+              <h3 class="text-xl font-bold text-slate-800 dark:text-slate-200">
+                Stars = People
+              </h3>
+            </div>
+            <p
+              class="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed"
+            >
+              Users who forged tokens through collaboration.
+            </p>
+          </div>
+        </div>
+
+        <!-- Panel 3: Ownership evolves -->
+        <div
+          class="relative p-8 flex flex-col items-center justify-center min-w-[300px] md:min-w-0 flex-shrink-0 snap-center backdrop-blur-md bg-white/40 dark:bg-slate-900/40 border border-slate-200/50 dark:border-slate-700/50 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
+        >
+          <div
+            class="h-56 w-full flex items-center justify-center mb-6 bg-gradient-to-br from-purple-50/50 to-pink-50/50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl"
+          >
+            <AuthorOwnershipVisualization client:load class="w-full h-full" />
+          </div>
+          <div class="text-center">
+            <div class="flex items-center justify-center gap-1 mb-3">
+              <ChartIcon class="text-purple-500 dark:text-purple-400" />
+              <h3 class="text-xl font-bold text-slate-800 dark:text-slate-200">
+                Ownership Evolves
+              </h3>
+            </div>
+            <p
+              class="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed"
+            >
+              If galaxy gets massive, ownership shifts to the Star-holding
+              community.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile scroll hint -->
+      <div class="w-full max-w-6xl mx-auto -mt-8 mb-2 md:hidden">
+        <p
+          class="text-sm text-slate-400 dark:text-slate-500 text-center flex items-center justify-center gap-1.5 opacity-50 italic"
+        >
+          <LeftArrowIcon client:load class="w-4 h-4" />
+          <FingerTouchIcon client:load class="w-4 h-4" />
+          <span class="text-sm">horizontally scrollable</span>
+          <RightArrowIcon client:load class="w-4 h-4" />
+        </p>
       </div>
     </div>
 

@@ -32,12 +32,22 @@ export default defineConfig({
     resolve: {
       conditions: ['import', 'module', 'browser', 'default'],
     },
+    optimizeDeps: {
+      esbuildOptions: {
+        target: 'esnext',
+      },
+    },
+    esbuild: {
+      target: 'esnext',
+    },
     server: {
       https: {
         key: './localhost-key.pem',
         cert: './localhost.pem',
       },
       watch: {
+        usePolling: false,
+        interval: 100,
       }
     }
   }
