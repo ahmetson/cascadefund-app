@@ -40,7 +40,7 @@ const PageTransitionOverlay: React.FC<PageTransitionOverlayProps> = ({
       opacity: 1,
       transition: {
         duration: 0.6,
-        ease: [0.4, 0, 0.2, 1]
+        ease: [0.4, 0, 0.2, 1] as const
       }
     },
     exit: {
@@ -48,7 +48,7 @@ const PageTransitionOverlay: React.FC<PageTransitionOverlayProps> = ({
       opacity: 0,
       transition: {
         duration: 0.6,
-        ease: [0.4, 0, 0.2, 1]
+        ease: [0.4, 0, 0.2, 1] as const
       }
     }
   };
@@ -66,7 +66,7 @@ const PageTransitionOverlay: React.FC<PageTransitionOverlayProps> = ({
       transition: {
         delay: 0.2,
         duration: 0.4,
-        ease: "easeOut"
+        ease: "easeOut" as const
       }
     },
     exit: {
@@ -75,7 +75,7 @@ const PageTransitionOverlay: React.FC<PageTransitionOverlayProps> = ({
       y: -20,
       transition: {
         duration: 0.3,
-        ease: "easeIn"
+        ease: "easeIn" as const
       }
     }
   };
@@ -90,9 +90,9 @@ const PageTransitionOverlay: React.FC<PageTransitionOverlayProps> = ({
           animate="visible"
           exit="exit"
         >
-          {/* Veil layer with background transition */}
+          {/* Veil layer with background transition - semi-transparent */}
           <motion.div
-            className="absolute inset-0 bg-slate-900 dark:bg-slate-950"
+            className="absolute inset-0 bg-transparent dark:bg-transparent backdrop-blur-sm"
             variants={veilVariants}
           />
 
