@@ -1,5 +1,5 @@
 import React from 'react';
-import { usePageTransition } from '@/hooks/use-page-transition';
+import { usePageTransition } from '@/hooks/usePageTransition';
 import PageTransitionOverlay from './PageTransitionOverlay';
 
 interface PageTransitionProviderProps {
