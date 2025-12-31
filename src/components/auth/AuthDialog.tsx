@@ -49,10 +49,10 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ isOpen, onClose, className }) =
         provider: 'github',
         callbackURL: window.location.href, // Use current page as callback
       })
-      
+
       // Log the result for debugging
       console.log('GitHub sign-in result:', result)
-      
+
       if (result.error) {
         console.error('Sign-in error:', result.error)
         alert(`Failed to sign in: ${result.error.message || 'Please try again.'}`)
@@ -175,142 +175,142 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ isOpen, onClose, className }) =
       />
 
       {/* Dialog */}
-      <div 
+      <div
         ref={dialogRef}
         className="fixed inset-0 z-[101] flex items-center justify-center p-4 overflow-y-auto"
       >
         <div className="w-full max-w-md my-auto">
-        <PageLikePanel title={isSignUpMode ? "Sign Up" : "Sign In"} titleCenter={true} className={className}>
-          <div className="space-y-4">
-            {/* Toggle between Sign In and Sign Up */}
-            <div className="flex gap-2 border-b border-slate-200 dark:border-slate-700 pb-2">
-              <button
-                type="button"
-                onClick={() => setIsSignUpMode(false)}
-                className={cn(
-                  'flex-1 py-1 text-sm font-medium transition-colors',
-                  !isSignUpMode
-                    ? 'text-slate-900 dark:text-slate-100 border-b-2 border-slate-900 dark:border-slate-100'
-                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
-                )}
-              >
-                Sign In
-              </button>
-              <button
-                type="button"
-                onClick={() => setIsSignUpMode(true)}
-                className={cn(
-                  'flex-1 py-1 text-sm font-medium transition-colors',
-                  isSignUpMode
-                    ? 'text-slate-900 dark:text-slate-100 border-b-2 border-slate-900 dark:border-slate-100'
-                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
-                )}
-              >
-                Sign Up
-              </button>
-            </div>
-
-            {/* Email/Password Form */}
-            <div className="space-y-3">
-              <div>
-                <Label>Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="your@email.com"
-                  disabled={isEmailSigningIn}
-                  className="w-full mt-1"
-                />
+          <PageLikePanel title={isSignUpMode ? "Sign Up" : "Sign In"} titleCenter={true} className={className}>
+            <div className="space-y-4">
+              {/* Toggle between Sign In and Sign Up */}
+              <div className="flex gap-2 border-b border-slate-200 dark:border-slate-700 pb-2">
+                <button
+                  type="button"
+                  onClick={() => setIsSignUpMode(false)}
+                  className={cn(
+                    'flex-1 py-1 text-sm font-medium transition-colors',
+                    !isSignUpMode
+                      ? 'text-slate-900 dark:text-slate-100 border-b-2 border-slate-900 dark:border-slate-100'
+                      : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
+                  )}
+                >
+                  Sign In
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsSignUpMode(true)}
+                  className={cn(
+                    'flex-1 py-1 text-sm font-medium transition-colors',
+                    isSignUpMode
+                      ? 'text-slate-900 dark:text-slate-100 border-b-2 border-slate-900 dark:border-slate-100'
+                      : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
+                  )}
+                >
+                  Sign Up
+                </button>
               </div>
 
-              <div>
-                <Label>Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
+              {/* Email/Password Form */}
+              <div className="space-y-3">
+                <div>
+                  <Label>Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="your@email.com"
+                    disabled={isEmailSigningIn}
+                    className="w-full mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label>Password</Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    disabled={isEmailSigningIn}
+                    className="w-full mt-1"
+                  />
+                </div>
+
+                {isSignUpMode && (
+                  <>
+                    <div>
+                      <Label>Username (e.g: siteuser777, vitalik)</Label>
+                      <Input
+                        id="nickname"
+                        type="text"
+                        value={nickname}
+                        onChange={(e) => setNickname(e.target.value)}
+                        placeholder="username"
+                        disabled={isEmailSigningIn}
+                        className="w-full mt-1"
+                      />
+                    </div>
+
+                    <div>
+                      <Label>Display Name (e.g: John Doe, Satoshi Nakamoto)</Label>
+                      <Input
+                        id="displayName"
+                        type="text"
+                        value={displayName}
+                        onChange={(e) => setDisplayName(e.target.value)}
+                        placeholder="Your Name"
+                        disabled={isEmailSigningIn}
+                        className="w-full mt-1"
+                      />
+                    </div>
+                  </>
+                )}
+
+                <Button
+                  variant="primary"
+                  size="sm"
                   disabled={isEmailSigningIn}
-                  className="w-full mt-1"
-                />
+                  onClick={() => {
+                    if (isSignUpMode) {
+                      handleEmailSignUp()
+                    } else {
+                      handleEmailSignIn()
+                    }
+                  }}
+                  className="w-full"
+                >
+                  {isEmailSigningIn
+                    ? isSignUpMode
+                      ? 'Signing up...'
+                      : 'Signing in...'
+                    : isSignUpMode
+                      ? 'Sign Up'
+                      : 'Sign In'}
+                </Button>
               </div>
 
-              {isSignUpMode && (
-                <>
-                  <div>
-                    <Label>Nickname (optional)</Label>
-                    <Input
-                      id="nickname"
-                      type="text"
-                      value={nickname}
-                      onChange={(e) => setNickname(e.target.value)}
-                      placeholder="username"
-                      disabled={isEmailSigningIn}
-                      className="w-full mt-1"
-                    />
-                  </div>
+              {/* Separator */}
+              <div className="flex items-center gap-2 py-2">
+                <hr className="flex-1 border-slate-200 dark:border-slate-700" />
+                <span className="text-xs text-slate-500 dark:text-slate-400">OR</span>
+                <hr className="flex-1 border-slate-200 dark:border-slate-700" />
+              </div>
 
-                  <div>
-                    <Label>Display Name (optional)</Label>
-                    <Input
-                      id="displayName"
-                      type="text"
-                      value={displayName}
-                      onChange={(e) => setDisplayName(e.target.value)}
-                      placeholder="Your Name"
-                      disabled={isEmailSigningIn}
-                      className="w-full mt-1"
-                    />
-                  </div>
-                </>
-              )}
-
+              {/* Login with GitHub Button */}
               <Button
-                variant="primary"
+                variant="secondary"
                 size="sm"
-                disabled={isEmailSigningIn}
-                onClick={() => {
-                  if (isSignUpMode) {
-                    handleEmailSignUp()
-                  } else {
-                    handleEmailSignIn()
-                  }
-                }}
-                className="w-full"
+                onClick={handleSignIn}
+                disabled={isSigningIn}
+                className="w-full flex items-center justify-center gap-2"
               >
-                {isEmailSigningIn
-                  ? isSignUpMode
-                    ? 'Signing up...'
-                    : 'Signing in...'
-                  : isSignUpMode
-                    ? 'Sign Up'
-                    : 'Sign In'}
+                <FaGithub className="w-4 h-4" />
+                {isSigningIn ? 'Signing in...' : 'Login with GitHub'}
               </Button>
             </div>
-
-            {/* Separator */}
-            <div className="flex items-center gap-2 py-2">
-              <hr className="flex-1 border-slate-200 dark:border-slate-700" />
-              <span className="text-xs text-slate-500 dark:text-slate-400">OR</span>
-              <hr className="flex-1 border-slate-200 dark:border-slate-700" />
-            </div>
-
-            {/* Login with GitHub Button */}
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={handleSignIn}
-              disabled={isSigningIn}
-              className="w-full flex items-center justify-center gap-2"
-            >
-              <FaGithub className="w-4 h-4" />
-              {isSigningIn ? 'Signing in...' : 'Login with GitHub'}
-            </Button>
-          </div>
-        </PageLikePanel>
+          </PageLikePanel>
         </div>
       </div>
     </>
