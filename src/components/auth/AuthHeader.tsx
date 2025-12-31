@@ -320,7 +320,7 @@ const AuthHeader: React.FC<Props> = ({ className }) => {
                     {isSignUpMode && (
                       <>
                         <div>
-                          <Label>Nickname (e.g: siteuser777, vitalik)</Label>
+                          <Label>Nickname</Label>
                           <Input
                             id="nickname"
                             type="text"
