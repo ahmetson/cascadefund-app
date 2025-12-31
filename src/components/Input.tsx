@@ -8,6 +8,7 @@ interface InputProps {
   placeholder?: string
   className?: string
   disabled?: boolean
+  required?: boolean
   ref?: React.RefObject<HTMLInputElement | null>
 }
 
@@ -19,6 +20,7 @@ const Input: React.FC<InputProps> = ({
   placeholder,
   className = '',
   disabled = false,
+  required = false,
   ref
 }) => {
   return (
@@ -30,6 +32,7 @@ const Input: React.FC<InputProps> = ({
       onChange={onChange}
       placeholder={placeholder}
       disabled={disabled}
+      required={required}
       className={`px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-purple-50 dark:bg-purple-800/10 ${disabled ? 'bg-gray-100 cursor-not-allowed' : ''} ${className}`}
     />
   )

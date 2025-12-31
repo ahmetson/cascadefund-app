@@ -299,6 +299,7 @@ const AuthHeader: React.FC<Props> = ({ className }) => {
                         placeholder="your@email.com"
                         disabled={isEmailSigningIn}
                         className="w-full mt-1"
+                        required
                       />
                     </div>
 
@@ -312,6 +313,7 @@ const AuthHeader: React.FC<Props> = ({ className }) => {
                         placeholder="••••••••"
                         disabled={isEmailSigningIn}
                         className="w-full mt-1"
+                        required
                       />
                     </div>
 
@@ -324,22 +326,24 @@ const AuthHeader: React.FC<Props> = ({ className }) => {
                             type="text"
                             value={nickname}
                             onChange={(e) => setNickname(e.target.value)}
-                            placeholder="username"
+                            placeholder="siteuser777"
                             disabled={isEmailSigningIn}
                             className="w-full mt-1"
+                            required
                           />
                         </div>
 
                         <div>
-                          <Label>Display Name (e.g: John Doe, Satoshi Nakamoto)</Label>
+                          <Label>Display Name</Label>
                           <Input
                             id="displayName"
                             type="text"
                             value={displayName}
                             onChange={(e) => setDisplayName(e.target.value)}
-                            placeholder="Your Name"
+                            placeholder="Satoshi Nakamoto"
                             disabled={isEmailSigningIn}
                             className="w-full mt-1"
+                            required
                           />
                         </div>
                       </>
